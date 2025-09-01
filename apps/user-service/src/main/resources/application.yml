@@ -1,0 +1,34 @@
+server:
+  port: 8081
+api:
+  version: v1
+  security:
+    token:
+      secret: ${PRIVATE_KEY:secret}
+      public: ${PUBLIC_KEY:public}
+      expire-length: 3600
+spring:
+  application:
+    name: user-service
+    issuer: chamaai.com
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chamaai_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
