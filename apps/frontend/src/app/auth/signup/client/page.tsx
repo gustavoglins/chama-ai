@@ -31,15 +31,14 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import { maskCPF, maskPhoneBR } from '@/lib/masks';
 
 import { signupFormSchema, SignupFormSchema } from '@/validators/formValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -48,17 +47,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { login } from '@/services/auth';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Label } from '@/components/ui/label';
+import { signup } from '@/services/auth';
 
 export default function ClientSignupPage() {
-  const router = useRouter();
+  const router = useRouter(); // usar após implementar fluxo de sucesso
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   const form = useForm<SignupFormSchema>({
     resolver: zodResolver(signupFormSchema),
@@ -67,22 +65,23 @@ export default function ClientSignupPage() {
       lastName: '',
       cpf: '',
       email: '',
-      // phoneNumber: 0,
+      phoneNumber: '',
       password: '',
       confirmPassword: '',
-      // dateOfBirth: Date.now(),
+      dateOfBirth: undefined,
       gender: '',
     },
     mode: 'onChange',
   });
 
   const onSubmit = async (data: SignupFormSchema) => {
+    console.log(data);
     setIsLoading(true);
     try {
-      const res = await login(data);
+      const res = await signup(data);
       toast.success('Login realizado com sucesso');
       if (typeof window !== 'undefined') {
-        localStorage.setItem('auth-token', res.token);
+        // localStorage.setItem('auth-token', res.token);
       }
       router.push('/app');
     } catch (err) {
@@ -103,7 +102,7 @@ export default function ClientSignupPage() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-4 md:gap-2"
           >
             <FormField
               control={form.control}
@@ -154,7 +153,18 @@ export default function ClientSignupPage() {
                 <FormItem>
                   <FormLabel>Telefone</FormLabel>
                   <FormControl>
-                    <Input placeholder="00000000000" {...field} />
+                    <Input
+                      type="tel"
+                      placeholder="(00) 00000-0000"
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(maskPhoneBR(e.target.value))
+                      }
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                      inputMode="numeric"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -169,7 +179,18 @@ export default function ClientSignupPage() {
                   <FormItem>
                     <FormLabel>CPF</FormLabel>
                     <FormControl>
-                      <Input className="w-50" placeholder="CPF" {...field} />
+                      <Input
+                        className="w-50"
+                        placeholder="000.000.000-00"
+                        value={field.value}
+                        onChange={(e) =>
+                          field.onChange(maskCPF(e.target.value))
+                        }
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        ref={field.ref}
+                        inputMode="numeric"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -188,10 +209,12 @@ export default function ClientSignupPage() {
                           <Button
                             variant="outline"
                             id="date"
+                            type="button"
                             className="w-50 h-9 justify-between font-normal"
+                            onClick={() => setOpen(!open)}
                           >
-                            {date
-                              ? date.toLocaleDateString()
+                            {field.value
+                              ? field.value.toLocaleDateString()
                               : 'Selecionar Data'}
                             <ChevronDownIcon />
                           </Button>
@@ -202,13 +225,14 @@ export default function ClientSignupPage() {
                         >
                           <Calendar
                             mode="single"
-                            selected={date}
+                            selected={field.value}
                             captionLayout="dropdown"
-                            onSelect={(date) => {
-                              setDate(date);
+                            onSelect={(val) => {
+                              if (val) {
+                                field.onChange(val);
+                              }
                               setOpen(false);
                             }}
-                            {...field}
                           />
                         </PopoverContent>
                       </Popover>
@@ -226,9 +250,9 @@ export default function ClientSignupPage() {
                 <FormItem>
                   <FormLabel>Gênero</FormLabel>
                   <FormControl>
-                    <Select>
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="w-full cursor-pointer">
-                        <SelectValue placeholder="Select a fruit" />
+                        <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>

@@ -10,14 +10,17 @@ export const signupFormSchema = z
       .string()
       .min(2, 'O Ultimo Nome deve ter pelo menos 2 caracteres'),
     cpf: z
-      .string('CPF inválido')
-      .min(13, 'CPF inválido')
-      .max(13, 'CPF inválido'),
+      .string()
+      .transform((v) => v.replace(/\D/g, ''))
+      .refine((v) => v.length === 11, 'CPF inválido'),
     email: z.email('Email inválido'),
     phoneNumber: z
-      .number()
-      .min(11, 'Número de telefone inválido')
-      .max(11, 'Número de telefone inválido'),
+      .string()
+      .transform((v) => v.replace(/\D/g, ''))
+      .refine(
+        (v) => v.length >= 10 && v.length <= 11,
+        'Número de telefone inválido'
+      ),
     password: z.string().min(8, 'A senha deve ter pelo menos 8 caracteres'),
     confirmPassword: z.string().min(8, 'A Confirmação de senha é obrigatória'),
     dateOfBirth: z.date('A Data de nascimento é obrigatória'),
@@ -25,7 +28,7 @@ export const signupFormSchema = z
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas nao coincidem',
-    path: ['confirmPassord'],
+    path: ['confirmPassword'],
   });
 
 // Signup Service Provider Schema, TODO:

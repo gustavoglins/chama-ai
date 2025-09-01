@@ -77,7 +77,7 @@ export default function LoginPage() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-4 md:gap-2"
           >
             <FormField
               control={form.control}

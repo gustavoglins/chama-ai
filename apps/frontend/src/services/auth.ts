@@ -1,14 +1,11 @@
+import { signupFormSchema, SignupFormSchema } from '@/validators/formValidator';
+
 interface LoginPayload {
   email: string;
   password: string;
 }
 
-interface SignupPayload {
-  name: string;
-  email: string;
-  password: string;
-  accountType: 'client' | 'service_provider';
-}
+// interface SignupPayload: signupFormSchema;
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -27,7 +24,7 @@ export async function login(payload: LoginPayload) {
   return res.json();
 }
 
-export async function signup(payload: SignupPayload) {
+export async function signup(payload: SignupFormSchema) {
   const res = await fetch(`${BASE_URL}/auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
