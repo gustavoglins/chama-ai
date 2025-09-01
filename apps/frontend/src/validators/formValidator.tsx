@@ -9,6 +9,10 @@ export const signupFormSchema = z
     lastName: z
       .string()
       .min(2, 'O Ultimo Nome deve ter pelo menos 2 caracteres'),
+    cpf: z
+      .string('CPF inválido')
+      .min(13, 'CPF inválido')
+      .max(13, 'CPF inválido'),
     email: z.email('Email inválido'),
     phoneNumber: z
       .number()
