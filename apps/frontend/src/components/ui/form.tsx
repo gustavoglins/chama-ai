@@ -138,16 +138,16 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
 
 function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message ?? '') : '\u00A0'; // nbsp para reservar espaço
   const hasError = !!error;
+  const body = hasError ? String(error?.message ?? '') : 'placeholder';
 
   return (
     <p
       data-slot="form-message"
       id={formMessageId}
       className={cn(
-        'text-[11px] min-h-[0rem] leading-tight transition-colors',
-        hasError ? 'text-destructive' : 'text-transparent',
+        'text-[11px] leading-tight transition-colors min-h-[14px] h-[14px] flex items-center',
+        hasError ? 'text-destructive' : 'opacity-0 select-none',
         className
       )}
       aria-hidden={hasError ? undefined : true}

@@ -7,8 +7,8 @@ import { Check } from 'lucide-react';
 export interface SimpleRadioCardOption<T extends string = string> {
   value: T;
   label: string;
-  description?: string; // not shown in screenshot, optional future
-  badge?: string; // e.g. Hobby / Pro
+  description?: string;
+  badge?: string;
 }
 
 export interface RadioCardGroupProps<T extends string = string> {
@@ -42,7 +42,6 @@ export function RadioCardGroup<T extends string = string>({
       {options.map((opt, i) => (
         <RadioRow<T>
           key={opt.value}
-          // show top border only for NOT first row? screenshot shows only internal divider lines
           showDivider={i !== 0}
           option={opt}
           checked={opt.value === value}
@@ -80,8 +79,8 @@ function RadioRow<T extends string>({
       className={cn(
         'flex w-full items-center gap-2 px-4 py-3 outline-none text-left transition-colors',
         'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:z-10',
-        'hover:bg-accent/60 cursor-pointer',
-        // checked && 'bg-accent/60',
+        'hover:bg-accent/50 cursor-pointer',
+        // checked && 'bg-accent/20',
         showDivider && 'border-t border-border'
       )}
       data-state={checked ? 'checked' : 'unchecked'}

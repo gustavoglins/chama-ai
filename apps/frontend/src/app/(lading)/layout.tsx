@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
+import { Separator } from '@radix-ui/react-separator';
 import { ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Separator } from '@radix-ui/react-separator';
 
 export default function LandingLayout({
   children,
@@ -11,7 +11,7 @@ export default function LandingLayout({
 }) {
   return (
     <>
-      <header className="w-full p-6">
+      <header className="w-full px-6 py-6.5">
         <div className="mx-auto flex justify-between items-center px-4">
           <Link href={'/app'}>
             <Image
@@ -19,7 +19,7 @@ export default function LandingLayout({
               alt="Chama Ai Icon"
               width={1000}
               height={1000}
-              className="h-6 w-auto object-contain hover:scale-115 active:scale-100 transition-all duration-300 ease-in-out"
+              className="h-6 w-auto object-contain"
               priority
             />
           </Link>

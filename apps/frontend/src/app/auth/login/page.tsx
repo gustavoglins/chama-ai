@@ -51,10 +51,12 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormSchema) => {
     setIsLoading(true);
     try {
-      const res = await login(data);
-      toast.success('Login realizado com sucesso');
+      const response = await login(data);
       if (typeof window !== 'undefined') {
-        localStorage.setItem('auth-token', res.token);
+        localStorage.setItem('auth-token', response.token);
+      } else {
+        toast.error('Ocorreu um erro inesperado. Tente novamente');
+        return;
       }
       router.push('/app');
     } catch (err) {
@@ -69,9 +71,7 @@ export default function LoginPage() {
     <Card className="w-full max-w-xl px-14 py-16 gap-8">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl font-bold">Bem vindo de volta</CardTitle>
-        <CardDescription>
-          Serviços rápidos e confiáveis ao seu alcance.
-        </CardDescription>
+        <CardDescription>Faça login para acessar sua conta.</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col w-full">
         <Form {...form}>
@@ -93,7 +93,7 @@ export default function LoginPage() {
               )}
             />
 
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col mb-2.5">
               <FormField
                 control={form.control}
                 name="password"

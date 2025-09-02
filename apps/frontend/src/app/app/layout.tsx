@@ -35,7 +35,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               alt="Chama Ai Icon"
               width={1000}
               height={1000}
-              className="h-6 w-auto object-contain hover:scale-115 active:scale-100 transition-all duration-300 ease-in-out"
+              className="h-6 w-auto object-contain"
               priority
             />
           </Link>

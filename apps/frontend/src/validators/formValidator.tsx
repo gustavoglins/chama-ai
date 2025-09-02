@@ -3,12 +3,8 @@ import { z } from 'zod';
 // Signup Client Schema
 export const signupFormSchema = z
   .object({
-    firstName: z
-      .string()
-      .min(2, 'O Primeiro Nome deve ter pelo menos 2 caracteres'),
-    lastName: z
-      .string()
-      .min(2, 'O Ultimo Nome deve ter pelo menos 2 caracteres'),
+    firstName: z.string().min(2, 'O Nome é obrigatório'),
+    lastName: z.string().min(2, 'O Sobrenome é obrigatório'),
     cpf: z
       .string()
       .transform((v) => v.replace(/\D/g, ''))
@@ -24,7 +20,7 @@ export const signupFormSchema = z
     password: z.string().min(8, 'A senha deve ter pelo menos 8 caracteres'),
     confirmPassword: z.string().min(8, 'A Confirmação de senha é obrigatória'),
     dateOfBirth: z.date('A Data de nascimento é obrigatória'),
-    gender: z.string('O gênero é obrigatório'),
+    gender: z.string().min(1, 'O gênero é obrigatório'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas nao coincidem',

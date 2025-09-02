@@ -1,4 +1,5 @@
-import { signupFormSchema, SignupFormSchema } from '@/validators/formValidator';
+import { ClientSignupRequestDto } from '@/dto/user.interface';
+import { SignupFormSchema } from '@/validators/formValidator';
 
 interface LoginPayload {
   email: string;
@@ -24,7 +25,7 @@ export async function login(payload: LoginPayload) {
   return res.json();
 }
 
-export async function signup(payload: SignupFormSchema) {
+export async function signupClient(payload: ClientSignupRequestDto) {
   const res = await fetch(`${BASE_URL}/auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

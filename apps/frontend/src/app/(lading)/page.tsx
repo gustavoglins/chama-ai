@@ -17,7 +17,7 @@ export default function LandingPage() {
         <h1 className="text-5xl text-primary font-bold mb-4">
           Serviços rápidos e confiáveis ao seu alcance.
         </h1>
-        <p className="text-xl text-gray-600 mb-6">
+        <p className="text-xl text-gray-500 mb-6">
           Encontre freelancers, contrate serviços e entregue resultados
           incríveis. Organize seu trabalho ou seu projeto com facilidade hoje
           mesmo.
