@@ -4,7 +4,7 @@ import com.chamaai.userservice.dto.requests.LoginRequestDTO;
 import com.chamaai.userservice.dto.requests.ResetPasswordRequestDTO;
 import com.chamaai.userservice.dto.requests.SignupRequestDTO;
 import com.chamaai.userservice.dto.responses.AuthResponseDTO;
-import com.chamaai.userservice.service.AuthService;
+import com.chamaai.userservice.service.implementations.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,16 @@ public class AuthController {
 
     public AuthController(AuthService authService) {
         this.authService = authService;
+    }
+
+    @PostMapping("/send-code")
+    public ResponseEntity<Void> sendCode(@RequestBody @Valid String email) {
+        return null;
+    }
+
+    @PostMapping("/verify-code")
+    public ResponseEntity<Void> verifyCode(@RequestBody @Valid String code) {
+        return null;
     }
 
     @PostMapping("/signup")

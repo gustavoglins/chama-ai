@@ -1,4 +1,4 @@
-package com.chamaai.userservice.service;
+package com.chamaai.userservice.service.implementations;
 
 import com.chamaai.userservice.entity.User;
 
