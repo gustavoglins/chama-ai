@@ -4,6 +4,8 @@ import com.chamaai.userservice.service.interfaces.RedisService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
 public class RedisServiceImpl implements RedisService {
 
@@ -14,8 +16,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void saveValue(String key, String value) {
-        redisTemplate.opsForValue().set(key, value);
+    public void saveValue(String key, String value, long expiration, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, expiration, timeUnit);
     }
 
     @Override
