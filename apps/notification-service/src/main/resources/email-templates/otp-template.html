@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Acesso - Chama Ai</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dddddd;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .header h1 {
+            color: #171717;
+            margin: 0;
+        }
+
+        .content {
+            padding: 30px 20px;
+            color: #000000;
+            text-align: center;
+        }
+
+        .otp-box {
+            display: inline-block;
+            background-color: #f5f5f5;
+            border: 1px dashed #171717;
+            border-radius: 6px;
+            padding: 15px 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #171717;
+            letter-spacing: 3px;
+            margin: 20px 0;
+        }
+
+        .footer {
+            text-align: center;
+            color: #000000;
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+        }
+    </style>
+</head>
+
+<body style="background-color: #f5f5f5; padding: 20px; color: #000000;">
+<div class="container">
+    <div class="header">
+        <h1 style="color: #171717;">Código de Acesso</h1>
+    </div>
+    <div class="content" style="color: #000000;">
+<!--        <p>Olá, <strong>{{userName}}</strong>!</p>-->
+        <p>Use o código abaixo para acessar sua conta:</p>
+
+        <div class="otp-box">
+            {{otpCode}}
+        </div>
+
+        <p>Por motivos de segurança, este código expira em <strong>10 minutos</strong>.</p>
+        <p>Se você não solicitou este código, ignore esta mensagem.</p>
+    </div>
+    <div class="footer" style="color: #000000;">
+        <p>Este é um e-mail automático. Por favor, não responda a esta mensagem.</p>
+        <p>Copyright &copy; 2025 Chama Ai - Todos os direitos reservados</p>
+    </div>
+</div>
+</body>
+</html>
