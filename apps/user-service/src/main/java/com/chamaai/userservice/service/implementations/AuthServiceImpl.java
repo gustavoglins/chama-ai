@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
 
                 User newUser = new User();
 
-                newUser.setAccountId(data.firstName() + '#' + generateAccountId(data.firstName()));
+                newUser.setAccountId(generateAccountId(data.firstName()));
                 newUser.setEmail(userEmail);
                 newUser.setPhoneNumber(null);
                 newUser.setPasswordHash(passwordEncoder.encode(data.password()));
@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
 
                 User newUser = new User();
 
-                newUser.setAccountId(data.firstName() + '#' + generateAccountId(data.firstName()));
+                newUser.setAccountId(generateAccountId(data.firstName()));
                 newUser.setPhoneNumber(userPhoneNumber);
                 newUser.setEmail(null);
                 newUser.setPasswordHash(passwordEncoder.encode(data.password()));
@@ -167,7 +167,7 @@ public class AuthServiceImpl implements AuthService {
 
         User newUser = new User();
 
-        newUser.setAccountId(data.firstName() + '#' + generateAccountId(data.firstName()));
+        newUser.setAccountId(generateAccountId(data.firstName()));
         newUser.setEmail(data.email());
         newUser.setPhoneNumber(data.phoneNumber());
         newUser.setPasswordHash(passwordEncoder.encode(data.password()));
@@ -181,7 +181,7 @@ public class AuthServiceImpl implements AuthService {
         newUser.setFirstName(data.firstName());
         newUser.setLastName(data.lastName());
         newUser.setCpf(data.cpf());
-        newUser.setAccountType(Set.of(AccountType.CLIENT));
+        newUser.setAccountType(Set.of(AccountType.SERVICE_PROVIDER));
         newUser.setProfilePicture(null);
         newUser.setDateOfBirth(data.dateOfBirth());
         newUser.setGender(data.gender());
@@ -210,20 +210,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseDTO login(LoginRequestDTO loginRequestDto) {
-        System.out.println(loginRequestDto);
         try {
             var usernamePassword = new UsernamePasswordAuthenticationToken(loginRequestDto.login(), loginRequestDto.password());
-            System.out.printf(usernamePassword.toString());
-
             var auth = this.authenticationManager.authenticate(usernamePassword);
-            System.out.printf(auth.toString());
-
             User user = findUserByLogin(auth.getName());
-            System.out.println(user.toString());
-
             var token = tokenService.generateToken(user);
-
-            System.out.println(token);
             return new AuthResponseDTO(token);
         } catch (AuthenticationException ex) {
             throw new BadCredentialsException("Invalid login or password");
@@ -267,17 +258,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void resetPassword(ResetPasswordRequestDTO resetPasswordRequestDto) {
         String key = tokenService.validateToken(resetPasswordRequestDto.token());
-        System.out.println(key);
 
         User user;
         if (key.contains("@")) {
             user = userRepository.findByEmail(key).orElseThrow(() -> new UserNotFoundException("User with login: " + key + " not found."));
-            System.out.println(user.toString());
         } else {
             user = userRepository.findByPhoneNumber(new BigInteger(key)).orElseThrow(() -> new UserNotFoundException("User with login: " + key + " not found."));
-            System.out.println(user.toString());
         }
-        System.out.println("hash start");
         user.setPasswordHash(passwordEncoder.encode(resetPasswordRequestDto.newPassword()));
         userRepository.save(user);
     }

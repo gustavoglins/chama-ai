@@ -80,7 +80,14 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.loginIdentifier != null ? this.loginIdentifier : this.email;
+        // Prefer explicit loginIdentifier when set (e.g., during authentication), otherwise email, then phone number.
+        if (this.loginIdentifier != null && !this.loginIdentifier.isBlank()) {
+            return this.loginIdentifier;
+        }
+        if (this.email != null && !this.email.isBlank()) {
+            return this.email;
+        }
+        return this.phoneNumber != null ? this.phoneNumber.toString() : null;
     }
 
     public void setLoginIdentifier(String loginIdentifier) {

@@ -49,7 +49,7 @@ public class AuthController {
     public ResponseEntity<SendCodeResponseDTO> sendOtp(@RequestBody @Valid SendOtpRequestDto sendOtpRequestDto) {
         logger.info("Received OTP send request: {}", sendOtpRequestDto);
         authService.sendOtp(sendOtpRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(new SendCodeResponseDTO("OK", "OTP sent successfully", 600));
     }
 
     @PostMapping("/otp/verify")

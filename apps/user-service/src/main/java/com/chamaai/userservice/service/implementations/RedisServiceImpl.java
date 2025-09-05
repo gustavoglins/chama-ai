@@ -9,9 +9,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisServiceImpl implements RedisService {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    public RedisServiceImpl(RedisTemplate<String, Object> redisTemplate) {
+    public RedisServiceImpl(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -22,7 +22,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public String getValue(String key) {
-        return (String) redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForValue().get(key);
     }
 
     @Override
