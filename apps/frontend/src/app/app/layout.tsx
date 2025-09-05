@@ -1,5 +1,14 @@
 'use client';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,21 +19,17 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from '@/components/ui/navigation-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
+import { logout } from '@/services/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <>
       <header className="w-full p-6">
@@ -369,7 +374,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               <li>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar className="cursor-pointer">
+                    <Avatar className="cursor-pointer hover:shadow-[0_0_0_7px_rgba(212,212,212,0.8)] transition-shadow duration-300 ease-in-out">
                       <AvatarImage
                         src="https://github.com/shadcn.png"
                         alt="User Profile Photo"
@@ -401,7 +406,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     {/* TODO */}
-                    <DropdownMenuItem>Sair</DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Sair
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </li>

@@ -165,3 +165,9 @@ export async function resetPassword(payload: ResetPasswordRequestDto) {
   }
   return response.json();
 }
+
+export function logout() {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('auth-token');
+  }
+}
