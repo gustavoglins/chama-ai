@@ -1,6 +1,7 @@
 package com.chamaai.notificationservice.controller;
 
 import com.chamaai.notificationservice.dtos.requests.SendOtpEmailRequestDto;
+import com.chamaai.notificationservice.dtos.requests.SendOtpPhoneRequestDto;
 import com.chamaai.notificationservice.service.interfaces.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,11 +24,12 @@ public class NotificationController {
     @PostMapping("/email/send")
     public ResponseEntity<Void> sendEmail(@RequestBody @Valid SendOtpEmailRequestDto request) {
         notificationService.sendOtpEmail(request);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/whatsapp/send")
-    public void sendWhatsApp(@RequestBody @Valid SendOtpEmailRequestDto request) {
-        //TODO
+    public ResponseEntity<Void> sendWhatsApp(@RequestBody @Valid SendOtpPhoneRequestDto request) {
+        notificationService.sendOtpWhatsapp(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

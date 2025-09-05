@@ -15,6 +15,7 @@ import {
   verifyOtp,
   signupClient,
 } from '@/services/auth';
+import { unmask } from '@/lib/masks';
 import { toast } from 'sonner';
 import { ClientSignupRequestDto } from '@/dto/user.interface';
 import { useRouter } from 'next/navigation';
@@ -74,8 +75,9 @@ export function useClientSignupFlow() {
         const email = contactForm.getValues('email');
         await sendEmailConfirmationCode(email || '');
       } else {
-        const phone = contactForm.getValues('phoneNumber');
-        await sendPhoneConfirmationCode(phone || '');
+        const phoneMasked = contactForm.getValues('phoneNumber');
+        const phone = unmask(phoneMasked || '');
+        await sendPhoneConfirmationCode(phone);
       }
       setStep(SignupStep.OTP);
       setOtpCooldown(60);
@@ -92,7 +94,7 @@ export function useClientSignupFlow() {
     try {
       const key = isEmail
         ? contactForm.getValues('email') || ''
-        : contactForm.getValues('phoneNumber') || '';
+        : unmask(contactForm.getValues('phoneNumber') || '');
       const res = await verifyOtp(key, otp);
       if (res.token) {
         localStorage.setItem('token', res.token);
@@ -136,7 +138,7 @@ export function useClientSignupFlow() {
         firstName: personal.firstName,
         lastName: personal.lastName,
         email: contact.email || '',
-        phoneNumber: Number((contact.phoneNumber || '').replace(/\D/g, '')),
+        phoneNumber: Number(unmask(contact.phoneNumber || '')),
         password: security.password,
         dateOfBirth: personal.dateOfBirth!.toISOString().split('T')[0],
         gender: personal.gender,

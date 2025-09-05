@@ -27,6 +27,13 @@ public class Notification {
     public Notification() {
     }
 
+    public Notification(String recipient, String message, NotificationChannel channel, NotificationStatus status) {
+        this.recipient = recipient;
+        this.message = message;
+        this.channel = channel;
+        this.status = status;
+    }
+
     public UUID getId() {
         return id;
     }

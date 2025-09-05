@@ -1,4 +1,5 @@
 import { ClientSignupRequestDto } from '@/dto/user.interface';
+import { unmask } from '@/lib/masks';
 
 interface LoginPayload {
   email: string;
@@ -63,11 +64,12 @@ export async function sendEmailConfirmationCode(email: string) {
 }
 
 export async function sendPhoneConfirmationCode(phoneNumber: string) {
+  const cleanPhone = unmask(phoneNumber || '');
   const response = await fetch(`${BASE_URL}/auth/otp/send`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      phoneNumber,
+      phoneNumber: cleanPhone,
       channel: 'WHATSAPP',
     }),
   });
