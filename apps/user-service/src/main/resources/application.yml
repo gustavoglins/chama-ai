@@ -11,17 +11,25 @@ spring:
   application:
     name: user-service
     issuer: chamaai.com
+  cloud:
+    openfeign:
+      config:
+        default:
+          connectionTimeout: 5000
+          readTimeout: 5000
   datasource:
     url: jdbc:postgresql://localhost:5432/chamaai_db
     username: postgres
     password: postgres
+  data:
+    redis:
+      host: localhost
+      port: 6379
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
   kafka:
     bootstrap-servers: localhost:9092
     producer:

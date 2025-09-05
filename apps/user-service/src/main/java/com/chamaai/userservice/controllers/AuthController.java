@@ -1,11 +1,12 @@
-package com.chamaai.userservice.controller;
+package com.chamaai.userservice.controllers;
 
-import com.chamaai.userservice.dto.requests.LoginRequestDTO;
-import com.chamaai.userservice.dto.requests.ResetPasswordRequestDTO;
-import com.chamaai.userservice.dto.requests.SignupRequestDTO;
+import com.chamaai.userservice.dto.requests.*;
 import com.chamaai.userservice.dto.responses.AuthResponseDTO;
-import com.chamaai.userservice.service.implementations.AuthService;
+import com.chamaai.userservice.dto.responses.SendCodeResponseDTO;
+import com.chamaai.userservice.service.interfaces.AuthService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,24 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
-    @PostMapping("/send-code")
-    public ResponseEntity<Void> sendCode(@RequestBody @Valid String email) {
-        return null;
-    }
-
-    @PostMapping("/verify-code")
-    public ResponseEntity<Void> verifyCode(@RequestBody @Valid String code) {
-        return null;
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<AuthResponseDTO> signup(@RequestBody @Valid SignupRequestDTO signupRequestDto) {
-        AuthResponseDTO authResponseDTO = authService.signup(signupRequestDto);
+    @PostMapping("/signup/client")
+    public ResponseEntity<AuthResponseDTO> signup(@RequestBody @Valid ClientSignupRequestDto request) {
+        logger.info("Received client signup request: {}", request);
+        AuthResponseDTO authResponseDTO = authService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(authResponseDTO);
     }
 
@@ -43,6 +36,20 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequestDto) {
         AuthResponseDTO authResponseDTO = authService.login(loginRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(authResponseDTO);
+    }
+
+    @PostMapping("/otp/send")
+    public ResponseEntity<SendCodeResponseDTO> sendOtp(@RequestBody @Valid SendOtpRequestDto sendOtpRequestDto) {
+        logger.info("Received OTP send request: {}", sendOtpRequestDto);
+        authService.sendOtp(sendOtpRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @PostMapping("/otp/verify")
+    public ResponseEntity<AuthResponseDTO> verifyOtp(@RequestBody @Valid VerifyOtpRequestDTO verifyOtpRequestDTO) {
+        logger.info("Received OTP verify request: {}", verifyOtpRequestDTO);
+        AuthResponseDTO response = authService.verifyOtp(verifyOtpRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/reset-password")

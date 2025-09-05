@@ -1,12 +1,16 @@
-package com.chamaai.userservice.service.implementations;
+package com.chamaai.userservice.service.interfaces;
 
-import com.chamaai.userservice.dto.requests.LoginRequestDTO;
-import com.chamaai.userservice.dto.requests.ResetPasswordRequestDTO;
-import com.chamaai.userservice.dto.requests.SignupRequestDTO;
+import com.chamaai.userservice.dto.requests.*;
 import com.chamaai.userservice.dto.responses.AuthResponseDTO;
 
 public interface AuthService {
-    AuthResponseDTO signup(SignupRequestDTO signupRequestDto);
+    AuthResponseDTO signup(ClientSignupRequestDto data);
+
     AuthResponseDTO login(LoginRequestDTO loginRequestDto);
+
+    void sendOtp(SendOtpRequestDto sendOtpRequestDto);
+
+    AuthResponseDTO verifyOtp(VerifyOtpRequestDTO verifyOtpRequestDTO);
+
     void resetPassword(ResetPasswordRequestDTO resetPasswordRequestDto);
 }

@@ -27,6 +27,7 @@ public class User implements UserDetails {
 
     private String accountId;
     private String email;
+    private String cpf;
     private String passwordHash;
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
