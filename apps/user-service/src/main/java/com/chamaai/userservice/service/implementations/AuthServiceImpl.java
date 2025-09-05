@@ -19,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +69,7 @@ public class AuthServiceImpl implements AuthService {
 
                 newUser.setAccountId(data.firstName() + '#' + generateAccountId(data.firstName()));
                 newUser.setEmail(userEmail);
+                newUser.setPhoneNumber(null);
                 newUser.setPasswordHash(passwordEncoder.encode(data.password()));
                 newUser.setAuthProvider(AuthProvider.LOCAL);
                 newUser.setLastLogin(LocalDateTime.now());
@@ -101,7 +103,7 @@ public class AuthServiceImpl implements AuthService {
                         createdUser.getDateOfBirth()
                 ));
 
-                String token = tokenService.generateResetPasswordToken(createdUser);
+                String token = tokenService.generateToken(createdUser);
                 return new AuthResponseDTO(token);
             } else {
                 BigInteger userPhoneNumber = new BigInteger(key);
@@ -112,6 +114,7 @@ public class AuthServiceImpl implements AuthService {
 
                 newUser.setAccountId(data.firstName() + '#' + generateAccountId(data.firstName()));
                 newUser.setPhoneNumber(userPhoneNumber);
+                newUser.setEmail(null);
                 newUser.setPasswordHash(passwordEncoder.encode(data.password()));
                 newUser.setAuthProvider(AuthProvider.LOCAL);
                 newUser.setLastLogin(LocalDateTime.now());
@@ -145,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
                         createdUser.getDateOfBirth()
                 ));
 
-                String token = tokenService.generateResetPasswordToken(createdUser);
+                String token = tokenService.generateToken(createdUser);
                 return new AuthResponseDTO(token);
             }
         } else {
@@ -156,17 +159,23 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseDTO login(LoginRequestDTO loginRequestDto) {
+        System.out.println(loginRequestDto);
         try {
-            var usernamePassword = new UsernamePasswordAuthenticationToken(loginRequestDto.email(), loginRequestDto.password());
-            var auth = this.authenticationManager.authenticate(usernamePassword);
-            var email = auth.getName();
+            var usernamePassword = new UsernamePasswordAuthenticationToken(loginRequestDto.login(), loginRequestDto.password());
+            System.out.printf(usernamePassword.toString());
 
-            User user = this.userRepository.findByEmail(email).orElseThrow();
+            var auth = this.authenticationManager.authenticate(usernamePassword);
+            System.out.printf(auth.toString());
+
+            User user = findUserByLogin(auth.getName());
+            System.out.println(user.toString());
+
             var token = tokenService.generateToken(user);
 
+            System.out.println(token);
             return new AuthResponseDTO(token);
         } catch (AuthenticationException ex) {
-            throw new BadCredentialsException("Invalid email or password");
+            throw new BadCredentialsException("Invalid login or password");
         }
     }
 
@@ -241,6 +250,16 @@ public class AuthServiceImpl implements AuthService {
         String year = String.valueOf(now.getYear()).substring(2);
 
         return firstName + "#" + month + day + millis + year;
+    }
+
+    private User findUserByLogin(String login) {
+        if (login.contains("@")) {
+            return userRepository.findByEmail(login)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + login));
+        } else {
+            return userRepository.findByPhoneNumber(BigInteger.valueOf(Long.parseLong(login)))
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with phone: " + login));
+        }
     }
 
     private void sendOtpTo(String destination, OtpChannelType channel) {

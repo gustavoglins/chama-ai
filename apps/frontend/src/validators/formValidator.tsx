@@ -62,10 +62,30 @@ export type ClientSignupSecurityType = z.infer<
   typeof ClientSignupSecuritySchema
 >;
 
-// Login
-export const LoginSchema = z.object({
-  email: z.string().trim().email('Email inválido'),
-  password: z.string().min(8, 'Senha inválida'),
-  rememberMe: z.boolean().optional(),
-});
+// Login (Email OU Telefone)
+export const LoginSchema = z
+  .object({
+    email: z
+      .string()
+      .trim()
+      .email('Email inválido')
+      .optional()
+      .or(z.literal('').transform(() => undefined)),
+    phoneNumber: z
+      .string()
+      .trim()
+      .transform((v) => v.replace(/\D/g, ''))
+      .refine(
+        (v) => v.length === 0 || (v.length >= 10 && v.length <= 11),
+        'Telefone inválido'
+      )
+      .optional()
+      .or(z.literal('').transform(() => undefined)),
+    password: z.string().min(8, 'Senha inválida'),
+    rememberMe: z.boolean().optional(),
+  })
+  .refine((data) => !!data.email || !!data.phoneNumber, {
+    message: 'Informe email ou telefone',
+    path: ['email'],
+  });
 export type LoginType = z.infer<typeof LoginSchema>;

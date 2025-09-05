@@ -25,8 +25,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Transient
+    private String loginIdentifier; // não persiste no banco
     private String accountId;
     private String email;
+    private BigInteger phoneNumber;
     private String cpf;
     private String passwordHash;
     @Enumerated(EnumType.STRING)
@@ -40,7 +43,7 @@ public class User implements UserDetails {
 
     private String firstName;
     private String lastName;
-    @ElementCollection(targetClass = AccountType.class)
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = AccountType.class)
     @CollectionTable(
             name = "user_account_types",
             joinColumns = @JoinColumn(name = "user_id")
@@ -48,7 +51,6 @@ public class User implements UserDetails {
     @Column(name = "account_type")
     @Enumerated(EnumType.STRING)
     private Set<AccountType> accountType;
-    private BigInteger phoneNumber;
     private String profilePicture;
     private LocalDate dateOfBirth;
     @Enumerated(EnumType.STRING)
@@ -78,8 +80,13 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.loginIdentifier != null ? this.loginIdentifier : this.email;
     }
+
+    public void setLoginIdentifier(String loginIdentifier) {
+        this.loginIdentifier = loginIdentifier;
+    }
+
 
     @Override
     public boolean isAccountNonExpired() {

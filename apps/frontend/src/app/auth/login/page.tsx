@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Smartphone, Mail, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -30,17 +30,20 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { login } from '@/services/auth';
+import { maskPhoneBR } from '@/lib/masks';
 import { toast } from 'sonner';
 
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isEmailLogin, setIsEmailLogin] = useState(true);
 
   const form = useForm<LoginType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: '',
+      phoneNumber: '',
       password: '',
       rememberMe: false,
     },
@@ -50,7 +53,11 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginType) => {
     setIsLoading(true);
     try {
-      const response = await login(data);
+      const response = await login({
+        email: data.email || undefined,
+        phoneNumber: data.phoneNumber || undefined,
+        password: data.password,
+      });
       if (typeof window !== 'undefined') {
         localStorage.setItem('auth-token', response.token);
       } else {
@@ -78,20 +85,71 @@ export default function LoginPage() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-4 md:gap-2"
           >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Endereço de Email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+            {isEmailLogin ? (
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center">
+                      <FormLabel>Email</FormLabel>
+                      <a
+                        className="ml-auto inline-block text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsEmailLogin(false);
+                          form.setValue('email', '');
+                        }}
+                      >
+                        <div className="flex gap-1 items-center">
+                          <Smartphone className="h-3.5 w-3.5" />
+                          Usar Telefone
+                        </div>
+                      </a>
+                    </div>
+                    <FormControl>
+                      <Input placeholder="voce@dominio.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center">
+                      <FormLabel>Telefone</FormLabel>
+                      <a
+                        className="ml-auto inline-block text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsEmailLogin(true);
+                          form.setValue('phoneNumber', '');
+                        }}
+                      >
+                        <div className="flex gap-1 items-center">
+                          <Mail className="h-3.5 w-3.5" />
+                          Usar Email
+                        </div>
+                      </a>
+                    </div>
+                    <FormControl>
+                      <Input
+                        placeholder="(99) 99999-9999"
+                        inputMode="numeric"
+                        {...field}
+                        value={maskPhoneBR(field.value || '')}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <div className="flex flex-col mb-2.5">
               <FormField
                 control={form.control}
@@ -164,7 +222,15 @@ export default function LoginPage() {
               className="w-full"
               disabled={isLoading}
             >
-              {isLoading ? 'Carregando' : 'Entrar'}
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Carregando
+                </>
+              ) : isEmailLogin ? (
+                'Entrar com Email'
+              ) : (
+                'Entrar com Telefone'
+              )}
             </Button>
             <p className="text-center pt-3 text-xs text-muted-foreground leading-relaxed">
               Primeira vez aqui?{' '}

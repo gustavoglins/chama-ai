@@ -122,7 +122,7 @@ export function StepContact({
           </Button>
         </form>
       </Form>
-      <Separator className="m-5 self-center" />
+      <Separator className="mt-5 mb-5 self-center" />
       <Button size="lg" variant="outline" className="w-full flex gap-2">
         <Image
           src="/google-icon.svg"

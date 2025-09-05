@@ -2,7 +2,9 @@ import { ClientSignupRequestDto } from '@/dto/user.interface';
 import { unmask } from '@/lib/masks';
 
 interface LoginPayload {
-  email: string;
+  login?: string;
+  email?: string;
+  phoneNumber?: string;
   password: string;
 }
 
@@ -11,15 +13,27 @@ interface sendEmailConfirmationCodePayload {
   email: string;
 }
 
-// interface SignupPayload: signupFormSchema;
-
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function login(payload: LoginPayload) {
+  const loginValue =
+    payload.login ??
+    payload.email ??
+    (payload.phoneNumber ? unmask(payload.phoneNumber) : undefined);
+
+  if (!loginValue) {
+    throw new Error('Informe email ou telefone para login');
+  }
+
+  const body: Record<string, unknown> = {
+    login: loginValue,
+    password: payload.password,
+  };
+
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
