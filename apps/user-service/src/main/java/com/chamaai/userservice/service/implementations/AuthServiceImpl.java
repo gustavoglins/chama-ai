@@ -80,6 +80,7 @@ public class AuthServiceImpl implements AuthService {
 
                 newUser.setFirstName(data.firstName());
                 newUser.setLastName(data.lastName());
+                newUser.setCpf(data.cpf());
                 newUser.setAccountType(Set.of(AccountType.CLIENT));
                 newUser.setProfilePicture(null);
                 newUser.setDateOfBirth(data.dateOfBirth());
@@ -125,6 +126,7 @@ public class AuthServiceImpl implements AuthService {
 
                 newUser.setFirstName(data.firstName());
                 newUser.setLastName(data.lastName());
+                newUser.setCpf(data.cpf());
                 newUser.setAccountType(Set.of(AccountType.CLIENT));
                 newUser.setProfilePicture(null);
                 newUser.setDateOfBirth(data.dateOfBirth());

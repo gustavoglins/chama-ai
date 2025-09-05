@@ -87,7 +87,6 @@ public class User implements UserDetails {
         this.loginIdentifier = loginIdentifier;
     }
 
-
     @Override
     public boolean isAccountNonExpired() {
         return this.isActive;
@@ -309,6 +308,18 @@ public class User implements UserDetails {
 
     public void setLastPasswordChangeAt(LocalDateTime lastPasswordChangeAt) {
         this.lastPasswordChangeAt = lastPasswordChangeAt;
+    }
+
+    public String getLoginIdentifier() {
+        return loginIdentifier;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     @Override
