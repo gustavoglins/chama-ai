@@ -400,20 +400,20 @@ export default function ServiceProviderSignupPage() {
       </div>
     </div>,
     <div key="step-1" className="grid gap-6">
-      <FormField
-        control={form.control}
-        name="email"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Email</FormLabel>
-            <FormControl>
-              <Input placeholder="Endereço de Email" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Endereço de Email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="phoneNumber"
@@ -422,6 +422,7 @@ export default function ServiceProviderSignupPage() {
               <FormLabel>Telefone</FormLabel>
               <FormControl>
                 <Input
+                  className="w-full"
                   type="tel"
                   placeholder="(00) 00000-0000"
                   value={field.value}
