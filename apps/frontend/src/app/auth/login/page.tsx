@@ -5,19 +5,18 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
 
-import { loginFormSchema, LoginFormSchema } from '@/validators/formValidator';
+import { LoginSchema, LoginType } from '@/validators/formValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -38,8 +37,8 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const form = useForm<LoginFormSchema>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<LoginType>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -48,7 +47,7 @@ export default function LoginPage() {
     mode: 'onChange',
   });
 
-  const onSubmit = async (data: LoginFormSchema) => {
+  const onSubmit = async (data: LoginType) => {
     setIsLoading(true);
     try {
       const response = await login(data);
@@ -68,7 +67,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Card className="w-full max-w-xl px-14 py-16 gap-8">
+    <Card className="w-full max-w-sm px-0 py-6.5 gap-10 rounded-3xl">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl font-bold">Bem vindo de volta</CardTitle>
         <CardDescription>Faça login para acessar sua conta.</CardDescription>
@@ -167,6 +166,12 @@ export default function LoginPage() {
             >
               {isLoading ? 'Carregando' : 'Entrar'}
             </Button>
+            <p className="text-center pt-3 text-xs text-muted-foreground leading-relaxed">
+              Primeira vez aqui?{' '}
+              <Link className="underline text-primary" href="/auth/signup">
+                Criar conta
+              </Link>
+            </p>
           </form>
         </Form>
         <Separator className="m-5 self-center" />
@@ -182,14 +187,6 @@ export default function LoginPage() {
           Iniciar sessão com o Google
         </Button>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <p className="text-center pt-3 text-xs text-muted-foreground leading-relaxed">
-          Primeira vez aqui?{' '}
-          <Link className="underline text-primary" href="/auth/signup">
-            Criar conta
-          </Link>
-        </p>
-      </CardFooter>
     </Card>
   );
 }

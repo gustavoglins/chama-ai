@@ -12,6 +12,8 @@ import {
 import { Label } from '@/components/ui/label';
 import { RadioCardGroup } from '@/components/ui/radio-card';
 import { AccountType } from '@/types/AccountType';
+import { ChevronLeft, LogIn } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
@@ -39,8 +41,16 @@ export default function SignupPage() {
   }
 
   return (
-    <Card className="w-full max-w-xl px-14 py-16 gap-8">
+    // <Card className="w-full max-w-xl px-14 py-16 gap-8">
+    <Card className="w-full max-w-md px-0 py-6.5 gap-10 rounded-3xl">
       <CardHeader className="text-center">
+        <Image
+          src="/logo.png"
+          alt="Chama Ai"
+          width={100}
+          height={100}
+          className="mx-auto mb-4"
+        />
         <CardTitle className="text-3xl font-bold">
           Bem-vindo ao Chama Ai
         </CardTitle>

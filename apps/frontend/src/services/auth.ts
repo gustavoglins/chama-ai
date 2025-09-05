@@ -1,9 +1,13 @@
 import { ClientSignupRequestDto } from '@/dto/user.interface';
-import { SignupFormSchema } from '@/validators/formValidator';
 
 interface LoginPayload {
   email: string;
   password: string;
+}
+
+interface sendEmailConfirmationCodePayload {
+  channel: 'EMAIL';
+  email: string;
 }
 
 // interface SignupPayload: signupFormSchema;
@@ -26,7 +30,7 @@ export async function login(payload: LoginPayload) {
 }
 
 export async function signupClient(payload: ClientSignupRequestDto) {
-  const res = await fetch(`${BASE_URL}/auth/signup`, {
+  const res = await fetch(`${BASE_URL}/auth/signup/client`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -38,4 +42,58 @@ export async function signupClient(payload: ClientSignupRequestDto) {
   }
 
   return res.json();
+}
+
+export async function sendEmailConfirmationCode(email: string) {
+  const response = await fetch(`${BASE_URL}/auth/otp/send`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email,
+      channel: 'EMAIL',
+    } as sendEmailConfirmationCodePayload),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(
+      error.message || 'Erro ao enviar código de confirmação via Email'
+    );
+  }
+}
+
+export async function sendPhoneConfirmationCode(phoneNumber: string) {
+  const response = await fetch(`${BASE_URL}/auth/otp/send`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      phoneNumber,
+      channel: 'WHATSAPP',
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(
+      error.message || 'Erro ao enviar código de confirmação via Whatsapp'
+    );
+  }
+}
+
+export async function verifyOtp(key: string, code: string) {
+  const response = await fetch(`${BASE_URL}/auth/otp/verify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      key,
+      code,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Erro ao verificar código de confirmação');
+  }
+
+  return response.json();
 }

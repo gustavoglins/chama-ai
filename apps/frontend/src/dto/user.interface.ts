@@ -1,11 +1,12 @@
 export interface ClientSignupRequestDto {
+  token: string;
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber: number;
-  cpf: string;
   password: string;
-  dateOfBirth: Date;
-  gender: 'MALE' | 'FEMALE' | 'OTHER';
-  accountType: 'CLIENT';
+  dateOfBirth: string;
+  cpf?: string;
+  gender?: 'MALE' | 'FEMALE' | 'OTHER';
+  accountType?: 'CLIENT' | 'SERVICE_PROVIDER';
 }
