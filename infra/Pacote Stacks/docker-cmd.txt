@@ -1,0 +1,12 @@
+Criar Volumes:
+docker volume create evolution_instances
+docker volume create postgres_data
+docker volume create redis data
+
+Criar rede:
+docker network create rede_interna
+
+Subir Stack:
+docker compose -f evolution.yaml up -d
+docker compose -f postgres.yaml up -d
+docker compose -f redis.yaml up -d
