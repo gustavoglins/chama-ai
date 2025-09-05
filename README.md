@@ -1,5 +1,5 @@
 # Chama Ai
 
-### Serviços rápidos e confiáveis ao seu alcance.
+### Plataforma de serviços e freenlancers sob demanda.
 
 ![Landing Page Preview](previews/landing-page.png)
