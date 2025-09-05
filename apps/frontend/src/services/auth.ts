@@ -145,3 +145,23 @@ export async function verifyOtp(key: string, code: string) {
 
   return response.json();
 }
+
+// Reset Password
+export interface ResetPasswordRequestDto {
+  token: string;
+  newPassword: string;
+}
+
+// Start reset by sending OTP to email or phone (reuse existing send functions)
+export async function resetPassword(payload: ResetPasswordRequestDto) {
+  const response = await fetch(`${BASE_URL}/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Erro ao redefinir senha');
+  }
+  return response.json();
+}

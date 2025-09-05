@@ -266,10 +266,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void resetPassword(ResetPasswordRequestDTO resetPasswordRequestDto) {
-        String email = tokenService.validateToken(resetPasswordRequestDto.token());
+        String key = tokenService.validateToken(resetPasswordRequestDto.token());
+        System.out.println(key);
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User with email: " + email + " not found."));
-
+        User user;
+        if (key.contains("@")) {
+            user = userRepository.findByEmail(key).orElseThrow(() -> new UserNotFoundException("User with login: " + key + " not found."));
+            System.out.println(user.toString());
+        } else {
+            user = userRepository.findByPhoneNumber(new BigInteger(key)).orElseThrow(() -> new UserNotFoundException("User with login: " + key + " not found."));
+            System.out.println(user.toString());
+        }
+        System.out.println("hash start");
         user.setPasswordHash(passwordEncoder.encode(resetPasswordRequestDto.newPassword()));
         userRepository.save(user);
     }

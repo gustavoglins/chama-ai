@@ -167,3 +167,62 @@ export const serviceProviderSignupFormSchema = z
 export type ServiceProviderSignupFormSchema = z.infer<
   typeof serviceProviderSignupFormSchema
 >;
+
+// Reset Password: Contact (Email OR Phone) and New Password
+export const ResetPasswordContactSchema = z
+  .object({
+    email: z
+      .string()
+      .trim()
+      .email('Email inválido')
+      .optional()
+      .or(z.literal('').transform(() => undefined)),
+    phoneNumber: z
+      .string()
+      .trim()
+      .transform((v) => v.replace(/\D/g, ''))
+      .refine(
+        (v) => v.length === 0 || (v.length >= 10 && v.length <= 11),
+        'Número de telefone inválido'
+      )
+      .optional()
+      .or(z.literal('').transform(() => undefined)),
+  })
+  .refine((data) => !!data.email || !!data.phoneNumber, {
+    message: 'Informe email ou telefone',
+    path: ['email'],
+  });
+export type ResetPasswordContactType = z.infer<
+  typeof ResetPasswordContactSchema
+>;
+
+export const ResetPasswordNewSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(8, 'A senha deve ter pelo menos 8 caracteres')
+      .max(72, 'Senha muito longa')
+      .optional()
+      .or(z.literal('').transform(() => undefined)),
+    confirmPassword: z
+      .string()
+      .min(8, 'A Confirmação de senha é obrigatória')
+      .optional()
+      .or(z.literal('').transform(() => undefined)),
+  })
+  .refine(
+    (data) =>
+      (!data.newPassword && !data.confirmPassword) ||
+      data.newPassword === data.confirmPassword,
+    {
+      message: 'As senhas não coincidem',
+      path: ['confirmPassword'],
+    }
+  );
+export type ResetPasswordNewType = z.infer<typeof ResetPasswordNewSchema>;
+
+// Combined schema for the form (we trigger step-specific fields)
+export const resetPasswordFormSchema = ResetPasswordContactSchema.merge(
+  ResetPasswordNewSchema
+);
+export type ResetPasswordFormSchema = z.infer<typeof resetPasswordFormSchema>;
