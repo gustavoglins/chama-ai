@@ -1,0 +1,22 @@
+api:
+  email: contact@gustavoglins.com
+
+server:
+  port: 8082
+spring:
+  application:
+    name: notification-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chamaai_db
+    username: postgres
+    password: postgres
+  jpa:
+    open-in-view: false
+
+resend:
+  apikey: ${RESEND_API_KEY}
+
+evolution-api:
+  url: http://localhost:8081/api/v1/evolution
+  instance: chama-ai
+  apikey: ${EVOLUTION_API_KEY:4AmT2CKIrytgLbYj3alLg32iKaHgyexlH4j9L050jvMyjYUC4LHsIGQYUrwo3Ru1K34ZHknajmR84HNndkDjv9MKrpotl9PCGOJdZDaKn8hZ6RBMcJRgPmk326yBn2NJ}
