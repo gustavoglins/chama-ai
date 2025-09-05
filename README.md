@@ -11,7 +11,7 @@
 - **Frontend:** React, Next.js, Tailwind CSS, Zustand
 - **Backend:** Java, Spring Framework (Boot, JPA, Security, Cloud, Kafka)
 - **Banco de dados:** PostgreSQL  
-- **Mensageria / Cache:** Redis, Kafka
+- **Mensageria / Cache:** Kafka, Redis
 - **Autenticação:** JWT 
 - **Envio de e-mails:** Resend (API externa)
 - **Envios Whatsapp:** EvolutionAPI (Self Hosted)
