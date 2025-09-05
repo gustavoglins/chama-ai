@@ -49,7 +49,7 @@ export default function ClientSignupPage() {
         <Card className="w-full max-w-sm px-0 py-6.5 gap-10 rounded-3xl">
           <CardHeader className="text-left flex flex-col gap-1">
             <CardTitle className="text-[1.625rem] font-bold">
-              Bem vindo ao Chama Ai
+              Criar conta
             </CardTitle>
             <CardDescription>
               Por favor preencha seus dados para iniciar o cadastro.
