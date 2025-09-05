@@ -1,23 +1,5 @@
 'use client';
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { ChevronDownIcon } from 'lucide-react';
-
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,10 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { maskCPF, maskPhoneBR, unmask } from '@/lib/masks';
-import { Eye, EyeOff } from 'lucide-react';
+import { unmask } from '@/lib/masks';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -42,60 +22,23 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  sendEmailConfirmationCode,
-  sendPhoneConfirmationCode,
-  signupServiceProvider,
-  verifyOtp,
-} from '@/services/auth';
-// import { ClientSignupRequestDto } from '@/dto/user.interface';
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from '@/components/ui/input-otp';
+import { Form } from '@/components/ui/form';
+import { signupServiceProvider } from '@/services/auth';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { StepPersonal } from './components/StepPersonal';
+import { StepContact } from './components/StepContact';
+import { StepSecurity } from './components/StepSecurity';
+import { StepOtp } from './components/StepOtp';
 
 export default function ServiceProviderSignupPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [open, setOpen] = React.useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [emailOtp, setEmailOtp] = useState('');
-  const [phoneOtp, setPhoneOtp] = useState('');
-  const [cooldownEmail, setCooldownEmail] = useState(0);
-  const [cooldownPhone, setCooldownPhone] = useState(0);
-  const [otpPhase, setOtpPhase] = useState<'EMAIL' | 'PHONE'>('EMAIL');
   const [emailVerified, setEmailVerified] = useState(false);
   const [phoneVerified, setPhoneVerified] = useState(false);
-  const [verifying, setVerifying] = useState(false);
 
-  // cooldown timers (email/phone)
-  React.useEffect(() => {
-    if (cooldownEmail <= 0) return;
-    const id = setInterval(() => {
-      setCooldownEmail((c) => (c > 0 ? c - 1 : 0));
-    }, 1000);
-    return () => clearInterval(id);
-  }, [cooldownEmail]);
-  React.useEffect(() => {
-    if (cooldownPhone <= 0) return;
-    const id = setInterval(() => {
-      setCooldownPhone((c) => (c > 0 ? c - 1 : 0));
-    }, 1000);
-    return () => clearInterval(id);
-  }, [cooldownPhone]);
+  // timers e reenvio são controlados pelo StepOtp
 
   const form = useForm<ServiceProviderSignupFormSchema>({
     resolver: zodResolver(serviceProviderSignupFormSchema),
@@ -149,25 +92,11 @@ export default function ServiceProviderSignupPage() {
       { shouldFocus: true }
     );
     if (!valid) return;
-    // Ao sair da etapa 3 (segurança), disparamos o OTP do EMAIL e vamos para verificação
+    // Ao sair da etapa 2 (segurança), vamos para verificação; StepOtp envia o código automaticamente
     if (currentStep === 2) {
-      setIsLoading(true);
-      try {
-        const { email } = form.getValues();
-        await sendEmailConfirmationCode(email);
-        setOtpPhase('EMAIL');
-        setEmailVerified(false);
-        setPhoneVerified(false);
-        setEmailOtp('');
-        setPhoneOtp('');
-        setCooldownEmail(60);
-        setCurrentStep(3);
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : 'Erro ao enviar códigos';
-        toast.error(msg);
-      } finally {
-        setIsLoading(false);
-      }
+      setEmailVerified(false);
+      setPhoneVerified(false);
+      setCurrentStep(3);
       return;
     }
     setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
@@ -209,391 +138,30 @@ export default function ServiceProviderSignupPage() {
     }
   };
 
-  // Auto-verificação: ao alcançar 6 dígitos, verificar o canal atual e avançar
-  React.useEffect(() => {
-    const run = async () => {
-      try {
-        setVerifying(true);
-        if (otpPhase === 'EMAIL') {
-          const key = form.getValues('email');
-          await verifyOtp(key, emailOtp);
-          setEmailVerified(true);
-          // Após verificar email, enviar OTP de telefone e alternar fase
-          const phoneMasked = form.getValues('phoneNumber');
-          await sendPhoneConfirmationCode(phoneMasked);
-          setCooldownPhone(60);
-          setOtpPhase('PHONE');
-          setPhoneOtp('');
-          toast.success('Email verificado com sucesso');
-        } else {
-          const key = unmask(form.getValues('phoneNumber'));
-          await verifyOtp(key, phoneOtp);
-          setPhoneVerified(true);
-          toast.success('Telefone verificado com sucesso');
-        }
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : 'Código inválido';
-        toast.error(msg);
-        if (otpPhase === 'EMAIL') setEmailOtp('');
-        else setPhoneOtp('');
-      } finally {
-        setVerifying(false);
-      }
-    };
-
-    if (currentStep === 3) {
-      if (
-        otpPhase === 'EMAIL' &&
-        emailOtp.length === 6 &&
-        !emailVerified &&
-        !verifying
-      ) {
-        void run();
-      }
-      if (
-        otpPhase === 'PHONE' &&
-        phoneOtp.length === 6 &&
-        !phoneVerified &&
-        !verifying
-      ) {
-        void run();
-      }
-    }
-  }, [
-    currentStep,
-    otpPhase,
-    emailOtp,
-    phoneOtp,
-    emailVerified,
-    phoneVerified,
-    verifying,
-    form,
-  ]);
-
   const StepContents = [
-    <div key="step-0" className="grid gap-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="firstName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nome</FormLabel>
-              <FormControl>
-                <Input placeholder="Nome" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="lastName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Sobrenome</FormLabel>
-              <FormControl>
-                <Input placeholder="Sobrenome" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="cpf"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>CPF</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="000.000.000-00"
-                  value={field.value}
-                  onChange={(e) => field.onChange(maskCPF(e.target.value))}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                  ref={field.ref}
-                  inputMode="numeric"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="dateOfBirth"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Data de Nascimento</FormLabel>
-              <FormControl>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="date"
-                      type="button"
-                      className="justify-between font-normal h-9"
-                      onClick={() => setOpen(!open)}
-                    >
-                      {field.value
-                        ? field.value.toLocaleDateString()
-                        : 'Selecionar Data'}
-                      <ChevronDownIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto overflow-hidden p-0"
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      captionLayout="dropdown"
-                      onSelect={(val) => {
-                        if (val) field.onChange(val);
-                        setOpen(false);
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-      <div>
-        <FormField
-          control={form.control}
-          name="gender"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Gênero</FormLabel>
-              <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="cursor-pointer w-full">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Gênero</SelectLabel>
-                      <SelectItem className="cursor-pointer" value="MALE">
-                        Masculino
-                      </SelectItem>
-                      <SelectItem className="cursor-pointer" value="FEMALE">
-                        Feminino
-                      </SelectItem>
-                      <SelectItem className="cursor-pointer" value="OTHER">
-                        Outro
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-    </div>,
-    <div key="step-1" className="grid gap-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Endereço de Email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phoneNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Telefone</FormLabel>
-              <FormControl>
-                <Input
-                  className="w-full"
-                  type="tel"
-                  placeholder="(00) 00000-0000"
-                  value={field.value}
-                  onChange={(e) => field.onChange(maskPhoneBR(e.target.value))}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                  ref={field.ref}
-                  inputMode="numeric"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-    </div>,
-    <div key="step-2" className="grid gap-4">
-      <FormField
-        control={form.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Senha</FormLabel>
-            <FormControl>
-              <div className="relative">
-                <Input
-                  placeholder="********"
-                  type={showPassword ? 'text' : 'password'}
-                  {...field}
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                  onClick={() => setShowPassword((p) => !p)}
-                  className="absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                  tabIndex={-1}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="confirmPassword"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Confirmar Senha</FormLabel>
-            <FormControl>
-              <div className="relative">
-                <Input
-                  placeholder="********"
-                  type={showPassword ? 'text' : 'password'}
-                  {...field}
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                  onClick={() => setShowPassword((p) => !p)}
-                  className="absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                  tabIndex={-1}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </div>,
-    // Step 3: Verificação sequencial (Email depois Telefone)
-    <div key="step-3" className="grid gap-6">
-      <div>
-        <FormLabel>
-          {otpPhase === 'EMAIL'
-            ? 'Código de verificação (Email)'
-            : 'Código de verificação (Telefone)'}
-        </FormLabel>
-        <div className="flex flex-col items-start gap-2">
-          <div className="w-full flex justify-center">
-            <InputOTP
-              maxLength={6}
-              value={otpPhase === 'EMAIL' ? emailOtp : phoneOtp}
-              onChange={otpPhase === 'EMAIL' ? setEmailOtp : setPhoneOtp}
-              containerClassName="w-full flex justify-center"
-            >
-              <InputOTPGroup>
-                {[0, 1, 2].map((i) => (
-                  <InputOTPSlot key={`${otpPhase}-a-${i}`} index={i} />
-                ))}
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                {[3, 4, 5].map((i) => (
-                  <InputOTPSlot key={`${otpPhase}-b-${i}`} index={i} />
-                ))}
-              </InputOTPGroup>
-            </InputOTP>
-          </div>
-          <div className="flex justify-between w-full">
-            <Button
-              size="xs"
-              type="button"
-              variant="link"
-              disabled={
-                isLoading ||
-                verifying ||
-                (otpPhase === 'EMAIL' ? cooldownEmail > 0 : cooldownPhone > 0)
-              }
-              onClick={async () => {
-                try {
-                  if (otpPhase === 'EMAIL') {
-                    const { email } = form.getValues();
-                    await sendEmailConfirmationCode(email);
-                    setCooldownEmail(60);
-                  } else {
-                    const { phoneNumber } = form.getValues();
-                    await sendPhoneConfirmationCode(phoneNumber);
-                    setCooldownPhone(60);
-                  }
-                } catch (e) {
-                  toast.error(
-                    e instanceof Error ? e.message : 'Erro ao reenviar código'
-                  );
-                }
-              }}
-            >
-              {otpPhase === 'EMAIL'
-                ? cooldownEmail > 0
-                  ? `Reenviar (${cooldownEmail})`
-                  : 'Reenviar código'
-                : cooldownPhone > 0
-                ? `Reenviar (${cooldownPhone})`
-                : 'Reenviar código'}
-            </Button>
-          </div>
-          {verifying && (
-            <div className="mt-2 text-sm text-muted-foreground">
-              Validando código...
-            </div>
-          )}
-          {emailVerified && otpPhase === 'PHONE' && (
-            <div className="mt-2 text-sm text-green-600">
-              Email verificado. Agora verifique seu telefone.
-            </div>
-          )}
-        </div>
-      </div>
-    </div>,
+    <StepPersonal key="step-0" form={form} />,
+    <StepContact key="step-1" form={form} />,
+    <StepSecurity key="step-2" form={form} />,
+    <StepOtp
+      key="step-3"
+      email={form.getValues('email')}
+      phoneNumber={form.getValues('phoneNumber')}
+      isActive={currentStep === 3}
+      onAllVerified={() => {
+        setEmailVerified(true);
+        setPhoneVerified(true);
+      }}
+    />,
   ];
 
   return (
-    <Card className="w-full max-w-2xl px-0 py-6.5 gap-10 rounded-3xl">
+    <Card className="w-full max-w-2xl px-0 py-6.5 gap-10 rounded-3xl mx-auto">
       <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-bold">Criar conta</CardTitle>
+        <CardTitle className="text-3xl font-bold">
+          {steps[currentStep]?.title || 'Criar conta'}
+        </CardTitle>
         <CardDescription>
-          {steps[currentStep].description ??
+          {steps[currentStep]?.description ||
             'Preencha seus dados para continuar.'}
         </CardDescription>
       </CardHeader>
