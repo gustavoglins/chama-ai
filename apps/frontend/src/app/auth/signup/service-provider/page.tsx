@@ -35,7 +35,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-import { signupFormSchema, SignupFormSchema } from '@/validators/formValidator';
+import {
+  serviceProviderSignupFormSchema,
+  type ServiceProviderSignupFormSchema,
+} from '@/validators/formValidator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -47,8 +50,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { signupClient } from '@/services/auth';
-import { ClientSignupRequestDto } from '@/dto/user.interface';
+import {
+  sendEmailConfirmationCode,
+  sendPhoneConfirmationCode,
+  signupServiceProvider,
+  verifyOtp,
+} from '@/services/auth';
+// import { ClientSignupRequestDto } from '@/dto/user.interface';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -58,9 +72,33 @@ export default function ServiceProviderSignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [emailOtp, setEmailOtp] = useState('');
+  const [phoneOtp, setPhoneOtp] = useState('');
+  const [cooldownEmail, setCooldownEmail] = useState(0);
+  const [cooldownPhone, setCooldownPhone] = useState(0);
+  const [otpPhase, setOtpPhase] = useState<'EMAIL' | 'PHONE'>('EMAIL');
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [verifying, setVerifying] = useState(false);
 
-  const form = useForm<SignupFormSchema>({
-    resolver: zodResolver(signupFormSchema),
+  // cooldown timers (email/phone)
+  React.useEffect(() => {
+    if (cooldownEmail <= 0) return;
+    const id = setInterval(() => {
+      setCooldownEmail((c) => (c > 0 ? c - 1 : 0));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [cooldownEmail]);
+  React.useEffect(() => {
+    if (cooldownPhone <= 0) return;
+    const id = setInterval(() => {
+      setCooldownPhone((c) => (c > 0 ? c - 1 : 0));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [cooldownPhone]);
+
+  const form = useForm<ServiceProviderSignupFormSchema>({
+    resolver: zodResolver(serviceProviderSignupFormSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -78,7 +116,7 @@ export default function ServiceProviderSignupPage() {
   const steps: {
     title: string;
     description?: string;
-    fields: (keyof SignupFormSchema)[];
+    fields: (keyof ServiceProviderSignupFormSchema)[];
   }[] = [
     {
       title: 'Informações pessoais',
@@ -95,42 +133,69 @@ export default function ServiceProviderSignupPage() {
       description: 'Crie uma senha segura para proteger sua conta',
       fields: ['password', 'confirmPassword'],
     },
+    {
+      title: 'Verificação de segurança',
+      description: 'Verifique seu email e telefone para concluir o cadastro',
+      fields: [],
+    },
   ];
 
   const isLastStep = currentStep === steps.length - 1;
 
   const goNext = async () => {
     const stepFields = steps[currentStep].fields;
-    const valid = await form.trigger(stepFields as (keyof SignupFormSchema)[], {
-      shouldFocus: true,
-    });
-    if (valid) setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
+    const valid = await form.trigger(
+      stepFields as (keyof ServiceProviderSignupFormSchema)[],
+      { shouldFocus: true }
+    );
+    if (!valid) return;
+    // Ao sair da etapa 3 (segurança), disparamos o OTP do EMAIL e vamos para verificação
+    if (currentStep === 2) {
+      setIsLoading(true);
+      try {
+        const { email } = form.getValues();
+        await sendEmailConfirmationCode(email);
+        setOtpPhase('EMAIL');
+        setEmailVerified(false);
+        setPhoneVerified(false);
+        setEmailOtp('');
+        setPhoneOtp('');
+        setCooldownEmail(60);
+        setCurrentStep(3);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : 'Erro ao enviar códigos';
+        toast.error(msg);
+      } finally {
+        setIsLoading(false);
+      }
+      return;
+    }
+    setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
   };
   const goBack = () => setCurrentStep((s) => Math.max(s - 1, 0));
 
-  const onSubmit = async (data: SignupFormSchema) => {
+  const onSubmit = async (data: ServiceProviderSignupFormSchema) => {
     setIsLoading(true);
     try {
-      const token = (
-        typeof window !== 'undefined' ? localStorage.getItem('token') : ''
-      ) as string;
-      const requestBody: ClientSignupRequestDto = {
-        token,
+      // OTPs já validados nesta etapa
+      if (!emailVerified || !phoneVerified) {
+        throw new Error('Conclua as verificações de email e telefone');
+      }
+
+      const resJson = await signupServiceProvider({
+        email: data.email,
+        phoneNumber: Number(unmask(data.phoneNumber)),
         firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email || '',
-        phoneNumber: Number(unmask(data.phoneNumber || '')),
         cpf: data.cpf,
         password: data.password,
         dateOfBirth: data.dateOfBirth
           ? data.dateOfBirth.toISOString().split('T')[0]
           : '',
-        gender: data.gender as ClientSignupRequestDto['gender'],
-        accountType: 'SERVICE_PROVIDER',
-      };
-      const response = await signupClient(requestBody);
+        gender: data.gender,
+      });
       if (typeof window !== 'undefined') {
-        localStorage.setItem('auth-token', response.token);
+        if (resJson.token) localStorage.setItem('auth-token', resJson.token);
         router.push('/app');
       } else {
         toast.error('Ocorreu um erro inesperado. Por favor faça o login');
@@ -143,6 +208,67 @@ export default function ServiceProviderSignupPage() {
       setIsLoading(false);
     }
   };
+
+  // Auto-verificação: ao alcançar 6 dígitos, verificar o canal atual e avançar
+  React.useEffect(() => {
+    const run = async () => {
+      try {
+        setVerifying(true);
+        if (otpPhase === 'EMAIL') {
+          const key = form.getValues('email');
+          await verifyOtp(key, emailOtp);
+          setEmailVerified(true);
+          // Após verificar email, enviar OTP de telefone e alternar fase
+          const phoneMasked = form.getValues('phoneNumber');
+          await sendPhoneConfirmationCode(phoneMasked);
+          setCooldownPhone(60);
+          setOtpPhase('PHONE');
+          setPhoneOtp('');
+          toast.success('Email verificado com sucesso');
+        } else {
+          const key = unmask(form.getValues('phoneNumber'));
+          await verifyOtp(key, phoneOtp);
+          setPhoneVerified(true);
+          toast.success('Telefone verificado com sucesso');
+        }
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : 'Código inválido';
+        toast.error(msg);
+        if (otpPhase === 'EMAIL') setEmailOtp('');
+        else setPhoneOtp('');
+      } finally {
+        setVerifying(false);
+      }
+    };
+
+    if (currentStep === 3) {
+      if (
+        otpPhase === 'EMAIL' &&
+        emailOtp.length === 6 &&
+        !emailVerified &&
+        !verifying
+      ) {
+        void run();
+      }
+      if (
+        otpPhase === 'PHONE' &&
+        phoneOtp.length === 6 &&
+        !phoneVerified &&
+        !verifying
+      ) {
+        void run();
+      }
+    }
+  }, [
+    currentStep,
+    otpPhase,
+    emailOtp,
+    phoneOtp,
+    emailVerified,
+    phoneVerified,
+    verifying,
+    form,
+  ]);
 
   const StepContents = [
     <div key="step-0" className="grid gap-6">
@@ -380,10 +506,89 @@ export default function ServiceProviderSignupPage() {
         )}
       />
     </div>,
+    // Step 3: Verificação sequencial (Email depois Telefone)
+    <div key="step-3" className="grid gap-6">
+      <div>
+        <FormLabel>
+          {otpPhase === 'EMAIL'
+            ? 'Código de verificação (Email)'
+            : 'Código de verificação (Telefone)'}
+        </FormLabel>
+        <div className="flex flex-col items-start gap-2">
+          <div className="w-full flex justify-center">
+            <InputOTP
+              maxLength={6}
+              value={otpPhase === 'EMAIL' ? emailOtp : phoneOtp}
+              onChange={otpPhase === 'EMAIL' ? setEmailOtp : setPhoneOtp}
+              containerClassName="w-full flex justify-center"
+            >
+              <InputOTPGroup>
+                {[0, 1, 2].map((i) => (
+                  <InputOTPSlot key={`${otpPhase}-a-${i}`} index={i} />
+                ))}
+              </InputOTPGroup>
+              <InputOTPSeparator />
+              <InputOTPGroup>
+                {[3, 4, 5].map((i) => (
+                  <InputOTPSlot key={`${otpPhase}-b-${i}`} index={i} />
+                ))}
+              </InputOTPGroup>
+            </InputOTP>
+          </div>
+          <div className="flex justify-between w-full">
+            <Button
+              size="xs"
+              type="button"
+              variant="link"
+              disabled={
+                isLoading ||
+                verifying ||
+                (otpPhase === 'EMAIL' ? cooldownEmail > 0 : cooldownPhone > 0)
+              }
+              onClick={async () => {
+                try {
+                  if (otpPhase === 'EMAIL') {
+                    const { email } = form.getValues();
+                    await sendEmailConfirmationCode(email);
+                    setCooldownEmail(60);
+                  } else {
+                    const { phoneNumber } = form.getValues();
+                    await sendPhoneConfirmationCode(phoneNumber);
+                    setCooldownPhone(60);
+                  }
+                } catch (e) {
+                  toast.error(
+                    e instanceof Error ? e.message : 'Erro ao reenviar código'
+                  );
+                }
+              }}
+            >
+              {otpPhase === 'EMAIL'
+                ? cooldownEmail > 0
+                  ? `Reenviar (${cooldownEmail})`
+                  : 'Reenviar código'
+                : cooldownPhone > 0
+                ? `Reenviar (${cooldownPhone})`
+                : 'Reenviar código'}
+            </Button>
+          </div>
+          {verifying && (
+            <div className="mt-2 text-sm text-muted-foreground">
+              Validando código...
+            </div>
+          )}
+          {emailVerified && otpPhase === 'PHONE' && (
+            <div className="mt-2 text-sm text-green-600">
+              Email verificado. Agora verifique seu telefone.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>,
   ];
 
   return (
-    <Card className="w-full max-w-xl px-0 py-6.5 gap-10 rounded-3xl">
+    <Card className="w-full max-w-2xl px-0 py-6.5 gap-10 rounded-3xl">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl font-bold">Criar conta</CardTitle>
         <CardDescription>
@@ -458,7 +663,14 @@ export default function ServiceProviderSignupPage() {
                   </Button>
                 )}
                 {isLastStep && (
-                  <Button type="submit" className="flex-1" disabled={isLoading}>
+                  <Button
+                    type="submit"
+                    className="flex-1"
+                    disabled={
+                      isLoading ||
+                      (currentStep === 3 && (!emailVerified || !phoneVerified))
+                    }
+                  >
                     {isLoading ? 'Carregando' : 'Finalizar Cadastro'}
                   </Button>
                 )}

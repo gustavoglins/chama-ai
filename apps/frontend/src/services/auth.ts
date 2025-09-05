@@ -15,6 +15,17 @@ interface sendEmailConfirmationCodePayload {
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export interface ServiceProviderSignupRequestDto {
+  email: string;
+  phoneNumber: number;
+  firstName: string;
+  lastName: string;
+  cpf: string;
+  password: string;
+  dateOfBirth: string;
+  gender: 'MALE' | 'FEMALE' | 'OTHER';
+}
+
 export async function login(payload: LoginPayload) {
   const loginValue =
     payload.login ??
@@ -49,6 +60,27 @@ export async function signupClient(payload: ClientSignupRequestDto) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || 'Erro ao criar conta');
+  }
+
+  return res.json();
+}
+
+export async function signupServiceProvider(
+  payload: ServiceProviderSignupRequestDto
+) {
+  const body = {
+    ...payload,
+    phoneNumber: Number(payload.phoneNumber),
+  };
+  const res = await fetch(`${BASE_URL}/auth/signup/service-provider`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {

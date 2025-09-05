@@ -160,6 +160,55 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public AuthResponseDTO signup(ServiceProviderSignupRequestDTO data) {
+        if (!isOfLegalAge(data.dateOfBirth())) throw new UserNotOfLegalAgeException();
+        if (emailAlreadyInUse(data.email())) throw new EmailAlreadyInUseException();
+        if (phoneNumberAlreadyInUse(data.phoneNumber())) throw new PhoneAlreadyInUseException();
+
+        User newUser = new User();
+
+        newUser.setAccountId(data.firstName() + '#' + generateAccountId(data.firstName()));
+        newUser.setEmail(data.email());
+        newUser.setPhoneNumber(data.phoneNumber());
+        newUser.setPasswordHash(passwordEncoder.encode(data.password()));
+        newUser.setAuthProvider(AuthProvider.LOCAL);
+        newUser.setLastLogin(LocalDateTime.now());
+        newUser.setActive(true);
+        newUser.setVerified(false);
+        newUser.setVerificationToken(null);
+        newUser.setPasswordResetToken(null);
+
+        newUser.setFirstName(data.firstName());
+        newUser.setLastName(data.lastName());
+        newUser.setCpf(data.cpf());
+        newUser.setAccountType(Set.of(AccountType.CLIENT));
+        newUser.setProfilePicture(null);
+        newUser.setDateOfBirth(data.dateOfBirth());
+        newUser.setGender(data.gender());
+        newUser.setBio(null);
+
+        newUser.setRole(AuthRole.COMMON_USER);
+        newUser.setTwoFactorEnabled(false);
+
+        newUser.setUpdatedAt(LocalDateTime.now());
+        newUser.setCreatedAt(LocalDateTime.now());
+        newUser.setDeletedAt(null);
+        newUser.setLastPasswordChangeAt(LocalDateTime.now());
+
+        User createdUser = this.userRepository.save(newUser);
+        userProducer.sendUserCreated(new UserCreatedEventDTO(
+                createdUser.getFirstName(),
+                createdUser.getLastName(),
+                createdUser.getEmail(),
+                createdUser.getPhoneNumber(),
+                createdUser.getDateOfBirth()
+        ));
+
+        String token = tokenService.generateToken(createdUser);
+        return new AuthResponseDTO(token);
+    }
+
+    @Override
     public AuthResponseDTO login(LoginRequestDTO loginRequestDto) {
         System.out.println(loginRequestDto);
         try {

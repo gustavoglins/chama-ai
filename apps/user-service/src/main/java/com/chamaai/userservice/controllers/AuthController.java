@@ -27,7 +27,14 @@ public class AuthController {
 
     @PostMapping("/signup/client")
     public ResponseEntity<AuthResponseDTO> signup(@RequestBody @Valid ClientSignupRequestDto request) {
-        logger.info("Received client signup request: {}", request);
+        logger.info("Received Client signup request: {}", request);
+        AuthResponseDTO authResponseDTO = authService.signup(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(authResponseDTO);
+    }
+
+    @PostMapping("/signup/service-provider")
+    public ResponseEntity<AuthResponseDTO> signup(@RequestBody @Valid ServiceProviderSignupRequestDTO request) {
+        logger.info("Received Service Provider signup request: {}", request);
         AuthResponseDTO authResponseDTO = authService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(authResponseDTO);
     }

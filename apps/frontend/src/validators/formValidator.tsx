@@ -134,3 +134,36 @@ export const signupFormSchema = z
     path: ['confirmPassword'],
   });
 export type SignupFormSchema = z.infer<typeof signupFormSchema>;
+
+// Signup do Service Provider (email e telefone OBRIGATÓRIOS)
+export const serviceProviderSignupFormSchema = z
+  .object({
+    firstName: z.string().min(2, 'O Nome é obrigatório'),
+    lastName: z.string().min(2, 'O Sobrenome é obrigatório'),
+    cpf: z
+      .string()
+      .transform((v) => v.replace(/\D/g, ''))
+      .refine((v) => v.length === 11, 'CPF inválido'),
+    dateOfBirth: z
+      .date()
+      .refine((v) => !!v, 'A Data de nascimento é obrigatória'),
+    gender: z.enum(['MALE', 'FEMALE', 'OTHER']),
+    email: z.string().trim().email('Email inválido'),
+    phoneNumber: z
+      .string()
+      .trim()
+      .transform((v) => v.replace(/\D/g, ''))
+      .refine((v) => v.length >= 10 && v.length <= 11, 'Telefone inválido'),
+    password: z
+      .string()
+      .min(8, 'A senha deve ter pelo menos 8 caracteres')
+      .max(72, 'Senha muito longa'),
+    confirmPassword: z.string().min(8, 'A Confirmação de senha é obrigatória'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas não coincidem',
+    path: ['confirmPassword'],
+  });
+export type ServiceProviderSignupFormSchema = z.infer<
+  typeof serviceProviderSignupFormSchema
+>;
