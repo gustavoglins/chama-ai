@@ -27,7 +27,7 @@ export default function LandingLayout({
           <nav>
             <ul className="flex space-x-4">
               <li>
-                <Link href={'/explore'}>
+                <Link href={'/app/services'}>
                   <Button variant="ghost">
                     Explorar <ArrowUpRight />
                   </Button>
