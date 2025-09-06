@@ -9,7 +9,7 @@
 ## Tecnologias
 
 - **Frontend:** React, Next.js, Tailwind CSS, Zustand
-- **Backend:** Java, Spring Framework (Boot, JPA, Security, Cloud, Kafka)
+- **Backend:** Java, Spring Framework (Boot, JPA, Security, Cloud, Kafka, Actuator)
 - **Banco de dados:** PostgreSQL  
 - **Mensageria / Cache:** Kafka, Redis
 - **Autenticação:** JWT 
