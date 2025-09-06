@@ -1,16 +1,31 @@
 server:
   port: 8081
 api:
-  version: v1
   security:
+    cors:
+      allowed-origins: "http://localhost:3000"
+      allowed-methods: "POST,UPDATE,GET,DELETE"
+      allowed-headers: "*"
+      allowed-credentials: true
     token:
       secret: ${PRIVATE_KEY:secret}
       public: ${PUBLIC_KEY:public}
       expire-length: 3600
 spring:
   application:
-    name: user-service
+    name: Chama Ai User Service API
+    description: API for user management, authentication and sessions in Chama Ai.
+    version: 1.0.0
     issuer: chamaai.com
+    contact:
+      name: Gustavo Lins
+      email: gustavoglins05@gmail.com
+      url: https://github.com/gustavoglins
+    license:
+      name: CC BY-NC 4.0
+      url: https://creativecommons.org/licenses/by-nc/4.0/
+    server:
+      url: http://localhost:8081
   cloud:
     openfeign:
       config:
