@@ -7,7 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  # FRONTEND
+  # --------------------------
+  # BUILD & TEST - FRONTEND
+  # --------------------------
   build-frontend:
     runs-on: ubuntu-latest
     steps:
@@ -29,10 +31,10 @@ jobs:
         run: |
           cd apps/frontend
           npm run build
-    paths:
-      - 'apps/frontend/**'
 
-  # USER SERVICE
+  # --------------------------
+  # BUILD & TEST - USER SERVICE
+  # --------------------------
   build-user-service:
     runs-on: ubuntu-latest
     steps:
@@ -51,10 +53,10 @@ jobs:
             ${{ runner.os }}-maven-
       - name: Build & Test User Service
         run: mvn -f apps/user-service/pom.xml clean install -B
-    paths:
-      - 'apps/user-service/**'
 
-  # NOTIFICATION SERVICE
+  # --------------------------
+  # BUILD & TEST - NOTIFICATION SERVICE
+  # --------------------------
   build-notification-service:
     runs-on: ubuntu-latest
     steps:
@@ -73,5 +75,3 @@ jobs:
             ${{ runner.os }}-maven-
       - name: Build & Test Notification Service
         run: mvn -f apps/notification-service/pom.xml clean install -B
-    paths:
-      - 'apps/notification-service/**'
