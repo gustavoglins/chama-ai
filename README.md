@@ -2,7 +2,7 @@
 
 ### On-demand services platform.
 
-![Landing Page Preview](previews/landing-page.png)
+![Landing Page Preview](/previews/landing-page.png)
 
 ## Technologies
 
