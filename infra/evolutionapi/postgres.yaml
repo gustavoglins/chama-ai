@@ -1,0 +1,23 @@
+services:
+
+  postgres:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rede_interna
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=4984W1621485ERG1ER615
+      - PG_MAX_CONNECTIONS=500
+
+volumes:
+  postgres_data:
+    external: true
+    name: postgres_data
+
+networks:
+  rede_interna:
+    external: true
+    name: rede_interna
