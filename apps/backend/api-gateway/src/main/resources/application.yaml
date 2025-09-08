@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+server:
+  port: 55001
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:55000/eureka
+    register-with-eureka: true
+    fetch-registry: true
