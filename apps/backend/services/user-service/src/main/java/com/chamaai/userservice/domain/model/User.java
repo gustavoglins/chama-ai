@@ -1,6 +1,7 @@
 package com.chamaai.userservice.domain.model;
 
 import com.chamaai.userservice.domain.enums.*;
+import com.chamaai.userservice.domain.exceptions.InvalidUserException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -169,16 +170,45 @@ public class User {
         return deletedAt;
     }
 
-    public void updatedEmail(String newEmail) {
+    public void updatedLastLogin() {
+        this.lastLogin = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateFirstName(String newFirstName) {
+        this.firstName = newFirstName;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateLastName(String newLastName) {
+        this.lastName = newLastName;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateProfilePicture(String newProfilePicture) {
+        this.profilePicture = newProfilePicture;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateBio(String newBio) {
+        this.bio = newBio;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateEmail(String newEmail) {
+        if (newEmail == null || email.equals(newEmail) || !newEmail.contains("@")) {
+            throw new InvalidUserException("Invalid email");
+        }
         this.email = newEmail;
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updatedPhoneNumber(String newPhoneNumber) {
+    public void updatePhoneNumber(String newPhoneNumber) {
         this.phoneNumber = newPhoneNumber;
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public void updatedPassword(String newPasswordHash) {
+    public void updatePassword(String newPasswordHash) {
         this.passwordHash = newPasswordHash;
         this.lastPasswordChangeAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -215,7 +245,16 @@ public class User {
         private String bio;
         private Set<AccountType> accountType;
 
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+        private LocalDateTime deletedAt;
+
         private AuthRole role;
+
+        public UserBuilder withId(UUID id) {
+            this.id = id;
+            return this;
+        }
 
         public UserBuilder withAuthProvider(AuthProvider authProvider) {
             this.authProvider = authProvider;
@@ -319,6 +358,21 @@ public class User {
 
         public UserBuilder withLastPasswordChangeAt(LocalDateTime lastPasswordChangeAt) {
             this.lastPasswordChangeAt = lastPasswordChangeAt;
+            return this;
+        }
+
+        public UserBuilder withCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public UserBuilder withUpdatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public UserBuilder withDeletedAt(LocalDateTime deletedAt) {
+            this.deletedAt = deletedAt;
             return this;
         }
 

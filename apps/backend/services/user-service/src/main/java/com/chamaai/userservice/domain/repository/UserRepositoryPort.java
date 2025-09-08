@@ -14,7 +14,7 @@ public interface UserRepositoryPort {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByCpf(String cpf);
+    Optional<User> findByTaxId(String taxId);
 
     Optional<User> findByPhoneNumber(String phoneNumber);
 
@@ -22,5 +22,11 @@ public interface UserRepositoryPort {
 
     void delete(User user);
 
-    boolean existsByEmailOrCpf(String email, String cpf);
+    boolean existsByEmail(String email);
+
+    boolean existsByTaxId(String taxId);
+
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    boolean existsByEmailOrTaxId(String email, String taxId);
 }
