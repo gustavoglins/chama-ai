@@ -1,6 +1,6 @@
-# Chama Ai
+# Chama Ai - On-demand services platform.
 
-### On-demand services platform.
+#### An app to connect customers with service providers quickly and reliably
 
 ![Landing Page Preview](/previews/landing-page.png)
 
