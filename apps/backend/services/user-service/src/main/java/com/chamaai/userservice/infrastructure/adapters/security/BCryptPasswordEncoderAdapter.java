@@ -1,4 +1,4 @@
-package com.chamaai.userservice.infrastructure.security;
+package com.chamaai.userservice.infrastructure.adapters.security;
 
 import com.chamaai.userservice.application.ports.out.PasswordEncoderPort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

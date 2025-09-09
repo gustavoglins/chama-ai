@@ -1,6 +1,6 @@
-package com.chamaai.userservice.infrastructure.persistence.repository;
+package com.chamaai.userservice.infrastructure.adapters.persistence.repository;
 
-import com.chamaai.userservice.infrastructure.persistence.entity.UserEntity;
+import com.chamaai.userservice.infrastructure.adapters.persistence.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

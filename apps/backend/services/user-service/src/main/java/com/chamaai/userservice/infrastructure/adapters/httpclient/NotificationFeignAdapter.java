@@ -1,4 +1,4 @@
-package com.chamaai.userservice.infrastructure.adapters.notification;
+package com.chamaai.userservice.infrastructure.adapters.httpclient;
 
 import com.chamaai.common.dto.SendNotificationRequestDTO;
 import com.chamaai.userservice.application.ports.out.NotificationPort;

@@ -1,9 +1,9 @@
-package com.chamaai.userservice.infrastructure.persistence.repository;
+package com.chamaai.userservice.infrastructure.adapters.persistence.repository;
 
 import com.chamaai.userservice.domain.model.User;
 import com.chamaai.userservice.application.ports.out.UserRepositoryPort;
-import com.chamaai.userservice.infrastructure.persistence.entity.UserEntity;
-import com.chamaai.userservice.infrastructure.persistence.mapper.UserEntityMapper;
+import com.chamaai.userservice.infrastructure.adapters.persistence.entity.UserEntity;
+import com.chamaai.userservice.infrastructure.adapters.persistence.mapper.UserEntityMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

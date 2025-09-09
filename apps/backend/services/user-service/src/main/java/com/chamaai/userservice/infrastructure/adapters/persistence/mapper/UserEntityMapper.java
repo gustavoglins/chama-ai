@@ -1,7 +1,7 @@
-package com.chamaai.userservice.infrastructure.persistence.mapper;
+package com.chamaai.userservice.infrastructure.adapters.persistence.mapper;
 
 import com.chamaai.userservice.domain.model.User;
-import com.chamaai.userservice.infrastructure.persistence.entity.UserEntity;
+import com.chamaai.userservice.infrastructure.adapters.persistence.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

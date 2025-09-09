@@ -1,4 +1,4 @@
-package com.chamaai.userservice.interfaces.http;
+package com.chamaai.userservice.infrastructure.adapters.http;
 
 import com.chamaai.userservice.application.dto.responses.ApiResponse;
 import com.chamaai.userservice.application.dto.responses.ApiResponseStatus;

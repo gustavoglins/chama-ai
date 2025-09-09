@@ -1,4 +1,4 @@
-package com.chamaai.userservice.infrastructure.security;
+package com.chamaai.userservice.infrastructure.adapters.security;
 
 import com.chamaai.userservice.infrastructure.config.JwtProvider;
 import jakarta.servlet.FilterChain;

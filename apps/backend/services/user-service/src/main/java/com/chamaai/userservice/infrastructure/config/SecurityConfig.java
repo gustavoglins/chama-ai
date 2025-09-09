@@ -1,6 +1,6 @@
 package com.chamaai.userservice.infrastructure.config;
 
-import com.chamaai.userservice.infrastructure.security.BCryptPasswordEncoderAdapter;
+import com.chamaai.userservice.infrastructure.adapters.security.BCryptPasswordEncoderAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

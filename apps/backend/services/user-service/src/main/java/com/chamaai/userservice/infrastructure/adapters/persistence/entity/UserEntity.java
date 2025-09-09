@@ -1,4 +1,4 @@
-package com.chamaai.userservice.infrastructure.persistence.entity;
+package com.chamaai.userservice.infrastructure.adapters.persistence.entity;
 
 import com.chamaai.userservice.domain.enums.*;
 import jakarta.persistence.*;
