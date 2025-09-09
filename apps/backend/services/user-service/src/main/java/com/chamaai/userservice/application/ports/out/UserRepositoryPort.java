@@ -1,4 +1,4 @@
-package com.chamaai.userservice.domain.repository;
+package com.chamaai.userservice.application.ports.out;
 
 import com.chamaai.userservice.domain.model.User;
 
@@ -27,6 +27,4 @@ public interface UserRepositoryPort {
     boolean existsByTaxId(String taxId);
 
     boolean existsByPhoneNumber(String phoneNumber);
-
-    boolean existsByEmailOrTaxId(String email, String taxId);
 }
