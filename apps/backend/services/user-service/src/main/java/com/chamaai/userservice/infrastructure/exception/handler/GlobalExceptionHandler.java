@@ -1,4 +1,4 @@
-package com.chamaai.userservice.infrastructure.adapters.http;
+package com.chamaai.userservice.infrastructure.exception.handler;
 
 import com.chamaai.userservice.application.dto.responses.ApiResponse;
 import com.chamaai.userservice.application.dto.responses.ApiResponseStatus;

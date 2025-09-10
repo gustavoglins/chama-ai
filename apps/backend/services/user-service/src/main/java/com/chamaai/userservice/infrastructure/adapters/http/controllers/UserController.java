@@ -1,4 +1,4 @@
-package com.chamaai.userservice.infrastructure.adapters.http;
+package com.chamaai.userservice.infrastructure.adapters.http.controllers;
 
 import com.chamaai.userservice.application.dto.requests.CreateUserRequestDTO;
 import com.chamaai.userservice.application.dto.requests.UpdateUserRequestDTO;

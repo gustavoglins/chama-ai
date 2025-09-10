@@ -7,7 +7,7 @@ import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
 import com.chamaai.userservice.application.exception.DataAlreadyRegisteredException;
 import com.chamaai.userservice.application.mapper.UserMapper;
 import com.chamaai.userservice.application.ports.in.CreateUserUseCase;
-import com.chamaai.userservice.application.ports.in.UserValidationPort;
+import com.chamaai.userservice.application.ports.out.UserValidationPort;
 import com.chamaai.userservice.application.ports.out.NotificationPort;
 import com.chamaai.userservice.application.ports.out.PasswordEncoderPort;
 import com.chamaai.userservice.application.ports.out.UserRepositoryPort;

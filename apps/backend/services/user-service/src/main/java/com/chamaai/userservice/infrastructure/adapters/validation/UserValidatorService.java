@@ -1,6 +1,6 @@
-package com.chamaai.userservice.application.services;
+package com.chamaai.userservice.infrastructure.adapters.validation;
 
-import com.chamaai.userservice.application.ports.in.UserValidationPort;
+import com.chamaai.userservice.application.ports.out.UserValidationPort;
 import com.chamaai.userservice.application.ports.out.UserRepositoryPort;
 
 import java.util.ArrayList;

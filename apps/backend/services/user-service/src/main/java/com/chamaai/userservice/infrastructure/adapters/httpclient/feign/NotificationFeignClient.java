@@ -1,4 +1,4 @@
-package com.chamaai.userservice.infrastructure.adapters.httpclient;
+package com.chamaai.userservice.infrastructure.adapters.httpclient.feign;
 
 import com.chamaai.common.dto.SendNotificationRequestDTO;
 import org.springframework.cloud.openfeign.FeignClient;
