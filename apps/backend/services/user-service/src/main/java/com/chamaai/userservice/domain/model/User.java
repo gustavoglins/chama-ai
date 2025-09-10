@@ -44,7 +44,8 @@ public class User {
     }
 
     private User(UserBuilder builder) {
-        this.id = UUID.randomUUID();
+        // Use the id provided by the builder (may be null for new entities; JPA will generate it)
+        this.id = builder.id;
         this.email = builder.email;
         this.taxId = builder.taxId;
         this.passwordHash = builder.passwordHash;
@@ -66,8 +67,10 @@ public class User {
         this.bio = builder.bio;
         this.accountType = builder.accountType;
         this.role = builder.role;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        // If timestamps not provided (new entity), initialize them.
+        this.createdAt = builder.createdAt != null ? builder.createdAt : LocalDateTime.now();
+        this.updatedAt = builder.updatedAt != null ? builder.updatedAt : LocalDateTime.now();
+        this.deletedAt = builder.deletedAt;
     }
 
     public UUID getId() {

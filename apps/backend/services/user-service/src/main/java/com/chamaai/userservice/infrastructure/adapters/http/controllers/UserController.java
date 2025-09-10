@@ -26,6 +26,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Valid CreateUserRequestDTO request) {
+        System.out.println("Request received");
         UserResponseDTO result = this.createUserUseCase.createUser(request);
         ApiResponse<UserResponseDTO> response = new ApiResponse<>(
                 ApiResponseStatus.SUCCESS,

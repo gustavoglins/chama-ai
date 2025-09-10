@@ -4,7 +4,7 @@ import com.chamaai.common.dto.SendNotificationRequestDTO;
 import com.chamaai.userservice.application.ports.out.NotificationPort;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("feignNotificationAdapter")
 public class NotificationFeignAdapter implements NotificationPort {
 
     private final NotificationFeignClient notificationFeignClient;

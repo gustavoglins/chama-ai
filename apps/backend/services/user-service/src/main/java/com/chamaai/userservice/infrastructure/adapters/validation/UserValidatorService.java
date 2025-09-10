@@ -1,11 +1,13 @@
 package com.chamaai.userservice.infrastructure.adapters.validation;
 
-import com.chamaai.userservice.application.ports.out.UserValidationPort;
 import com.chamaai.userservice.application.ports.out.UserRepositoryPort;
+import com.chamaai.userservice.application.ports.out.UserValidationPort;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class UserValidatorService implements UserValidationPort {
 
     private final UserRepositoryPort userRepositoryPort;

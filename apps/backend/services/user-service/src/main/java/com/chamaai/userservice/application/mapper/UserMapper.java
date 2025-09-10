@@ -4,10 +4,12 @@ import com.chamaai.userservice.application.dto.requests.CreateUserRequestDTO;
 import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
 import com.chamaai.userservice.domain.enums.AuthProvider;
 import com.chamaai.userservice.domain.enums.AuthRole;
+import com.chamaai.userservice.domain.enums.CommunicationChannel;
 import com.chamaai.userservice.domain.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
@@ -33,6 +35,9 @@ public interface UserMapper {
                 .withAuthProvider(AuthProvider.LOCAL)
                 .withRole(AuthRole.COMMON_USER)
                 .withIsActive(true)
+                .withTwoFactorEnabled(false)
+                .withPreferredCommunicationChannel(CommunicationChannel.EMAIL)
+                .withLastLogin(LocalDateTime.now())
                 .build();
     }
 

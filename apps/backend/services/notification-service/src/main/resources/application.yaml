@@ -1,17 +1,17 @@
 server:
-  port: 55002
+  port: 55003
 chama-ai:
   kafka:
-    group-id: user-service-group
+    group-id: notification-service-group
     bootstrap-servers: localhost:9092
     topic:
-      user: user-service-topic
+      user: user-created
       notification-service: notification-service-topic
   service-discovery:
     url: http://localhost:55000/eureka/
   services:
-    notification-service:
-      url: http://localhost:55003
+    user-service:
+      url: http://localhost:55002
 api:
   security:
     cors:
@@ -19,14 +19,10 @@ api:
       allowed-methods: "POST,UPDATE,GET,DELETE"
       allowed-headers: "*"
       allowed-credentials: true
-    token:
-      secret: ${PRIVATE_KEY:secret}
-      public: ${PUBLIC_KEY:public}
-      expiration-in-seconds: 7200
 spring:
   application:
-    name: user-service
-    description: API for user management, authentication and sessions in Chama Ai.
+    name: notification-service
+    description: API for notification management of Chama Ai.
     version: 1.0.0
     issuer: chamaai.com
     contact:
@@ -38,21 +34,10 @@ spring:
       url: https://creativecommons.org/licenses/by-nc/4.0/
     server:
       url: http://localhost:${server.port}
-  cloud:
-    openfeign:
-      config:
-        default:
-          connectTimeout: 5000
-          readTimeout: 5000
   datasource:
     url: jdbc:postgresql://localhost:5433/chamaai_db
     username: postgres
     password: postgres
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    open-in-view: false
 eureka:
   client:
     service-url:

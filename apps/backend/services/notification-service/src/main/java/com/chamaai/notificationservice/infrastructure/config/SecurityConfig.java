@@ -1,6 +1,5 @@
-package com.chamaai.userservice.infrastructure.config;
+package com.chamaai.notificationservice.infrastructure.config;
 
-import com.chamaai.userservice.infrastructure.adapters.security.BCryptPasswordEncoderAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,31 +24,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .cors(cors -> cors.configurationSource(this.corsConfigurationSource))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/swagger-resources/**",
-                                "/webjars/**"
-                        ).permitAll()
+                        .requestMatchers("/api/v1/notifications/email").permitAll()
                         .anyRequest().permitAll()
                 )
-//                .addFilterBefore()
                 .build();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public BCryptPasswordEncoderAdapter bCryptPasswordEncoderAdapter() {
-        return new BCryptPasswordEncoderAdapter();
     }
 }

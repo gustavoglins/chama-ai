@@ -7,12 +7,13 @@ import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
 import com.chamaai.userservice.application.exception.DataAlreadyRegisteredException;
 import com.chamaai.userservice.application.mapper.UserMapper;
 import com.chamaai.userservice.application.ports.in.CreateUserUseCase;
-import com.chamaai.userservice.application.ports.out.UserValidationPort;
 import com.chamaai.userservice.application.ports.out.NotificationPort;
 import com.chamaai.userservice.application.ports.out.PasswordEncoderPort;
 import com.chamaai.userservice.application.ports.out.UserRepositoryPort;
+import com.chamaai.userservice.application.ports.out.UserValidationPort;
 import com.chamaai.userservice.domain.model.User;
 import com.chamaai.userservice.domain.services.UserDomainService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,14 @@ public class CreateUserUseCaseImpl implements CreateUserUseCase {
     private final UserValidationPort userValidationPort;
     private final UserMapper userMapper;
 
-    public CreateUserUseCaseImpl(UserRepositoryPort userRepositoryPort, UserDomainService userDomainService, PasswordEncoderPort passwordEncoderPort, NotificationPort notificationPort, UserValidationPort userValidationPort, UserMapper userMapper) {
+    public CreateUserUseCaseImpl(
+            UserRepositoryPort userRepositoryPort,
+            UserDomainService userDomainService,
+            PasswordEncoderPort passwordEncoderPort,
+            @Qualifier("kafkaNotificationAdapter") NotificationPort notificationPort,
+            UserValidationPort userValidationPort,
+            UserMapper userMapper
+    ) {
         this.userRepositoryPort = userRepositoryPort;
         this.userDomainService = userDomainService;
         this.passwordEncoderPort = passwordEncoderPort;
