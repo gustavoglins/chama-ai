@@ -27,4 +27,6 @@ public interface UserRepositoryPort {
     boolean existsByTaxId(String taxId);
 
     boolean existsByPhoneNumber(String phoneNumber);
+
+    void deleteAll();
 }

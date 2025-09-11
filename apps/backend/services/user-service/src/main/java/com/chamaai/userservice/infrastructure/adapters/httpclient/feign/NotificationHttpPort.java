@@ -1,15 +1,15 @@
 package com.chamaai.userservice.infrastructure.adapters.httpclient.feign;
 
 import com.chamaai.common.dto.SendNotificationRequestDTO;
-import com.chamaai.userservice.application.ports.out.NotificationPort;
+import com.chamaai.userservice.application.ports.out.NotificationRestPort;
 import org.springframework.stereotype.Component;
 
-@Component("feignNotificationAdapter")
-public class NotificationFeignAdapter implements NotificationPort {
+@Component
+public class NotificationHttpPort implements NotificationRestPort {
 
     private final NotificationFeignClient notificationFeignClient;
 
-    public NotificationFeignAdapter(NotificationFeignClient notificationFeignClient) {
+    public NotificationHttpPort(NotificationFeignClient notificationFeignClient) {
         this.notificationFeignClient = notificationFeignClient;
     }
 

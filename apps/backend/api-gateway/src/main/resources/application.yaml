@@ -1,6 +1,8 @@
 server:
   port: 55001
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: api-gateway
   cloud:

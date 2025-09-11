@@ -1,8 +1,9 @@
 package com.chamaai.notificationservice.infrastructure.config;
-import com.chamaai.common.dto.SendNotificationRequestDTO;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,14 +29,13 @@ public class KafkaConfig {
         this.groupId = groupId;
     }
 
-
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
-        Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(configProps);
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(config);
     }
 
     @Bean
@@ -44,26 +44,22 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, SendNotificationRequestDTO> consumerFactory() {
-        JsonDeserializer<SendNotificationRequestDTO> deserializer =
-                new JsonDeserializer<>(SendNotificationRequestDTO.class);
-        deserializer.addTrustedPackages("com.chamaai.common.dto");
+    public ConsumerFactory<String, Object> consumerFactory() {
+        JsonDeserializer<Object> deserializer = new JsonDeserializer<>();
+        deserializer.addTrustedPackages("*");
 
-        return new DefaultKafkaConsumerFactory<>(
-                Map.of(
-                        ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
-                        ConsumerConfig.GROUP_ID_CONFIG, this.groupId,
-                        ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
-                        ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer
-                ),
-                new StringDeserializer(),
-                deserializer
-        );
+        Map<String, Object> config = new HashMap<>();
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, this.groupId);
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
+
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), deserializer);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, SendNotificationRequestDTO> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, SendNotificationRequestDTO> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;

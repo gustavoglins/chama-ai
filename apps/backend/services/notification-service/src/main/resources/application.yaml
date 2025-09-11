@@ -5,7 +5,7 @@ chama-ai:
     group-id: notification-service-group
     bootstrap-servers: localhost:9092
     topic:
-      user: user-created
+      user: user-created-topic
       notification-service: notification-service-topic
   service-discovery:
     url: http://localhost:55000/eureka/
@@ -13,6 +13,7 @@ chama-ai:
     user-service:
       url: http://localhost:55002
 api:
+  email: contact@gustavoglins.com
   security:
     cors:
       allowed-origins: "http://localhost:3000"
@@ -48,3 +49,9 @@ eureka:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 30
+resend:
+  apikey: ${RESEND_API_KEY}
+evolution-api:
+  url: http://localhost:8080
+  instance: otp
+  apikey: ${EVOLUTION_API_KEY:4AmT2CKIrytgLbYj3alLg32iKaHgyexlH4j9L050jvMyjYUC4LHsIGQYUrwo3Ru1K34ZHknajmR84HNndkDjv9MKrpotl9PCGOJdZDaKn8hZ6RBMcJRgPmk326yBn2NJ}=
