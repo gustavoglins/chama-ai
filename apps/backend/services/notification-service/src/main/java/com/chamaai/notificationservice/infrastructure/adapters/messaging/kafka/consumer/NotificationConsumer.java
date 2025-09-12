@@ -2,6 +2,7 @@ package com.chamaai.notificationservice.infrastructure.adapters.messaging.kafka.
 
 import com.chamaai.common.dto.UserCreatedEvent;
 import com.chamaai.notificationservice.application.ports.in.UserCreatedEventConsumerUseCase;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,9 +19,15 @@ public class NotificationConsumer {
     }
 
     @KafkaListener(topics = "${chama-ai.kafka.topic.user}", groupId = "${chama-ai.kafka.group-id}")
-    public void consumerUserCreatedEvent(UserCreatedEvent event) {
-        logger.info("Mensagem recebida no NotificationService: {}", event);
-        this.userCreatedEventConsumerUseCase.handleUserCreatedEvent(event);
-        logger.info("Mensagem processada no NotificationService");
+    public void consumeUserCreatedEvent(ConsumerRecord<String, UserCreatedEvent> record) {
+        UserCreatedEvent event = record.value();
+        String key = record.key();
+        logger.info("Message received. topic={}, partition={}, offset={}, key={}", record.topic(), record.partition(), record.offset(), key);
+        try {
+            userCreatedEventConsumerUseCase.handleUserCreatedEvent(event);
+            logger.info("Message processed successfully. key={}", key);
+        } catch (Exception e) {
+            logger.error("Error processing message. topic={}, partition={}, offset={}, key={}, error={}", record.topic(), record.partition(), record.offset(), key, e.getMessage(), e);
+        }
     }
 }
