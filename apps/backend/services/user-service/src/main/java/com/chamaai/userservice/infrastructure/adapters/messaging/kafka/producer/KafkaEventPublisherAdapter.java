@@ -22,14 +22,24 @@ public class KafkaEventPublisherAdapter implements DomainEventPublisherPort {
 
     @Override
     public void publishUserCreatedEvent(UserCreatedEvent event) {
-        this.kafkaTemplate.send(this.userCreatedTopic, event.userId(), event)
+        kafkaTemplate.send(userCreatedTopic, event.userId(), event)
                 .whenComplete((recordMetadata, exception) -> {
                     if (exception != null) {
-                        //TODO: implement retry
-                        logger.error("Error sending Event: UserCreated: {}", exception.getMessage());
+                        logger.error(
+                                "Failed to send UserCreatedEvent. topic={}, key={}, error={}",
+                                userCreatedTopic,
+                                event.userId(),
+                                exception.getMessage(),
+                                exception
+                        );
                     } else {
-                        //TODO: implement real logic
-                        logger.info("Event: UserCreated sent successfully");
+                        logger.info(
+                                "UserCreatedEvent sent successfully. topic={}, partition={}, offset={}, key={}",
+                                recordMetadata.getRecordMetadata().topic(),
+                                recordMetadata.getRecordMetadata().partition(),
+                                recordMetadata.getRecordMetadata().offset(),
+                                event.userId()
+                        );
                     }
                 });
     }
