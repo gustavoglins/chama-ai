@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -42,13 +44,13 @@ public class AuthController {
     }
 
     @PostMapping("/otp/validate")
-    public ResponseEntity<ApiResponseDTO<Void>> validateOtp(@RequestBody @Valid ValidateOtpRequestDTO request) {
-        this.validateOtpUseCase.validate(new ValidateOtpCommand(request.login(), request.otp()));
-        ApiResponseDTO<Void> response = new ApiResponseDTO<>(
+    public ResponseEntity<ApiResponseDTO<?>> validateOtp(@RequestBody @Valid ValidateOtpRequestDTO request) {
+        String result = this.validateOtpUseCase.validate(new ValidateOtpCommand(request.login(), request.otp()));
+        ApiResponseDTO<?> response = new ApiResponseDTO<>(
                 ApiResponseStatus.SUCCESS,
                 HttpStatus.OK.value(),
                 "OTP validated successfully",
-                null,
+                Map.of("token", result),
                 null
         );
         return ResponseEntity.status(HttpStatus.OK).body(response);

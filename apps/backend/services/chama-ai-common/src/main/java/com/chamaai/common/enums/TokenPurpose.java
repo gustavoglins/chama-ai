@@ -1,9 +1,10 @@
-package com.chamaai.userservice.domain.enums;
+package com.chamaai.common.enums;
 
 public enum TokenPurpose {
     SESSION("SESSION"),
     PASSWORD_RESET("PASSWORD_RESET"),
-    EMAIL_VERIFICATION("EMAIL_VERIFICATION");
+    OTP_VERIFICATION("OTP_VERIFICATION"),
+    ACCOUNT_CREATION("ACCOUNT_CREATION");
 
     private String value;
 

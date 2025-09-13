@@ -1,6 +1,5 @@
 package com.chamaai.userservice.infrastructure.adapters.security;
 
-import com.chamaai.userservice.infrastructure.config.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

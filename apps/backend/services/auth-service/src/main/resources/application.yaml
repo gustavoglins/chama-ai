@@ -22,7 +22,6 @@ api:
     token:
       secret: ${PRIVATE_KEY:secret}
       public: ${PUBLIC_KEY:public}
-      expiration-in-seconds: 7200
 spring:
   application:
     name: auth-service
