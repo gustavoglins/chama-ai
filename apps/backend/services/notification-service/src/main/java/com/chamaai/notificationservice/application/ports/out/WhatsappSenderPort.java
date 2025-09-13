@@ -1,5 +1,8 @@
 package com.chamaai.notificationservice.application.ports.out;
 
+import com.chamaai.notificationservice.application.commands.out.SendWhatsappCommand;
+
 public interface WhatsappSenderPort {
-    void send(String phoneNumber, String message);
+    //TODO: criar records
+    void send(SendWhatsappCommand command);
 }

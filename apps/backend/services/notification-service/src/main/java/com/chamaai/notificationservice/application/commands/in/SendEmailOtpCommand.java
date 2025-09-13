@@ -1,4 +1,4 @@
-package com.chamaai.notificationservice.application.commands;
+package com.chamaai.notificationservice.application.commands.in;
 
 public record SendEmailOtpCommand(
         String email,

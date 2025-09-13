@@ -1,7 +1,7 @@
 package com.chamaai.notificationservice.infrastructure.adapters.email;
 
+import com.chamaai.notificationservice.application.commands.out.SendEmailCommand;
 import com.chamaai.notificationservice.application.ports.out.EmailSenderPort;
-import com.chamaai.notificationservice.domain.enums.EmailTemplate;
 import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
@@ -24,14 +24,14 @@ public class EmailSenderAdapter implements EmailSenderPort {
     }
 
     @Override
-    public void send(EmailTemplate template, String recipient, String subject, String message) {
-        String templateBody = loadTemplate(template.getValue() + ".html");
-        String htmlBody = templateBody.replace("{{htmlBodyVar}}", message);
+    public void send(SendEmailCommand command) {
+        String templateBody = loadTemplate(command.template().getValue() + ".html");
+        String htmlBody = templateBody.replace("{{htmlBodyVar}}", command.dynamicVariableValue());
 
         CreateEmailOptions params = CreateEmailOptions.builder()
                 .from(this.apiEmail)
-                .to(recipient)
-                .subject(subject)
+                .to(command.recipient())
+                .subject(command.subject())
                 .html(htmlBody)
                 .build();
 

@@ -2,9 +2,9 @@ package com.chamaai.notificationservice.application.usecases;
 
 import com.chamaai.common.enums.NotificationChannel;
 import com.chamaai.common.enums.NotificationType;
-import com.chamaai.notificationservice.application.commands.NotificationCommand;
-import com.chamaai.notificationservice.application.commands.SendEmailOtpCommand;
-import com.chamaai.notificationservice.application.commands.SendWhatsappOtpCommand;
+import com.chamaai.notificationservice.application.commands.in.NotificationCommand;
+import com.chamaai.notificationservice.application.commands.in.SendEmailOtpCommand;
+import com.chamaai.notificationservice.application.commands.in.SendWhatsappOtpCommand;
 import com.chamaai.notificationservice.application.exceptions.UnsupportedNotificationChannelException;
 import com.chamaai.notificationservice.application.exceptions.UnsupportedNotificationTypeException;
 import com.chamaai.notificationservice.application.ports.in.NotificationOrchestratorUseCase;

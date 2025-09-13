@@ -4,7 +4,7 @@ import com.chamaai.common.dto.requests.SendNotificationRequestDTO;
 import com.chamaai.common.dto.responses.ApiResponseDTO;
 import com.chamaai.common.enums.ApiResponseStatus;
 import com.chamaai.common.enums.NotificationChannel;
-import com.chamaai.notificationservice.application.commands.NotificationCommand;
+import com.chamaai.notificationservice.application.commands.in.NotificationCommand;
 import com.chamaai.notificationservice.application.ports.in.NotificationOrchestratorUseCase;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

@@ -1,5 +1,6 @@
 package com.chamaai.notificationservice.infrastructure.adapters.httpclient;
 
+import com.chamaai.notificationservice.application.commands.out.SendWhatsappCommand;
 import com.chamaai.notificationservice.application.ports.out.WhatsappSenderPort;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ public class WhatsappSenderAdapter implements WhatsappSenderPort {
     }
 
     @Override
-    public void send(String phoneNumber, String message) {
-        this.evolutionApiRestClient.sendMessage(phoneNumber, message);
+    public void send(SendWhatsappCommand command) {
+        this.evolutionApiRestClient.sendMessage(command.phoneNumber(), command.message());
     }
 }

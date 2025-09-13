@@ -1,6 +1,7 @@
 package com.chamaai.notificationservice.application.usecases;
 
 import com.chamaai.common.dto.responses.UserCreatedEvent;
+import com.chamaai.notificationservice.application.commands.out.SendEmailCommand;
 import com.chamaai.notificationservice.application.ports.in.UserCreatedEventConsumerUseCase;
 import com.chamaai.notificationservice.application.ports.out.EmailSenderPort;
 import com.chamaai.notificationservice.domain.enums.EmailTemplate;
@@ -17,6 +18,6 @@ public class UserCreatedEventConsumerService implements UserCreatedEventConsumer
 
     @Override
     public void handleUserCreatedEvent(UserCreatedEvent event) {
-        emailSenderPort.send(EmailTemplate.WELCOME, event.email(), "Chama Aí | Bem vindo(a)", event.name());
+        emailSenderPort.send(new SendEmailCommand(EmailTemplate.WELCOME, event.email(), "Chama Aí | Bem vindo(a)", event.name()));
     }
 }

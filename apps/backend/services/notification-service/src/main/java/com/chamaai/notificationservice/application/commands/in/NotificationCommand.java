@@ -1,4 +1,4 @@
-package com.chamaai.notificationservice.application.commands;
+package com.chamaai.notificationservice.application.commands.in;
 
 import com.chamaai.common.enums.NotificationChannel;
 import com.chamaai.common.enums.NotificationType;

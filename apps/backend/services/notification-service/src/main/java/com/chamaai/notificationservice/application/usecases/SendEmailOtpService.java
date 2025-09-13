@@ -1,6 +1,7 @@
 package com.chamaai.notificationservice.application.usecases;
 
-import com.chamaai.notificationservice.application.commands.SendEmailOtpCommand;
+import com.chamaai.notificationservice.application.commands.in.SendEmailOtpCommand;
+import com.chamaai.notificationservice.application.commands.out.SendEmailCommand;
 import com.chamaai.notificationservice.application.ports.in.SendEmailOtpUseCase;
 import com.chamaai.notificationservice.application.ports.out.EmailSenderPort;
 import com.chamaai.notificationservice.domain.enums.EmailTemplate;
@@ -17,6 +18,6 @@ public class SendEmailOtpService implements SendEmailOtpUseCase {
 
     @Override
     public void sendOtp(SendEmailOtpCommand command) {
-        this.emailSenderPort.send(EmailTemplate.OTP, command.email(), "Chama Aí | Código de Acesso", command.otp());
+        this.emailSenderPort.send(new SendEmailCommand(EmailTemplate.OTP, command.email(), "Chama Aí | Código de Acesso", command.otp()));
     }
 }
