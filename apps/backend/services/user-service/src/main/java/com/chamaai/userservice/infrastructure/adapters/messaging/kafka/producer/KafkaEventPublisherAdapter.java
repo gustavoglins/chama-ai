@@ -1,6 +1,6 @@
 package com.chamaai.userservice.infrastructure.adapters.messaging.kafka.producer;
 
-import com.chamaai.common.dto.UserCreatedEvent;
+import com.chamaai.common.dto.responses.UserCreatedEvent;
 import com.chamaai.userservice.application.ports.out.DomainEventPublisherPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

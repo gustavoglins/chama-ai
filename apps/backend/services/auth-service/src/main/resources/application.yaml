@@ -53,6 +53,10 @@ spring:
     url: jdbc:postgresql://localhost:5433/chamaai_db
     username: postgres
     password: postgres
+  data:
+    redis:
+      host: localhost
+      port: 6380
   jpa:
     hibernate:
       ddl-auto: create-drop

@@ -4,18 +4,22 @@ import com.chamaai.common.enums.NotificationChannel;
 import com.chamaai.common.enums.NotificationType;
 import com.chamaai.notificationservice.application.commands.NotificationCommand;
 import com.chamaai.notificationservice.application.commands.SendEmailOtpCommand;
+import com.chamaai.notificationservice.application.commands.SendWhatsappOtpCommand;
 import com.chamaai.notificationservice.application.exceptions.UnsupportedNotificationChannelException;
 import com.chamaai.notificationservice.application.exceptions.UnsupportedNotificationTypeException;
 import com.chamaai.notificationservice.application.ports.in.NotificationOrchestratorUseCase;
+import com.chamaai.notificationservice.application.ports.in.SendWhatsappOtpUseCase;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationOrchestratorService implements NotificationOrchestratorUseCase {
 
     private final SendEmailOtpService sendEmailOtpUseCase;
+    private final SendWhatsappOtpUseCase sendWhatsappOtpUseCase;
 
-    public NotificationOrchestratorService(SendEmailOtpService sendEmailOtpUseCase) {
+    public NotificationOrchestratorService(SendEmailOtpService sendEmailOtpUseCase, SendWhatsappOtpUseCase sendWhatsappOtpUseCase) {
         this.sendEmailOtpUseCase = sendEmailOtpUseCase;
+        this.sendWhatsappOtpUseCase = sendWhatsappOtpUseCase;
     }
 
     @Override
@@ -39,6 +43,11 @@ public class NotificationOrchestratorService implements NotificationOrchestrator
     }
 
     private void handleWhatsapp(NotificationCommand command) {
-
+        switch (command.type()) {
+            case NotificationType.OTP_VERIFICATION ->
+                    this.sendWhatsappOtpUseCase.sendOtp(new SendWhatsappOtpCommand(command.recipient(), command.data().get("otp").toString()));
+            default ->
+                    throw new UnsupportedNotificationTypeException("Unsupported notification type: " + command.type());
+        }
     }
 }

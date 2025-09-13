@@ -12,6 +12,8 @@ chama-ai:
   services:
     notification-service:
       url: http://localhost:55003
+    auth-service:
+      url: http://localhost:55004
 api:
   security:
     cors:

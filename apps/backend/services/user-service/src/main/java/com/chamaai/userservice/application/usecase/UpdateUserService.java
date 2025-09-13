@@ -10,13 +10,13 @@ import com.chamaai.userservice.domain.services.UserDomainService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
+public class UpdateUserService implements UpdateUserUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
     private final UserDomainService userDomainService;
     private final UserMapper userMapper;
 
-    public UpdateUserUseCaseImpl(UserRepositoryPort userRepositoryPort, UserDomainService userDomainService, UserMapper userMapper) {
+    public UpdateUserService(UserRepositoryPort userRepositoryPort, UserDomainService userDomainService, UserMapper userMapper) {
         this.userRepositoryPort = userRepositoryPort;
         this.userDomainService = userDomainService;
         this.userMapper = userMapper;

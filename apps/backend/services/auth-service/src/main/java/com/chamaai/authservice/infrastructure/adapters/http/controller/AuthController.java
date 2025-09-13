@@ -3,7 +3,10 @@ package com.chamaai.authservice.infrastructure.adapters.http.controller;
 import com.chamaai.authservice.application.commands.GenerateOtpCommand;
 import com.chamaai.authservice.application.commands.ValidateOtpCommand;
 import com.chamaai.authservice.application.ports.in.GenerateOtpUseCase;
-import com.chamaai.common.dto.ApiResponseDTO;
+import com.chamaai.authservice.application.ports.in.ValidateOtpUseCase;
+import com.chamaai.authservice.infrastructure.adapters.http.dto.requests.GenerateOtpRequestDTO;
+import com.chamaai.authservice.infrastructure.adapters.http.dto.requests.ValidateOtpRequestDTO;
+import com.chamaai.common.dto.responses.ApiResponseDTO;
 import com.chamaai.common.enums.ApiResponseStatus;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,15 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final GenerateOtpUseCase generateOtpUseCase;
+    private final ValidateOtpUseCase validateOtpUseCase;
 
-    public AuthController(GenerateOtpUseCase generateOtpUseCase) {
+    public AuthController(GenerateOtpUseCase generateOtpUseCase, ValidateOtpUseCase validateOtpUseCase) {
         this.generateOtpUseCase = generateOtpUseCase;
+        this.validateOtpUseCase = validateOtpUseCase;
     }
 
     @PostMapping("/otp/generate")
-    public <T> ResponseEntity<ApiResponseDTO<T>> generateOtp(@RequestBody @Valid GenerateOtpCommand request) {
-        this.generateOtpUseCase.generateOTP(request);
-        ApiResponseDTO<T> response = new ApiResponseDTO<>(
+    public ResponseEntity<ApiResponseDTO<Void>> generateOtp(@RequestBody @Valid GenerateOtpRequestDTO request) {
+        this.generateOtpUseCase.generateOTP(new GenerateOtpCommand(request.login()));
+        ApiResponseDTO<Void> response = new ApiResponseDTO<>(
                 ApiResponseStatus.SUCCESS,
                 HttpStatus.OK.value(),
                 "OTP sent successfully",
@@ -37,7 +42,15 @@ public class AuthController {
     }
 
     @PostMapping("/otp/validate")
-    public ResponseEntity<ApiResponseDTO<?>> validateOtp(@RequestBody @Valid ValidateOtpCommand request) {
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<ApiResponseDTO<Void>> validateOtp(@RequestBody @Valid ValidateOtpRequestDTO request) {
+        this.validateOtpUseCase.validate(new ValidateOtpCommand(request.login(), request.otp()));
+        ApiResponseDTO<Void> response = new ApiResponseDTO<>(
+                ApiResponseStatus.SUCCESS,
+                HttpStatus.OK.value(),
+                "OTP validated successfully",
+                null,
+                null
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

@@ -1,6 +1,6 @@
 package com.chamaai.userservice.infrastructure.adapters.httpclient.feign;
 
-import com.chamaai.common.dto.SendNotificationRequestDTO;
+import com.chamaai.common.dto.requests.SendNotificationRequestDTO;
 import com.chamaai.userservice.application.ports.out.NotificationRestPort;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +14,12 @@ public class NotificationRestAdapter implements NotificationRestPort {
     }
 
     @Override
-    public <T> void sendEmailNotification(SendNotificationRequestDTO<T> sendNotificationRequestDTO) {
+    public void sendEmailNotification(SendNotificationRequestDTO sendNotificationRequestDTO) {
         this.notificationFeignClient.sendEmail(sendNotificationRequestDTO);
     }
 
     @Override
-    public <T> void sendWhatsappNotification(SendNotificationRequestDTO<T> sendNotificationRequestDTO) {
+    public void sendWhatsappNotification(SendNotificationRequestDTO sendNotificationRequestDTO) {
         this.notificationFeignClient.sendWhatsappMessage(sendNotificationRequestDTO);
     }
 }

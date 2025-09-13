@@ -1,9 +1,9 @@
 package com.chamaai.userservice.application.ports.out;
 
-import com.chamaai.common.dto.SendNotificationRequestDTO;
+import com.chamaai.common.dto.requests.SendNotificationRequestDTO;
 
 public interface NotificationRestPort {
-    <T> void sendEmailNotification(SendNotificationRequestDTO<T> sendNotificationRequestDTO);
+    void sendEmailNotification(SendNotificationRequestDTO sendNotificationRequestDTO);
 
-    <T> void sendWhatsappNotification(SendNotificationRequestDTO<T> sendNotificationRequestDTO);
+    void sendWhatsappNotification(SendNotificationRequestDTO sendNotificationRequestDTO);
 }

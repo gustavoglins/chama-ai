@@ -1,12 +1,15 @@
 package com.chamaai.userservice.infrastructure.adapters.http.controllers;
 
 import com.chamaai.userservice.application.commands.CreateUserCommand;
+import com.chamaai.userservice.application.commands.StartRegistrationCommand;
 import com.chamaai.userservice.application.commands.UpdateUserCommand;
+import com.chamaai.userservice.application.ports.in.CreateUserUseCase;
+import com.chamaai.userservice.application.ports.in.StartRegistrationUseCase;
+import com.chamaai.userservice.application.ports.in.UpdateUserUseCase;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.requests.StartRegistrationRequestDTO;
 import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.ApiResponse;
 import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.ApiResponseStatus;
 import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
-import com.chamaai.userservice.application.ports.in.CreateUserUseCase;
-import com.chamaai.userservice.application.ports.in.UpdateUserUseCase;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +22,27 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final StartRegistrationUseCase startRegistrationUseCase;
     private final CreateUserUseCase createUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
 
-    public UserController(CreateUserUseCase createUserUseCase, UpdateUserUseCase updateUserUseCase) {
+    public UserController(StartRegistrationUseCase startRegistrationUseCase, CreateUserUseCase createUserUseCase, UpdateUserUseCase updateUserUseCase) {
+        this.startRegistrationUseCase = startRegistrationUseCase;
         this.createUserUseCase = createUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> startRegistration(@RequestBody @Valid StartRegistrationRequestDTO request) {
+        this.startRegistrationUseCase.startRegistration(new StartRegistrationCommand(request.login()));
+        ApiResponse<UserResponseDTO> response = new ApiResponse<>(
+                ApiResponseStatus.SUCCESS,
+                HttpStatus.OK.value(),
+                "Registration started successfully",
+                null,
+                null
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping

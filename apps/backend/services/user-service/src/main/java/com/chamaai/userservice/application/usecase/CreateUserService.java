@@ -1,6 +1,6 @@
 package com.chamaai.userservice.application.usecase;
 
-import com.chamaai.common.dto.UserCreatedEvent;
+import com.chamaai.common.dto.responses.UserCreatedEvent;
 import com.chamaai.userservice.application.commands.CreateUserCommand;
 import com.chamaai.userservice.application.exception.DataAlreadyRegisteredException;
 import com.chamaai.userservice.application.mapper.UserMapper;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CreateUserUseCaseImpl implements CreateUserUseCase {
+public class CreateUserService implements CreateUserUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
     private final UserDomainService userDomainService;
@@ -26,7 +26,7 @@ public class CreateUserUseCaseImpl implements CreateUserUseCase {
     private final DomainEventPublisherPort domainEventPublisherPort;
     private final UserMapper userMapper;
 
-    public CreateUserUseCaseImpl(
+    public CreateUserService(
             UserRepositoryPort userRepositoryPort,
             UserDomainService userDomainService,
             PasswordEncoderPort passwordEncoderPort,

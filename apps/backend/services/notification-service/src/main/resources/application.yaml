@@ -54,4 +54,4 @@ resend:
 evolution-api:
   url: http://localhost:8080
   instance: otp
-  apikey: ${EVOLUTION_API_KEY:4AmT2CKIrytgLbYj3alLg32iKaHgyexlH4j9L050jvMyjYUC4LHsIGQYUrwo3Ru1K34ZHknajmR84HNndkDjv9MKrpotl9PCGOJdZDaKn8hZ6RBMcJRgPmk326yBn2NJ}=
+  apikey: ${EVOLUTION_API_KEY:4AmT2CKIrytgLbYj3alLg32iKaHgyexlH4j9L050jvMyjYUC4LHsIGQYUrwo3Ru1K34ZHknajmR84HNndkDjv9MKrpotl9PCGOJdZDaKn8hZ6RBMcJRgPmk326yBn2NJ}

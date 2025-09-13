@@ -1,4 +1,4 @@
-package com.chamaai.common.dto;
+package com.chamaai.common.dto.responses;
 
 import com.chamaai.common.enums.ApiResponseStatus;
 
