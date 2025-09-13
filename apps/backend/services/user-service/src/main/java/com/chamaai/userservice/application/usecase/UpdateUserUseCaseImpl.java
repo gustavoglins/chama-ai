@@ -1,7 +1,7 @@
 package com.chamaai.userservice.application.usecase;
 
-import com.chamaai.userservice.application.dto.requests.UpdateUserRequestDTO;
-import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
+import com.chamaai.userservice.application.commands.UpdateUserCommand;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
 import com.chamaai.userservice.application.mapper.UserMapper;
 import com.chamaai.userservice.application.ports.in.UpdateUserUseCase;
 import com.chamaai.userservice.domain.model.User;
@@ -23,25 +23,25 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
     }
 
     @Override
-    public UserResponseDTO updateUser(UpdateUserRequestDTO updateUserRequestDTO) {
-        User user = userRepositoryPort.findById(updateUserRequestDTO.id()).orElseThrow(() -> new IllegalArgumentException("User not found."));
+    public UserResponseDTO updateUser(UpdateUserCommand updateUserCommand) {
+        User user = userRepositoryPort.findById(updateUserCommand.id()).orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        if (updateUserRequestDTO.email() != null && !updateUserRequestDTO.email().equals(user.getEmail()) &&
-                userRepositoryPort.existsByEmail(updateUserRequestDTO.email())) {
+        if (updateUserCommand.email() != null && !updateUserCommand.email().equals(user.getEmail()) &&
+                userRepositoryPort.existsByEmail(updateUserCommand.email())) {
             throw new IllegalArgumentException("Email already in use");
         }
 
-        if (updateUserRequestDTO.phoneNumber() != null && !updateUserRequestDTO.phoneNumber().equals(user.getPhoneNumber()) && userRepositoryPort.existsByPhoneNumber(updateUserRequestDTO.phoneNumber())) {
+        if (updateUserCommand.phoneNumber() != null && !updateUserCommand.phoneNumber().equals(user.getPhoneNumber()) && userRepositoryPort.existsByPhoneNumber(updateUserCommand.phoneNumber())) {
             throw new IllegalArgumentException("Phone number already in use");
         }
 
-        userDomainService.updateEmail(user, updateUserRequestDTO.email());
-        userDomainService.updatePhoneNumber(user, updateUserRequestDTO.phoneNumber());
-        if (updateUserRequestDTO.firstName() != null) user.updateFirstName(updateUserRequestDTO.firstName());
-        if (updateUserRequestDTO.lastName() != null) user.updateLastName(updateUserRequestDTO.lastName());
-        if (updateUserRequestDTO.profilePicture() != null)
-            user.updateProfilePicture(updateUserRequestDTO.profilePicture());
-        if (updateUserRequestDTO.bio() != null) user.updateBio(updateUserRequestDTO.bio());
+        userDomainService.updateEmail(user, updateUserCommand.email());
+        userDomainService.updatePhoneNumber(user, updateUserCommand.phoneNumber());
+        if (updateUserCommand.firstName() != null) user.updateFirstName(updateUserCommand.firstName());
+        if (updateUserCommand.lastName() != null) user.updateLastName(updateUserCommand.lastName());
+        if (updateUserCommand.profilePicture() != null)
+            user.updateProfilePicture(updateUserCommand.profilePicture());
+        if (updateUserCommand.bio() != null) user.updateBio(updateUserCommand.bio());
 
         userDomainService.validateUser(user);
 

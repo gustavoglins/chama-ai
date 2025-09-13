@@ -1,8 +1,7 @@
 package com.chamaai.userservice.application.usecase;
 
 import com.chamaai.common.dto.UserCreatedEvent;
-import com.chamaai.userservice.application.dto.requests.CreateUserRequestDTO;
-import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
+import com.chamaai.userservice.application.commands.CreateUserCommand;
 import com.chamaai.userservice.application.exception.DataAlreadyRegisteredException;
 import com.chamaai.userservice.application.mapper.UserMapper;
 import com.chamaai.userservice.application.ports.in.CreateUserUseCase;
@@ -12,6 +11,7 @@ import com.chamaai.userservice.application.ports.out.UserRepositoryPort;
 import com.chamaai.userservice.application.ports.out.UserValidationPort;
 import com.chamaai.userservice.domain.model.User;
 import com.chamaai.userservice.domain.services.UserDomainService;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,14 +43,14 @@ public class CreateUserUseCaseImpl implements CreateUserUseCase {
     }
 
     @Override
-    public UserResponseDTO createUser(CreateUserRequestDTO request) {
+    public UserResponseDTO createUser(CreateUserCommand command) {
         userRepositoryPort.deleteAll(); //!TODO: remove this after all tests
-        List<String> conflicts = userValidationPort.validateUniqueFields(request.taxId(), request.email(), request.phoneNumber());
+        List<String> conflicts = userValidationPort.validateUniqueFields(command.taxId(), command.email(), command.phoneNumber());
         if (!conflicts.isEmpty()) {
             throw new DataAlreadyRegisteredException(conflicts);
         }
 
-        User user = userMapper.toDomain(request);
+        User user = userMapper.toDomain(command);
         user.updatePassword(passwordEncoderPort.encode(user.getPasswordHash()));
         userDomainService.validateUser(user);
 

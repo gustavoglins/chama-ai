@@ -1,7 +1,7 @@
 package com.chamaai.userservice.application.mapper;
 
-import com.chamaai.userservice.application.dto.requests.CreateUserRequestDTO;
-import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
+import com.chamaai.userservice.application.commands.CreateUserCommand;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
 import com.chamaai.userservice.domain.enums.AuthProvider;
 import com.chamaai.userservice.domain.enums.AuthRole;
 import com.chamaai.userservice.domain.enums.CommunicationChannel;
@@ -17,7 +17,7 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    default User toDomain(CreateUserRequestDTO dto) {
+    default User toDomain(CreateUserCommand dto) {
         if (dto == null) return null;
 
         return new User.UserBuilder()

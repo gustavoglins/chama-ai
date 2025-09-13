@@ -1,8 +1,8 @@
 package com.chamaai.userservice.application.ports.in;
 
-import com.chamaai.userservice.application.dto.requests.UpdateUserRequestDTO;
-import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
+import com.chamaai.userservice.application.commands.UpdateUserCommand;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
 
 public interface UpdateUserUseCase {
-    UserResponseDTO updateUser(UpdateUserRequestDTO updateUserRequestDTO);
+    UserResponseDTO updateUser(UpdateUserCommand updateUserCommand);
 }

@@ -1,4 +1,4 @@
-package com.chamaai.userservice.application.dto.responses;
+package com.chamaai.userservice.infrastructure.adapters.http.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

@@ -1,6 +1,6 @@
 package com.chamaai.authservice.application.usecase;
 
-import com.chamaai.authservice.application.dto.requests.GenerateOtpRequestDTO;
+import com.chamaai.authservice.application.commands.GenerateOtpCommand;
 import com.chamaai.authservice.application.ports.in.GenerateOtpUseCase;
 import com.chamaai.authservice.application.ports.out.NotificationRestPort;
 import com.chamaai.common.dto.SendNotificationRequestDTO;
@@ -20,18 +20,18 @@ public class GenerateOtpUseCaseImpl implements GenerateOtpUseCase {
     }
 
     @Override
-    public void generateOTP(GenerateOtpRequestDTO generateOtpRequestDTO) {
+    public void generateOTP(GenerateOtpCommand generateOtpCommand) {
         int otpCode = ThreadLocalRandom.current().nextInt(100000, 999999);
-        if (generateOtpRequestDTO.login().contains("@")) {
+        if (generateOtpCommand.login().contains("@")) {
             this.notificationRestPort.sendEmailNotification(new SendNotificationRequestDTO<>(
-                    NotificationType.LOGIN_VERIFICATION,
-                    generateOtpRequestDTO.login(),
+                    NotificationType.OTP_VERIFICATION,
+                    generateOtpCommand.login(),
                     Map.of("otp", otpCode)
             ));
         } else {
             this.notificationRestPort.sendWhatsappNotification(new SendNotificationRequestDTO<>(
-                    NotificationType.LOGIN_VERIFICATION,
-                    generateOtpRequestDTO.login(),
+                    NotificationType.OTP_VERIFICATION,
+                    generateOtpCommand.login(),
                     Map.of("otp", otpCode)
             ));
         }

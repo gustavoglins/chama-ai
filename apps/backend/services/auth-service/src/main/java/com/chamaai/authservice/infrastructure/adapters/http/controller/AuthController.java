@@ -1,7 +1,7 @@
 package com.chamaai.authservice.infrastructure.adapters.http.controller;
 
-import com.chamaai.authservice.application.dto.requests.GenerateOtpRequestDTO;
-import com.chamaai.authservice.application.dto.requests.ValidateOtpRequestDTO;
+import com.chamaai.authservice.application.commands.GenerateOtpCommand;
+import com.chamaai.authservice.application.commands.ValidateOtpCommand;
 import com.chamaai.authservice.application.ports.in.GenerateOtpUseCase;
 import com.chamaai.common.dto.ApiResponseDTO;
 import com.chamaai.common.enums.ApiResponseStatus;
@@ -24,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/otp/generate")
-    public <T> ResponseEntity<ApiResponseDTO<T>> generateOtp(@RequestBody @Valid GenerateOtpRequestDTO request) {
+    public <T> ResponseEntity<ApiResponseDTO<T>> generateOtp(@RequestBody @Valid GenerateOtpCommand request) {
         this.generateOtpUseCase.generateOTP(request);
         ApiResponseDTO<T> response = new ApiResponseDTO<>(
                 ApiResponseStatus.SUCCESS,
@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/otp/validate")
-    public ResponseEntity<ApiResponseDTO<?>> validateOtp(@RequestBody @Valid ValidateOtpRequestDTO request) {
+    public ResponseEntity<ApiResponseDTO<?>> validateOtp(@RequestBody @Valid ValidateOtpCommand request) {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

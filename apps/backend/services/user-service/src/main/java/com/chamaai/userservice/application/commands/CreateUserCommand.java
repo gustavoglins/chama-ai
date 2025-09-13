@@ -1,4 +1,4 @@
-package com.chamaai.userservice.application.dto.requests;
+package com.chamaai.userservice.application.commands;
 
 import com.chamaai.userservice.domain.enums.AccountType;
 import com.chamaai.userservice.domain.enums.Gender;
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record CreateUserRequestDTO(
+public record CreateUserCommand(
 
         @NotBlank(message = "Tax ID is required")
         @Pattern(regexp = "[A-Za-z0-9]+", message = "Tax ID must contain only letters and numbers")

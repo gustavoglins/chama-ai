@@ -1,8 +1,8 @@
 package com.chamaai.userservice.application.ports.in;
 
-import com.chamaai.userservice.application.dto.requests.CreateUserRequestDTO;
-import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
+import com.chamaai.userservice.application.commands.CreateUserCommand;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
 
 public interface CreateUserUseCase {
-    UserResponseDTO createUser(CreateUserRequestDTO signupRequestDTO);
+    UserResponseDTO createUser(CreateUserCommand command);
 }

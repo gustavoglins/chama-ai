@@ -1,8 +1,8 @@
-package com.chamaai.authservice.application.dto.requests;
+package com.chamaai.authservice.application.commands;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record GenerateOtpRequestDTO(
+public record GenerateOtpCommand(
 
         @NotBlank(message = "Login is required")
         String login

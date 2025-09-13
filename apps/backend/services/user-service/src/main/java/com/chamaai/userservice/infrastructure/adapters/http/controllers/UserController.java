@@ -1,10 +1,10 @@
 package com.chamaai.userservice.infrastructure.adapters.http.controllers;
 
-import com.chamaai.userservice.application.dto.requests.CreateUserRequestDTO;
-import com.chamaai.userservice.application.dto.requests.UpdateUserRequestDTO;
-import com.chamaai.userservice.application.dto.responses.ApiResponse;
-import com.chamaai.userservice.application.dto.responses.ApiResponseStatus;
-import com.chamaai.userservice.application.dto.responses.UserResponseDTO;
+import com.chamaai.userservice.application.commands.CreateUserCommand;
+import com.chamaai.userservice.application.commands.UpdateUserCommand;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.ApiResponse;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.ApiResponseStatus;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
 import com.chamaai.userservice.application.ports.in.CreateUserUseCase;
 import com.chamaai.userservice.application.ports.in.UpdateUserUseCase;
 import jakarta.validation.Valid;
@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Valid CreateUserRequestDTO request) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Valid CreateUserCommand request) {
         logger.info("Receive request to create a new user");
         UserResponseDTO result = this.createUserUseCase.createUser(request);
         ApiResponse<UserResponseDTO> response = new ApiResponse<>(
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(@RequestBody @Valid UpdateUserRequestDTO request) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(@RequestBody @Valid UpdateUserCommand request) {
         UserResponseDTO result = this.updateUserUseCase.updateUser(request);
         ApiResponse<UserResponseDTO> response = new ApiResponse<>(
                 ApiResponseStatus.SUCCESS,
