@@ -1,0 +1,16 @@
+package com.chamaai.common.enums;
+
+public enum ApiResponseStatus {
+    SUCCESS("SUCCESS"),
+    ERROR("ERROR");
+
+    private String value;
+
+    ApiResponseStatus(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+}

@@ -2,8 +2,8 @@ package com.chamaai.common.enums;
 
 public enum NotificationType {
     WELCOME("WELCOME"),
-    PASSWORD_RESET("PASSWORD_RESET"),
-    EMAIL_VERIFICATION("EMAIL_VERIFICATION");
+    OTP_VERIFICATION("OTP_VERIFICATION"),
+    PASSWORD_RESET("PASSWORD_RESET");
 
     private String value;
 
