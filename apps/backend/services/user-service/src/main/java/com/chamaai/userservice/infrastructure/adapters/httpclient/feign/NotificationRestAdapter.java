@@ -5,11 +5,11 @@ import com.chamaai.userservice.application.ports.out.NotificationRestPort;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NotificationHttpPort implements NotificationRestPort {
+public class NotificationRestAdapter implements NotificationRestPort {
 
     private final NotificationFeignClient notificationFeignClient;
 
-    public NotificationHttpPort(NotificationFeignClient notificationFeignClient) {
+    public NotificationRestAdapter(NotificationFeignClient notificationFeignClient) {
         this.notificationFeignClient = notificationFeignClient;
     }
 

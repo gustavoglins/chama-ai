@@ -44,7 +44,6 @@ public class User {
     }
 
     private User(UserBuilder builder) {
-        // Use the id provided by the builder (may be null for new entities; JPA will generate it)
         this.id = builder.id;
         this.email = builder.email;
         this.taxId = builder.taxId;
