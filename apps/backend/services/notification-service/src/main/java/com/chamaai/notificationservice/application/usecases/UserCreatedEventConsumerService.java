@@ -6,11 +6,11 @@ import com.chamaai.notificationservice.application.ports.out.EmailSenderPort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserCreatedEventConsumerUseCaseImpl implements UserCreatedEventConsumerUseCase {
+public class UserCreatedEventConsumerService implements UserCreatedEventConsumerUseCase {
 
     private final EmailSenderPort emailSenderPort;
 
-    public UserCreatedEventConsumerUseCaseImpl(EmailSenderPort emailSenderPort) {
+    public UserCreatedEventConsumerService(EmailSenderPort emailSenderPort) {
         this.emailSenderPort = emailSenderPort;
     }
 

@@ -1,7 +1,7 @@
 package com.chamaai.notificationservice.infrastructure.adapters.email;
 
-import com.chamaai.common.dto.UserCreatedEvent;
 import com.chamaai.notificationservice.application.ports.out.EmailSenderPort;
+import com.chamaai.notificationservice.domain.enums.EmailTemplate;
 import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
@@ -24,21 +24,19 @@ public class EmailSenderAdapter implements EmailSenderPort {
     }
 
     @Override
-    public void sendWelcomeEmail(UserCreatedEvent data) {
-        String template = loadTemplate("welcome-email.html");
-        String htmlBody = template.replace("{{userFirstName}}", data.name());
+    public void send(EmailTemplate template, String recipient, String subject, String message) {
+        String templateBody = loadTemplate(template.getValue() + ".html");
+        String htmlBody = templateBody.replace("{{htmlBodyVar}}", message);
 
         CreateEmailOptions params = CreateEmailOptions.builder()
                 .from(this.apiEmail)
-                .to(data.email())
-                .subject("Boas Vindas - Chama Ai")
+                .to(recipient)
+                .subject(subject)
                 .html(htmlBody)
                 .build();
 
         try {
             resend.emails().send(params);
-            String message = params.getSubject() + ": " + params.getTo();
-            //TODO: persistence to db
         } catch (ResendException exception) {
             throw new RuntimeException(exception.getMessage(), exception.getCause());
         }

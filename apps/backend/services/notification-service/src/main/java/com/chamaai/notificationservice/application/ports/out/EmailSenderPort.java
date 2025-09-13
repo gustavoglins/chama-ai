@@ -1,7 +1,7 @@
 package com.chamaai.notificationservice.application.ports.out;
 
-import com.chamaai.common.dto.UserCreatedEvent;
+import com.chamaai.notificationservice.domain.enums.EmailTemplate;
 
 public interface EmailSenderPort {
-    void sendWelcomeEmail(UserCreatedEvent data);
+    void send(EmailTemplate template, String recipient, String subject, String message);
 }
