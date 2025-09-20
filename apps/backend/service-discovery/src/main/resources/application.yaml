@@ -3,12 +3,12 @@ server:
 spring:
   application:
     name: service-discovery
-#  security:
-#    basic:
-#      enabled: false
-#    user:
-#      name: admin
-#      password: admin
+  security:
+    basic:
+      enabled: true
+    user:
+      name: ${EUREKA_USER:admin}
+      password: ${EUREKA_PASSWORD:admin}
 
 eureka:
   client:

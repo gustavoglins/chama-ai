@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -17,21 +17,20 @@ spring:
             locator:
               enabled: true
               lower-case-service-id: true
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          # TODO: put the correct url
-          issuer-uri: http://localhost:8081/realms/chamaai
-          jwk-set-uri: http://localhost:8081/auth/realms/chama/protocol/openid-connect/certs
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://${EUREKA_USER:admin}:${EUREKA_PASSWORD:admin}@localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus
+
+
+
+
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          # put the correct url
+#          issuer-uri: http://localhost:8081/realms/chamaai
+#          jwk-set-uri: http://localhost:8081/auth/realms/chama/protocol/openid-connect/certs

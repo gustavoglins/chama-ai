@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "auth-service", url = "${chama-ai.services.auth-service.url}")
+@FeignClient(name = "auth-service", url = "${chama-ai.service-discovery.url}/auth-service")
 public interface AuthFeignClient {
 
     @PostMapping("/api/v1/auth/otp/generate")

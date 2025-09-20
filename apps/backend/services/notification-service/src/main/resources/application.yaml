@@ -1,17 +1,15 @@
 server:
-  port: 55003
+  port: 0
+
 chama-ai:
+  service-discovery:
+    url: http://localhost:8081
   kafka:
     group-id: notification-service-group
     bootstrap-servers: localhost:9092
     topic:
       user: user-created-topic
       notification-service: notification-service-topic
-  service-discovery:
-    url: http://localhost:55000/eureka/
-  services:
-    user-service:
-      url: http://localhost:55002
 api:
   email: contact@gustavoglins.com
   security:
@@ -42,7 +40,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: ${chama-ai.service-discovery.url}
+      defaultZone: http://${EUREKA_USER:admin}:${EUREKA_PASSWORD:admin}@localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
