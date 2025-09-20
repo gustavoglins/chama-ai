@@ -1,5 +1,6 @@
 server:
-  port: 55002
+  port: 0
+
 chama-ai:
   kafka:
     group-id: user-service-group
@@ -7,13 +8,7 @@ chama-ai:
     topic:
       userCreated: user-created-topic
       notification-service: notification-service-topic
-  service-discovery:
-    url: http://localhost:55000/eureka/
-  services:
-    notification-service:
-      url: http://localhost:55003
-    auth-service:
-      url: http://localhost:55004
+
 api:
   security:
     cors:
@@ -25,6 +20,7 @@ api:
       secret: ${PRIVATE_KEY:secret}
       public: ${PUBLIC_KEY:public}
       expiration-in-seconds: 7200
+
 spring:
   application:
     name: user-service
@@ -60,13 +56,31 @@ spring:
       ddl-auto: create-drop
     show-sql: true
     open-in-view: false
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
 eureka:
   client:
     service-url:
-      defaultZone: ${chama-ai.service-discovery.url}
+      defaultZone: http://localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 30
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  file:
+    name: ./logs/user-service.log

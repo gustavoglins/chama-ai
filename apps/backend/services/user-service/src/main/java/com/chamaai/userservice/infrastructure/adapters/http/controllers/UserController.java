@@ -33,12 +33,12 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> startRegistration(@RequestBody @Valid StartRegistrationRequestDTO request) {
+    public ResponseEntity<ApiResponse<Void>> startRegistration(@RequestBody @Valid StartRegistrationRequestDTO request) {
         this.startRegistrationUseCase.startRegistration(new StartRegistrationCommand(request.login()));
-        ApiResponse<UserResponseDTO> response = new ApiResponse<>(
+        ApiResponse<Void> response = new ApiResponse<>(
                 ApiResponseStatus.SUCCESS,
                 HttpStatus.OK.value(),
-                "Registration started successfully",
+                "Registration started and OTP has been sent successfully",
                 null,
                 null
         );

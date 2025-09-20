@@ -1,15 +1,16 @@
 server:
-  port: 55000
-  servlet:
-    context-path: /
-
+  port: 8761
 spring:
   application:
     name: service-discovery
+#  security:
+#    basic:
+#      enabled: false
+#    user:
+#      name: admin
+#      password: admin
 
 eureka:
-  instance:
-    hostname: localhost
   client:
     register-with-eureka: false
     fetch-registry: false
