@@ -12,11 +12,28 @@ export const routes: Routes = [
       import('./core/layouts/auth/auth.layout').then((m) => m.AuthLayout),
     children: [
       {
+        title: 'Signup | Chama Aí',
         path: 'signup',
         loadComponent: () =>
-          import('./domain/pages/auth/signup/signup.page').then(
+          import('./domain/auth/pages/signup/signup.page').then(
             (m) => m.SignupPage
           ),
+      },
+      {
+        title: 'Cliente | Chama Aí',
+        path: 'signup/client',
+        loadComponent: () =>
+          import('./domain/auth/pages/signup/client/client-signup.page').then(
+            (m) => m.ClientSignupPage
+          ),
+      },
+      {
+        title: 'Profissional | Chama Aí',
+        path: 'signup/service-provider',
+        loadComponent: () =>
+          import(
+            './domain/auth/pages/signup/service-provider/service-provider-signup.page'
+          ).then((m) => m.ServiceProviderSignupPage),
       },
     ],
   },

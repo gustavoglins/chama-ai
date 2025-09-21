@@ -52,10 +52,6 @@
   font-style: italic;
 }
 
-body {
-  font-family: "SF Pro Text", sans-serif;
-}
-
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -171,4 +167,12 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  font-family: "SF Pro Text", sans-serif;
+}
+
+.form-field {
+  @apply flex flex-col gap-2.5;
 }
