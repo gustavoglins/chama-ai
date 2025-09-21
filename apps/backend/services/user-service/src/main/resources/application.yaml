@@ -14,7 +14,9 @@ chama-ai:
 api:
   security:
     cors:
-      allowed-origins: "http://localhost:3000"
+      allowed-origins:
+      - "http://localhost:3000"
+      - "http://localhost:4200"
       allowed-methods: "POST,UPDATE,GET,DELETE"
       allowed-headers: "*"
       allowed-credentials: true
@@ -55,7 +57,7 @@ spring:
     password: postgres
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     open-in-view: false
   data:
@@ -71,8 +73,8 @@ eureka:
     fetch-registry: true
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    lease-renewal-interval-in-seconds: 10
-    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
 
 management:
   endpoints:

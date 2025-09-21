@@ -45,8 +45,8 @@ eureka:
     fetch-registry: true
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    lease-renewal-interval-in-seconds: 10
-    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 16
 resend:
   apikey: ${RESEND_API_KEY}
 evolution-api:

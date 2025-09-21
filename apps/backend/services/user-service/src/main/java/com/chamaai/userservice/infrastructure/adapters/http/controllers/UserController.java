@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
     private final StartRegistrationUseCase startRegistrationUseCase;
     private final CreateUserUseCase createUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
@@ -34,6 +34,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Void>> startRegistration(@RequestBody @Valid StartRegistrationRequestDTO request) {
+        log.info("Receive request to start registration");
         this.startRegistrationUseCase.startRegistration(new StartRegistrationCommand(request.login()));
         ApiResponse<Void> response = new ApiResponse<>(
                 ApiResponseStatus.SUCCESS,
@@ -42,12 +43,12 @@ public class UserController {
                 null,
                 null
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Valid CreateUserCommand request) {
-        logger.info("Receive request to create a new user");
+        log.info("Receive request to create a new user");
         UserResponseDTO result = this.createUserUseCase.createUser(request);
         ApiResponse<UserResponseDTO> response = new ApiResponse<>(
                 ApiResponseStatus.SUCCESS,
@@ -56,7 +57,7 @@ public class UserController {
                 result,
                 null
         );
-        logger.info("Successfully created a new user");
+        log.info("Successfully created a new user");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -1,3 +1,22 @@
+api:
+  security:
+    cors:
+      allowed-origins:
+        - "http://localhost:3000"
+        - "http://localhost:4200"
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+      allowed-headers:
+        - "*"
+      allowed-credentials: true
+
+    token:
+      secret: ${PRIVATE_KEY:secret}
+      public: ${PUBLIC_KEY:public}
+      expiration-in-seconds: 7200
 server:
   port: 8081
 spring:
@@ -23,7 +42,11 @@ eureka:
       defaultZone: http://${EUREKA_USER:admin}:${EUREKA_PASSWORD:admin}@localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
-
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 60
 
 
 
