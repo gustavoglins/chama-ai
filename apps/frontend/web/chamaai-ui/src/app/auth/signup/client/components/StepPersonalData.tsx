@@ -33,7 +33,6 @@ interface StepPersonalDataProps {
 export default function StepPersonalData({ onSuccess }: StepPersonalDataProps) {
   const [step, setStep] = useState<'personalData' | 'security'>('personalData');
   const [isLoading, setIsLoading] = useState(false);
-  // ayu
 
   const form = useForm<ClientSignupPersonalDataType>({
     resolver: zodResolver(ClientSignupPersonalDataSchema),

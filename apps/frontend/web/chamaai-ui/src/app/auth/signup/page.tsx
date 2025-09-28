@@ -40,19 +40,31 @@ export default function SignupPage() {
   }
 
   return (
-    // <Card className="w-full max-w-xl px-14 py-16 gap-8">
-    <Card className="w-full max-w-md px-0 py-6.5 gap-10 rounded-3xl">
-      <CardHeader className="text-center">
+    // <Card className="w-full max-w-md px-0 py-6.5 gap-10 rounded-3xl">
+    <Card className="w-full max-w-md">
+      {/* <CardHeader className="text-center">
         <Image
           src="/logo.png"
           alt="Chama Ai"
-          width={100}
           height={100}
           className="mx-auto mb-4"
         />
         <CardTitle className="text-3xl font-bold">
           Bem-vindo ao Chama Ai
         </CardTitle>
+        <CardDescription>
+          Serviços rápidos e confiáveis ao seu alcance.
+        </CardDescription>
+      </CardHeader> */}
+      <CardHeader className="text-center">
+        <Image
+          src="/logo.png"
+          alt="Chama Ai"
+          width={100}
+          height={100}
+          className="mx-auto mb-5"
+        />
+        <CardTitle>Bem-vindo ao Chama Ai</CardTitle>
         <CardDescription>
           Serviços rápidos e confiáveis ao seu alcance.
         </CardDescription>

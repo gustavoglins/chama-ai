@@ -22,7 +22,7 @@ export default function ClientSignupPage() {
   }
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className={`w-full ${step === 2 ? 'max-w-md' : 'max-w-sm'}`}>
       <CardHeader>
         <CardTitle>
           {step === 0 && 'Criar conta'}
