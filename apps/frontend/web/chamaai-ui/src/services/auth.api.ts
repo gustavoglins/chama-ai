@@ -12,7 +12,7 @@ const API_LOGIN_URI = '/auth-service/api/v1/auth/login';
 const API_RESET_PASSWORD_URI = '/auth-service/api/v1/auth/reset-password';
 
 interface VerifyOtpPayload {
-  email: string;
+  login: string;
   otp: number;
 }
 

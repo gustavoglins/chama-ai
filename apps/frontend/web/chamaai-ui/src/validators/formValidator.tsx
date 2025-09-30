@@ -11,6 +11,27 @@ export const VerifyOtpSchema = z.object({
 });
 export type VerifyOtpType = z.infer<typeof VerifyOtpSchema>;
 
+// (Novo) Schema apenas para dados pessoais (sem senha) - Step separado
+export const ClientSignupOnlyPersonalDataSchema = z.object({
+  firstName: z.string('O Nome é obrigatório').min(2, 'O Nome é obrigatório'),
+  lastName: z
+    .string('O Sobrenome é obrigatório')
+    .min(2, 'O Sobrenome é obrigatório'),
+  cpf: z
+    .string('O CPF é obrigatório')
+    .transform((v) => v.replace(/\D/g, ''))
+    .refine((v) => v.length === 11, 'CPF inválido'),
+  dateOfBirth: z
+    .date('A Data de nascimento é obrigatória')
+    .refine((v) => !!v, 'A Data de nascimento é obrigatória'),
+  gender: z
+    .enum(['MALE', 'FEMALE', 'OTHER'], 'O gênero é obrigatório')
+    .refine((v) => !!v, 'O gênero é obrigatório'),
+});
+export type ClientSignupOnlyPersonalDataType = z.infer<
+  typeof ClientSignupOnlyPersonalDataSchema
+>;
+
 // Schema to colect user personal data (Step 3/4)
 export const ClientSignupPersonalDataSchema = z
   .object({

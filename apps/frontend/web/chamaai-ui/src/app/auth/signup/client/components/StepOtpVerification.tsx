@@ -63,7 +63,7 @@ export default function StepOtpVerification({
     }
     try {
       const response = await verifyOtp({
-        email: userEmail,
+        login: userEmail,
         otp: Number(values.otp),
       });
 
