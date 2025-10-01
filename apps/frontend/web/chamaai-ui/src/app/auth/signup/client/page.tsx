@@ -7,13 +7,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { finishSignup } from '@/services/user.api';
+import {
+  ClientSignupOnlyPersonalDataType,
+  ClientSignupPersonalDataType,
+} from '@/validators/formValidator';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import StepOtpVerification from './components/StepOtpVerification';
-import StepStartSignup from './components/StepStartSignup';
 import StepPersonalData from './components/StepPersonalData';
 import StepSecurity from './components/StepSecurity';
-import { ClientSignupOnlyPersonalDataType } from '@/validators/formValidator';
-import { useRouter } from 'next/navigation';
+import StepStartSignup from './components/StepStartSignup';
 
 export default function ClientSignupPage() {
   const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
@@ -21,8 +26,20 @@ export default function ClientSignupPage() {
     useState<ClientSignupOnlyPersonalDataType | null>(null);
   const router = useRouter();
 
-  function onSignuped() {
-    router.push('/app');
+  async function onFinished() {
+    try {
+      const response = await finishSignup(
+        personalData as ClientSignupPersonalDataType
+      );
+
+      if (response.data?.token) {
+        localStorage.setItem('authToken', response.data.token);
+        router.push('/app');
+      }
+    } catch (error) {
+      toast.error('Erro ao criar conta. Tente novamente.');
+      console.error('Error in signup:', error);
+    }
   }
 
   return (
@@ -43,7 +60,7 @@ export default function ClientSignupPage() {
             'Por favor, introduza o código de 6 dígitos que enviamos para o seu email.'}
           {step === 2 &&
             'Quase lá! Só mais alguns passos para finalizar o seu cadastro.'}
-          {step === 3 && 'Defina uma senha segura para a sua conta.'}
+          {step === 3 && 'Crie uma senha segura para a sua conta.'}
         </CardDescription>
       </CardHeader>
       <CardContent className="w-full">
@@ -73,7 +90,7 @@ export default function ClientSignupPage() {
           <StepSecurity
             personalData={personalData}
             onBack={() => setStep(2)}
-            onSuccess={onSignuped}
+            onSuccess={onFinished}
           />
         )}
       </CardContent>

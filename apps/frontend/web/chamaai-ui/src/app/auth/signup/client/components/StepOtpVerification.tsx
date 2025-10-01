@@ -55,7 +55,6 @@ export default function StepOtpVerification({
   }, [otp, form]);
 
   async function handleSubmit(values: VerifyOtpType) {
-    console.log('Submitting OTP:', values);
     const userEmail = localStorage.getItem('signupEmail');
     if (!userEmail) {
       toast.error('Email não encontrado. Por favor, reinicie o cadastro.');

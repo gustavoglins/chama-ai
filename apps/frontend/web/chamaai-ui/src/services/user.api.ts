@@ -1,4 +1,5 @@
 import { ApiResponse } from '@/interfaces/api.interface';
+import { AuthResponse } from '@/interfaces/auth.interface';
 import { ClientSignupPersonalDataType } from '@/validators/formValidator';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -39,7 +40,7 @@ export async function startSignup(payload: {
 
 export async function finishSignup(
   payload: ClientSignupPersonalDataType
-): Promise<ApiResponse<undefined>> {
+): Promise<ApiResponse<AuthResponse | undefined>> {
   try {
     // Recupera o email do localStorage (salvo no step anterior)
     const email = localStorage.getItem('signupEmail');
@@ -68,13 +69,12 @@ export async function finishSignup(
       body: JSON.stringify(backendPayload),
     });
 
-    const data: ApiResponse<undefined> = await response.json();
+    const data: ApiResponse<AuthResponse | undefined> = await response.json();
 
     if (!response.ok) {
       return { ...data, status: 'ERROR' };
     }
 
-    // Limpa o email do localStorage após sucesso
     localStorage.removeItem('signupEmail');
 
     return data;
