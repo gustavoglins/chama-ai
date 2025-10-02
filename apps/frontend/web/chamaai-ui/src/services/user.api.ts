@@ -4,8 +4,8 @@ import { ClientSignupPersonalDataType } from '@/validators/formValidator';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const API_START_SIGUP_URI = '/user-service/api/v1/users/signup';
-const API_FINISH_SIGUP_URI = '/user-service/api/v1/users/signup';
+const API_START_SIGUP_URI = '/user-service/api/v1/users/startSignup';
+const API_FINISH_SIGUP_URI = '/user-service/api/v1/users/completeSignup';
 
 export async function startSignup(payload: {
   email: string;
@@ -39,17 +39,16 @@ export async function startSignup(payload: {
 }
 
 export async function finishSignup(
-  payload: ClientSignupPersonalDataType
+  payload: ClientSignupPersonalDataType,
+  emailOverride?: string
 ): Promise<ApiResponse<AuthResponse | undefined>> {
   try {
-    // Recupera o email do localStorage (salvo no step anterior)
-    const email = localStorage.getItem('signupEmail');
+  const email = emailOverride ?? localStorage.getItem('signupEmail');
 
     if (!email) {
       throw new Error('Email não encontrado. Reinicie o processo de cadastro.');
     }
 
-    // Adapta o payload para o formato esperado pelo backend
     const backendPayload = {
       taxId: payload.cpf.replace(/\D/g, ''),
       email: email,

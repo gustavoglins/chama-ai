@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -8,10 +10,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { finishSignup } from '@/services/user.api';
 import {
   ClientSignupOnlyPersonalDataType,
-  ClientSignupPersonalDataType,
   ClientSignupSecuritySchema,
   ClientSignupSecurityType,
 } from '@/validators/formValidator';
@@ -21,14 +21,16 @@ import { toast } from 'sonner';
 
 interface StepSecurityProps {
   personalData: ClientSignupOnlyPersonalDataType | null;
-  onSuccess?: () => void;
+  onSubmit: (values: ClientSignupSecurityType) => Promise<void> | void;
   onBack?: () => void;
+  isSubmitting?: boolean;
 }
 
 export default function StepSecurity({
   personalData,
-  onSuccess,
+  onSubmit,
   onBack,
+  isSubmitting = false,
 }: StepSecurityProps) {
   const form = useForm<ClientSignupSecurityType>({
     resolver: zodResolver(ClientSignupSecuritySchema),
@@ -38,7 +40,7 @@ export default function StepSecurity({
     },
   });
 
-  async function onSubmit(values: ClientSignupSecurityType) {
+  async function handleSubmit(values: ClientSignupSecurityType) {
     if (!personalData) {
       toast.error(
         'Dados pessoais não encontrados. Volte e preencha novamente.'
@@ -47,29 +49,12 @@ export default function StepSecurity({
       return;
     }
 
-    const payload: ClientSignupPersonalDataType = {
-      ...personalData,
-      password: values.password,
-      confirmPassword: values.confirmPassword,
-    } as ClientSignupPersonalDataType;
-
-    try {
-      const response = await finishSignup(payload);
-      if (response.status === 'SUCCESS') {
-        toast.success('Cadastro realizado com sucesso!');
-        onSuccess?.();
-      } else {
-        toast.error(response.message || 'Erro ao realizar cadastro.');
-      }
-    } catch (e) {
-      toast.error('Erro inesperado. Tente novamente.');
-      console.error(e);
-    }
+    await onSubmit(values);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="form">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="form">
         <div className="flex flex-col gap-4">
           <FormField
             control={form.control}
@@ -82,6 +67,7 @@ export default function StepSecurity({
                     id="password"
                     type="password"
                     placeholder="********"
+                    autoComplete="new-password"
                     {...field}
                   />
                 </FormControl>
@@ -100,6 +86,7 @@ export default function StepSecurity({
                     id="confirmPassword"
                     type="password"
                     placeholder="********"
+                    autoComplete="new-password"
                     {...field}
                   />
                 </FormControl>
@@ -108,17 +95,24 @@ export default function StepSecurity({
             )}
           />
         </div>
-        <div className="mt-6 flex gap-3">
+        <div className="mt-6 flex flex-col sm:flex-row gap-3">
           <Button
             type="button"
             variant="outline"
             onClick={onBack}
-            className="flex-1"
+            className="w-full sm:flex-1"
+            disabled={form.formState.isSubmitting || isSubmitting}
           >
             Voltar
           </Button>
-          <Button type="submit" className="flex-1">
-            Finalizar
+          <Button
+            type="submit"
+            className="w-full sm:flex-1"
+            disabled={form.formState.isSubmitting || isSubmitting}
+          >
+            {form.formState.isSubmitting || isSubmitting
+              ? 'Finalizando...'
+              : 'Finalizar'}
           </Button>
         </div>
       </form>

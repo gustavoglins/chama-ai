@@ -11,7 +11,10 @@ import { finishSignup } from '@/services/user.api';
 import {
   ClientSignupOnlyPersonalDataType,
   ClientSignupPersonalDataType,
+  ClientSignupSecurityType,
 } from '@/validators/formValidator';
+import { ApiResponseStatus } from '@/interfaces/api.interface';
+import { translateError } from '@/lib/errors/error-utils';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -24,21 +27,67 @@ export default function ClientSignupPage() {
   const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
   const [personalData, setPersonalData] =
     useState<ClientSignupOnlyPersonalDataType | null>(null);
+  const [signupEmail, setSignupEmail] = useState<string | null>(null);
+  const [isFinishing, setIsFinishing] = useState(false);
   const router = useRouter();
 
-  async function onFinished() {
-    try {
-      const response = await finishSignup(
-        personalData as ClientSignupPersonalDataType
-      );
+  async function handleFinishSignup(credentials: ClientSignupSecurityType) {
+    if (!personalData) {
+      toast.error('Preencha seus dados pessoais antes de finalizar.');
+      setStep(2);
+      return;
+    }
 
-      if (response.data?.token) {
-        localStorage.setItem('authToken', response.data.token);
-        router.push('/app');
+    setIsFinishing(true);
+
+    try {
+      const payload: ClientSignupPersonalDataType = {
+        ...personalData,
+        password: credentials.password,
+        confirmPassword: credentials.confirmPassword,
+      };
+
+      const emailToUse = signupEmail ?? localStorage.getItem('signupEmail');
+
+      if (!emailToUse) {
+        toast.error('Email não encontrado. Volte ao início e tente novamente.');
+        setStep(0);
+        return;
       }
-    } catch (error) {
-      toast.error('Erro ao criar conta. Tente novamente.');
+
+      if (!signupEmail) {
+        setSignupEmail(emailToUse);
+      }
+
+      const response = await finishSignup(payload, emailToUse);
+
+      if (response.status === ApiResponseStatus.SUCCESS) {
+        if (response.data?.token) {
+          localStorage.setItem('authToken', response.data.token);
+          localStorage.removeItem('signupEmail');
+          toast.success('Cadastro realizado com sucesso!');
+          router.push('/app');
+        } else {
+          toast.success('Cadastro finalizado. Faça login para continuar.');
+          router.push('/auth/login');
+        }
+        return;
+      }
+
+      const userFriendlyErrorMessage = translateError(response.message);
+      toast.error(userFriendlyErrorMessage);
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        const backendErrorMessage = err.response?.data?.message;
+        const userMessage = translateError(backendErrorMessage);
+        toast.error(userMessage);
+      } else {
+        toast.error('Erro inesperado. Tente novamente.');
+      }
       console.error('Error in signup:', error);
+    } finally {
+      setIsFinishing(false);
     }
   }
 
@@ -66,15 +115,21 @@ export default function ClientSignupPage() {
       <CardContent className="w-full">
         {step === 0 && (
           <StepStartSignup
-            onSuccess={() => {
+            onSuccess={(email) => {
+              setSignupEmail(email);
               setStep(1);
             }}
           />
         )}
         {step === 1 && (
           <StepOtpVerification
+            email={signupEmail}
             onSuccess={() => {
               setStep(2);
+            }}
+            onBack={() => {
+              setStep(0);
+              setPersonalData(null);
             }}
           />
         )}
@@ -84,13 +139,18 @@ export default function ClientSignupPage() {
               setPersonalData(data);
               setStep(3);
             }}
+            onBack={() => {
+              setPersonalData(null);
+              setStep(1);
+            }}
           />
         )}
         {step === 3 && (
           <StepSecurity
             personalData={personalData}
+            isSubmitting={isFinishing}
             onBack={() => setStep(2)}
-            onSuccess={onFinished}
+            onSubmit={handleFinishSignup}
           />
         )}
       </CardContent>

@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { ApiResponseStatus } from '@/interfaces/api.interface';
+import { translateError } from '@/lib/errors/error-utils';
 import { startSignup } from '@/services/user.api';
 import {
   StartClientSignupSchema,
@@ -23,7 +24,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 interface StepStartSignupProps {
-  onSuccess?: () => void;
+  onSuccess?: (email: string) => void;
 }
 
 export default function StepStartSignup({ onSuccess }: StepStartSignupProps) {
@@ -35,16 +36,28 @@ export default function StepStartSignup({ onSuccess }: StepStartSignupProps) {
   });
 
   async function onSubmit(values: StartClientSignupType) {
+    const trimmedEmail = values.email.trim().toLowerCase();
     try {
-      const response = await startSignup({ email: values.email });
-      console.log(response);
+      const response = await startSignup({ email: trimmedEmail });
 
       if (response.status === ApiResponseStatus.SUCCESS) {
-        localStorage.setItem('signupEmail', values.email);
-        onSuccess?.();
+        localStorage.setItem('signupEmail', trimmedEmail);
+        toast.success('Código de verificação enviado para o seu email.');
+        onSuccess?.(trimmedEmail);
+        return;
       }
-    } catch (error) {
-      toast.error('Erro ao enviar código de verificação. Tente novamente.');
+
+      const userFriendlyErrorMessage = translateError(response.message);
+      toast.error(userFriendlyErrorMessage);
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        const backendErrorMessage = err.response?.data?.message;
+        const userMessage = translateError(backendErrorMessage);
+        toast.error(userMessage);
+      } else {
+        toast.error('Erro inesperado. Tente novamente.');
+      }
       console.error('Error in client signup:', error);
     }
   }
@@ -75,13 +88,25 @@ export default function StepStartSignup({ onSuccess }: StepStartSignupProps) {
               )}
             />
           </div>
-          <Button type="submit" className="w-full">
-            Continuar
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? 'Enviando...' : 'Continuar'}
           </Button>
         </form>
       </Form>
       <Separator className="mt-5 mb-5 self-center" />
-      <Button size="lg" variant="outline" className="w-full flex gap-2">
+      <Button
+        type="button"
+        size="lg"
+        variant="outline"
+        className="w-full flex gap-2"
+        onClick={() =>
+          toast.info('Login com o Google estará disponível em breve.')
+        }
+      >
         <Image
           src="/google-icon.svg"
           alt="Google Logo Icon"

@@ -1,32 +1,61 @@
 import { z } from 'zod';
 
+const emailField = z
+  .string()
+  .trim()
+  .min(1, 'Email é obrigatório')
+  .email('Email inválido');
+
+const passwordField = z
+  .string()
+  .min(8, 'A senha deve ter pelo menos 8 caracteres')
+  .max(72, 'Senha muito longa');
+
+const confirmPasswordField = z
+  .string()
+  .min(8, 'A Confirmação de senha é obrigatória');
+
+const firstNameField = z
+  .string()
+  .trim()
+  .min(2, 'O Nome é obrigatório');
+
+const lastNameField = z
+  .string()
+  .trim()
+  .min(2, 'O Sobrenome é obrigatório');
+
+const cpfField = z
+  .string()
+  .trim()
+  .min(1, 'O CPF é obrigatório')
+  .refine((value) => value.replace(/\D/g, '').length === 11, 'CPF inválido')
+  .transform((value) => value.replace(/\D/g, ''));
+
+const dateOfBirthField = z
+  .date()
+  .refine((value) => value <= new Date(), 'A Data de nascimento não pode ser no futuro');
+
+const genderField = z.enum(['MALE', 'FEMALE', 'OTHER']);
+
 // Schema to initialize client signup (Step 1/3)
 export const StartClientSignupSchema = z.object({
-  email: z.email('Email inválido'),
+  email: emailField,
 });
 export type StartClientSignupType = z.infer<typeof StartClientSignupSchema>;
 
 export const VerifyOtpSchema = z.object({
-  otp: z.string().length(6, 'O código deve ter 6 dígitos'),
+  otp: z.string().trim().length(6, 'O código deve ter 6 dígitos'),
 });
 export type VerifyOtpType = z.infer<typeof VerifyOtpSchema>;
 
 // (Novo) Schema apenas para dados pessoais (sem senha) - Step separado
 export const ClientSignupOnlyPersonalDataSchema = z.object({
-  firstName: z.string('O Nome é obrigatório').min(2, 'O Nome é obrigatório'),
-  lastName: z
-    .string('O Sobrenome é obrigatório')
-    .min(2, 'O Sobrenome é obrigatório'),
-  cpf: z
-    .string('O CPF é obrigatório')
-    .transform((v) => v.replace(/\D/g, ''))
-    .refine((v) => v.length === 11, 'CPF inválido'),
-  dateOfBirth: z
-    .date('A Data de nascimento é obrigatória')
-    .refine((v) => !!v, 'A Data de nascimento é obrigatória'),
-  gender: z
-    .enum(['MALE', 'FEMALE', 'OTHER'], 'O gênero é obrigatório')
-    .refine((v) => !!v, 'O gênero é obrigatório'),
+  firstName: firstNameField,
+  lastName: lastNameField,
+  cpf: cpfField,
+  dateOfBirth: dateOfBirthField,
+  gender: genderField,
 });
 export type ClientSignupOnlyPersonalDataType = z.infer<
   typeof ClientSignupOnlyPersonalDataSchema
@@ -35,30 +64,17 @@ export type ClientSignupOnlyPersonalDataType = z.infer<
 // Schema to colect user personal data (Step 3/4)
 export const ClientSignupPersonalDataSchema = z
   .object({
-    firstName: z.string('O Nome é obrigatório').min(2, 'O Nome é obrigatório'),
-    lastName: z
-      .string('O Sobrenome é obrigatório')
-      .min(2, 'O Sobrenome é obrigatório'),
-    cpf: z
-      .string('O CPF é obrigatório')
-      .transform((v) => v.replace(/\D/g, ''))
-      .refine((v) => v.length === 11, 'CPF inválido'),
-    dateOfBirth: z
-      .date('A Data de nascimento é obrigatória')
-      .refine((v) => !!v, 'A Data de nascimento é obrigatória'),
-    gender: z
-      .enum(['MALE', 'FEMALE', 'OTHER'], 'O gênero é obrigatório')
-      .refine((v) => !!v, 'O gênero é obrigatório'),
-    password: z
-      .string('A senha é obrigatória')
-      .min(8, 'A senha deve ter pelo menos 8 caracteres')
-      .max(72, 'Senha muito longa'),
-    confirmPassword: z
-      .string('A confirmação de senha é obrigatória')
-      .min(8, 'A Confirmação de senha é obrigatória'),
+    firstName: firstNameField,
+    lastName: lastNameField,
+    cpf: cpfField,
+    dateOfBirth: dateOfBirthField,
+    gender: genderField,
+    password: passwordField,
+    confirmPassword: confirmPasswordField,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas não coincidem',
+    path: ['confirmPassword'],
   });
 export type ClientSignupPersonalDataType = z.infer<
   typeof ClientSignupPersonalDataSchema
@@ -67,11 +83,8 @@ export type ClientSignupPersonalDataType = z.infer<
 // Schema to set user password (Step 4/4)
 export const ClientSignupSecuritySchema = z
   .object({
-    password: z
-      .string()
-      .min(8, 'A senha deve ter pelo menos 8 caracteres')
-      .max(72, 'Senha muito longa'),
-    confirmPassword: z.string().min(8, 'A Confirmação de senha é obrigatória'),
+    password: passwordField,
+    confirmPassword: confirmPasswordField,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas não coincidem',
@@ -83,8 +96,8 @@ export type ClientSignupSecurityType = z.infer<
 
 // Login (Email required)
 export const LoginSchema = z.object({
-  email: z.string().trim().email('Email inválido'),
-  password: z.string().min(8, 'Senha inválida'),
+  email: emailField,
+  password: passwordField,
   rememberMe: z.boolean().optional(),
 });
 export type LoginType = z.infer<typeof LoginSchema>;
@@ -92,22 +105,14 @@ export type LoginType = z.infer<typeof LoginSchema>;
 // Signup (form único usado no fluxo do service-provider)
 export const signupFormSchema = z
   .object({
-    firstName: z.string().min(2, 'O Nome é obrigatório'),
-    lastName: z.string().min(2, 'O Sobrenome é obrigatório'),
-    cpf: z
-      .string()
-      .transform((v) => v.replace(/\D/g, ''))
-      .refine((v) => v.length === 11, 'CPF inválido'),
-    dateOfBirth: z
-      .date()
-      .refine((v) => !!v, 'A Data de nascimento é obrigatória'),
-    gender: z.enum(['MALE', 'FEMALE', 'OTHER']),
-    email: z.string().trim().email('Email inválido'),
-    password: z
-      .string()
-      .min(8, 'A senha deve ter pelo menos 8 caracteres')
-      .max(72, 'Senha muito longa'),
-    confirmPassword: z.string().min(8, 'A Confirmação de senha é obrigatória'),
+    firstName: firstNameField,
+    lastName: lastNameField,
+    cpf: cpfField,
+    dateOfBirth: dateOfBirthField,
+    gender: genderField,
+    email: emailField,
+    password: passwordField,
+    confirmPassword: confirmPasswordField,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas não coincidem',
@@ -118,22 +123,14 @@ export type SignupFormSchema = z.infer<typeof signupFormSchema>;
 // Signup do Service Provider (email obrigatório)
 export const serviceProviderSignupFormSchema = z
   .object({
-    firstName: z.string().min(2, 'O Nome é obrigatório'),
-    lastName: z.string().min(2, 'O Sobrenome é obrigatório'),
-    cpf: z
-      .string()
-      .transform((v) => v.replace(/\D/g, ''))
-      .refine((v) => v.length === 11, 'CPF inválido'),
-    dateOfBirth: z
-      .date()
-      .refine((v) => !!v, 'A Data de nascimento é obrigatória'),
-    gender: z.enum(['MALE', 'FEMALE', 'OTHER']),
-    email: z.string().trim().email('Email inválido'),
-    password: z
-      .string()
-      .min(8, 'A senha deve ter pelo menos 8 caracteres')
-      .max(72, 'Senha muito longa'),
-    confirmPassword: z.string().min(8, 'A Confirmação de senha é obrigatória'),
+    firstName: firstNameField,
+    lastName: lastNameField,
+    cpf: cpfField,
+    dateOfBirth: dateOfBirthField,
+    gender: genderField,
+    email: emailField,
+    password: passwordField,
+    confirmPassword: confirmPasswordField,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas não coincidem',
@@ -145,7 +142,7 @@ export type ServiceProviderSignupFormSchema = z.infer<
 
 // Reset Password: Contact (Email required) and New Password
 export const ResetPasswordContactSchema = z.object({
-  email: z.string().trim().email('Email inválido'),
+  email: emailField,
 });
 export type ResetPasswordContactType = z.infer<
   typeof ResetPasswordContactSchema
@@ -153,15 +150,10 @@ export type ResetPasswordContactType = z.infer<
 
 export const ResetPasswordNewSchema = z
   .object({
-    newPassword: z
-      .string()
-      .min(8, 'A senha deve ter pelo menos 8 caracteres')
-      .max(72, 'Senha muito longa')
+    newPassword: passwordField
       .optional()
       .or(z.literal('').transform(() => undefined)),
-    confirmPassword: z
-      .string()
-      .min(8, 'A Confirmação de senha é obrigatória')
+    confirmPassword: confirmPasswordField
       .optional()
       .or(z.literal('').transform(() => undefined)),
   })

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,30 +22,38 @@ import {
   ClientSignupOnlyPersonalDataSchema,
   ClientSignupOnlyPersonalDataType,
 } from '@/validators/formValidator';
+import { maskCPF } from '@/lib/masks';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface StepPersonalDataProps {
   onContinue: (data: ClientSignupOnlyPersonalDataType) => void;
+  onBack?: () => void;
 }
 
 export default function StepPersonalData({
   onContinue,
+  onBack,
 }: StepPersonalDataProps) {
   const form = useForm<ClientSignupOnlyPersonalDataType>({
     resolver: zodResolver(ClientSignupOnlyPersonalDataSchema),
+    mode: 'onBlur',
     defaultValues: {
       firstName: '',
       lastName: '',
       cpf: '',
-      dateOfBirth: undefined as unknown as Date | undefined,
-      gender: undefined as unknown as 'MALE' | 'FEMALE' | 'OTHER' | undefined,
+      dateOfBirth: undefined as unknown as Date,
+      gender: undefined as unknown as 'MALE' | 'FEMALE' | 'OTHER',
     },
   });
 
   function onSubmit(data: ClientSignupOnlyPersonalDataType) {
     onContinue(data);
   }
+
+  const today = useMemo(() => new Date().toISOString().split('T')[0], []);
 
   return (
     <Form {...form}>
@@ -85,7 +95,18 @@ export default function StepPersonalData({
                 <FormItem>
                   <FormLabel>CPF</FormLabel>
                   <FormControl>
-                    <Input id="cpf" placeholder="000.000.000-00" {...field} />
+                    <Input
+                      id="cpf"
+                      placeholder="000.000.000-00"
+                      inputMode="numeric"
+                      maxLength={14}
+                      value={maskCPF(field.value || '')}
+                      onChange={(event) => {
+                        const masked = maskCPF(event.target.value);
+                        field.onChange(masked);
+                      }}
+                      onBlur={field.onBlur}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,6 +132,8 @@ export default function StepPersonalData({
                           e.target.value ? new Date(e.target.value) : undefined
                         )
                       }
+                      onBlur={field.onBlur}
+                      max={today}
                     />
                   </FormControl>
                   <FormMessage />
@@ -146,9 +169,25 @@ export default function StepPersonalData({
             )}
           />
         </div>
-        <Button type="submit" className="w-full">
-          Continuar
-        </Button>
+        <div className="flex flex-col-reverse sm:flex-row gap-3">
+          {onBack && (
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full sm:flex-1"
+              onClick={onBack}
+            >
+              Voltar
+            </Button>
+          )}
+          <Button
+            type="submit"
+            className="w-full sm:flex-1"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? 'Validando...' : 'Continuar'}
+          </Button>
+        </div>
       </form>
     </Form>
   );
