@@ -7,7 +7,7 @@ interface VerticalSeparatorProps {
 
 export function VerticalSeparator({
   className,
-  height = '1.5rem',
+  height = '1rem',
 }: VerticalSeparatorProps) {
   return (
     <div
