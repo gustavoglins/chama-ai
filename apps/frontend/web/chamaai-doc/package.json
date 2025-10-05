@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:webpack": "powershell -NoProfile -Command \"$env:NEXT_DISABLE_TURBOPACK='1'; next dev\"",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint"
@@ -24,6 +25,7 @@
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-syntax-highlighter": "^15.6.6",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

@@ -2,6 +2,11 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group';
 import { Kbd } from '@/components/ui/kbd';
 import { Navigation } from '@/components/ui/navigation';
 import { Separator } from '@/components/ui/separator';
@@ -11,13 +16,8 @@ import { sfPro } from '@/lib/fonts';
 import { GalleryHorizontal, Search } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import './globals.css';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/components/ui/input-group';
-import { useState, useEffect } from 'react';
 
 export default function RootLayout({
   children,
@@ -52,34 +52,23 @@ export default function RootLayout({
     <html
       className={`${sfPro.variable} ${
         isExpanded ? 'max-w-full' : 'max-w-[85rem]'
-      } mx-auto${isDark ? ' dark' : ''}`}
+      } mx-auto${isDark ? ' dark' : ''} mx-auto`}
     >
-      <body className={isExpanded ? 'px-8' : ''}>
+      <body className={`${isExpanded ? 'px-8' : ''} flex flex-col gap-5`}>
         <header className="py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-5 w-1/3 min-w-0">
+            <div className="flex items-center gap-4 w-1/3 min-w-0">
               <Image
                 src={isDark ? '/logo-white.png' : '/logo-black.png'}
                 height={100}
                 width={100}
                 alt="Chama Aí Logo"
               />
-              <Badge variant="outline" className="rounded-full">
-                v1.0.0
+              <Badge variant="outline" size="xs" className="font-medium">
+                v1
               </Badge>
             </div>
             <div className="flex items-center justify-center w-1/3 min-w-0 max-w-md">
-              {/* <Input
-                placeholder="Search"
-                icon={<Search className="h-4 w-4 text-muted-foreground" />}
-                rightText={
-                  <div className="flex items-center gap-1">
-                    <Kbd>Ctrl</Kbd>
-                    <Kbd>K</Kbd>
-                  </div>
-                }
-                shortcut={{ display: 'Ctrl+K', key: 'k', ctrl: true }}
-              /> */}
               <InputGroup
                 shortcut={{ display: 'Ctrl+K', key: 'k', ctrl: true }}
               >
@@ -119,7 +108,6 @@ export default function RootLayout({
           <Separator className="my-4" />
           <div className="flex w-full">
             <nav className="w-full">
-              {/* Example usage: pass items prop with id, label and optional url */}
               <Navigation
                 items={[
                   { id: 'docs', label: 'Documentation', url: '/docs' },
