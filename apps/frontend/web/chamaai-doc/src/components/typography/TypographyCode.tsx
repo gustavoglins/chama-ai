@@ -5,10 +5,7 @@ import clsx from 'clsx';
 import { Check, ChevronsUpDown, Copy } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import {
-  vscDarkPlus as darkTheme,
-  prism as lightTheme,
-} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { customDarkTheme, customLightTheme } from '@/lib/code-themes';
 
 export enum CodeLanguage {
   CURL = 'curl',
@@ -111,7 +108,7 @@ export function TypographyCode({
     );
   }
 
-  const resolvedStyle = isDark ? darkTheme : lightTheme;
+  const resolvedStyle = isDark ? customDarkTheme : customLightTheme;
   const containerClass = clsx(
     'rounded-lg border overflow-hidden',
     isDark ? 'bg-[#1c1e1f] border-border/40' : 'bg-[#f5f7fa] border-border/50'
