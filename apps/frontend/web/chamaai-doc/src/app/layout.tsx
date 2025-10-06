@@ -53,7 +53,12 @@ export default function RootLayout({
       className={`${sfPro.variable} ${
         isExpanded ? 'max-w-full' : 'max-w-[85rem]'
       } mx-auto${isDark ? ' dark' : ''} mx-auto`}
+      lang="pt-BR"
     >
+      <head>
+        <title>Chama Aí</title>
+        <meta name="description" content="Documentação oficial do Chama Aí" />
+      </head>
       <body className={`${isExpanded ? 'px-8' : ''} flex flex-col gap-5`}>
         <header className="py-4">
           <div className="flex justify-between items-center">

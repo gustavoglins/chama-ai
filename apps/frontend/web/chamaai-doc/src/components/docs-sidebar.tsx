@@ -39,9 +39,6 @@ const nav: { [section: string]: NavItem[] } = {
         { label: 'Login / JWT Tokens', href: '/docs/voice/batch' },
       ],
     },
-    { label: 'Speaker Detection', href: '/docs/voice/speaker-detection' },
-    { label: 'Language Support', href: '/docs/voice/languages' },
-    { label: 'Audio Enhancement', href: '/docs/voice/enhancement' },
   ],
 };
 
