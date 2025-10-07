@@ -1,5 +1,13 @@
 import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
-export function TypographyLarge({ children }: { children: ReactNode }) {
-  return <div className="text-lg font-semibold">{children}</div>;
+interface TypographyLargeProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function TypographyLarge({ children, className }: TypographyLargeProps) {
+  return (
+    <div className={cn('text-lg font-semibold', className)}>{children}</div>
+  );
 }

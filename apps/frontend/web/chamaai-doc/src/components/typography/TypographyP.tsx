@@ -1,5 +1,15 @@
 import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
-export function TypographyP({ children }: { children: ReactNode }) {
-  return <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>;
+interface TypographyPProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function TypographyP({ children, className }: TypographyPProps) {
+  return (
+    <p className={cn('leading-7 [&:not(:first-child)]:mt-3.25', className)}>
+      {children}
+    </p>
+  );
 }

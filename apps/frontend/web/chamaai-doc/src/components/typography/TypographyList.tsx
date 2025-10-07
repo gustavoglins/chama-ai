@@ -1,5 +1,15 @@
 import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
-export function TypographyList({ children }: { children: ReactNode }) {
-  return <ul className="my-6 ml-6 list-disc [&>li]:mt-2">{children}</ul>;
+interface TypographyListProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function TypographyList({ children, className }: TypographyListProps) {
+  return (
+    <ul className={cn('my-6 ml-6 list-disc [&>li]:mt-2', className)}>
+      {children}
+    </ul>
+  );
 }

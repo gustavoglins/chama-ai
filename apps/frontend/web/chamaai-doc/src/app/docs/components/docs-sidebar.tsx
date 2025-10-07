@@ -27,19 +27,20 @@ type NavItem = {
 
 const nav: { [section: string]: NavItem[] } = {
   Introduction: [
-    { label: 'Overview', href: '/docs/playground' },
-    { label: 'Problem & Solution', href: '/docs/history' },
+    { label: 'Welcome!', href: '/docs' },
+    { label: 'What’s it even about?', href: '/docs' },
+    { label: 'Under the Hood', href: '/docs/history' },
     { label: 'Target users', href: '/docs/starred' },
   ],
-  Features: [
-    {
-      label: 'Authentication',
-      items: [
-        { label: 'User Registration', href: '/docs/voice/realtime' },
-        { label: 'Login / JWT Tokens', href: '/docs/voice/batch' },
-      ],
-    },
-  ],
+  // Features: [
+  //   {
+  //     label: 'Authentication',
+  //     items: [
+  //       { label: 'User Registration', href: '/docs/voice/realtime' },
+  //       { label: 'Login / JWT Tokens', href: '/docs/voice/batch' },
+  //     ],
+  //   },
+  // ],
 };
 
 export default function DocsSidebar({ className }: { className?: string }) {
