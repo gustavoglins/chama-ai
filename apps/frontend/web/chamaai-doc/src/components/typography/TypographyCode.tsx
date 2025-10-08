@@ -16,13 +16,13 @@ export enum CodeLanguage {
 
 interface TypographyCodeProps {
   children?: string;
-  code?: string; // alternativa a children para passar código via prop
-  codeByLanguage?: Partial<Record<CodeLanguage, string>>; // objeto com código para cada linguagem
-  language?: CodeLanguage | string; // permite CodeLanguage enum ou string genérica
+  code?: string;
+  codeByLanguage?: Partial<Record<CodeLanguage, string>>;
+  language?: CodeLanguage | string;
   showLineNumbers?: boolean;
   forceTheme?: 'light' | 'dark';
-  title?: string; // título do bloco (ex: "Response", "Example request")
-  languages?: (CodeLanguage | string)[]; // lista de linguagens disponíveis para troca
+  title?: string;
+  languages?: (CodeLanguage | string)[];
   onLanguageChange?: (lang: string) => void;
   showCopyButton?: boolean;
   showLanguageSelector?: boolean;
@@ -47,14 +47,12 @@ export function TypographyCode({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Determina o código a exibir baseado na linguagem selecionada
   const codeContent = codeByLanguage
     ? codeByLanguage[selectedLang as CodeLanguage] ??
       Object.values(codeByLanguage)[0] ??
       ''
     : code ?? children ?? '';
 
-  // Sincroniza com a classe 'dark' no <html> ou usa forceTheme
   useEffect(() => {
     if (forceTheme) {
       setIsDark(forceTheme === 'dark');
@@ -74,7 +72,6 @@ export function TypographyCode({
     return () => observer.disconnect();
   }, [forceTheme]);
 
-  // Fecha dropdown ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -101,7 +98,6 @@ export function TypographyCode({
     onLanguageChange?.(lang);
   };
 
-  // Evita flicker/hydration mismatch: só renderiza quando sabemos o tema
   if (isDark === null) {
     return (
       <div className="rounded-md border border-border/40 bg-muted/30 h-24 animate-pulse" />
@@ -123,7 +119,6 @@ export function TypographyCode({
 
   const showHeader = title || showCopyButton || showLanguageSelector;
 
-  // Mapeia linguagens customizadas para linguagens reconhecidas pelo syntax highlighter
   const getSyntaxLanguage = (lang: string): string => {
     const languageMap: Record<string, string> = {
       [CodeLanguage.NODEJS]: 'javascript',

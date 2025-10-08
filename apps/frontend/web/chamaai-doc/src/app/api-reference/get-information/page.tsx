@@ -1,22 +1,28 @@
 import SectionTitle from '@/components/typography/section-title';
-import { TypographyH3 } from '@/components/typography/TypographyH3';
-import { TypographyP } from '@/components/typography/TypographyP';
+import { TypographyH2 } from '@/components/typography/TypographyH2';
+import RequestCard from '@/components/ui/request-card';
 
 export default function GetInformationPage() {
   return (
-    <div>
-      {/* <SectionTitle>Start</SectionTitle>
-      <TypographyH3>Get Information</TypographyH3>
-      <TypographyP>Get information about Chama Aí API Status</TypographyP> */}
-
-      <div className="space-y-2">
+    <div className="w-full">
+      <div className="space-y-2 w-full">
         <SectionTitle>Start</SectionTitle>
-        <h1 className="text-3xl font-semibold tracking-tight">
+        <TypographyH2 className="text-3xl font-semibold tracking-tight">
           Get Information
-        </h1>
+        </TypographyH2>
         <p className="text-sm text-muted-foreground">
           Get information about API Status.
         </p>
+        <RequestCard method="get" endpoint="/" />
+        <RequestCard
+          method="post"
+          endpoint="/user-service/api/v1/users/signup"
+        />
+        <RequestCard
+          method="put"
+          endpoint="/notification-service/api/v1/notifications/email/send"
+        />
+        <RequestCard method="delete" endpoint="/auth-service/api" />
       </div>
     </div>
   );

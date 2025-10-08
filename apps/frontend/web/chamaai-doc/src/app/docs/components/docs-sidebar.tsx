@@ -15,7 +15,6 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarRail,
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
 
@@ -27,20 +26,14 @@ type NavItem = {
 
 const nav: { [section: string]: NavItem[] } = {
   Introduction: [
-    { label: 'Welcome!', href: '/docs' },
-    { label: 'What’s it even about?', href: '/docs' },
-    { label: 'Under the Hood', href: '/docs/history' },
-    { label: 'Target users', href: '/docs/starred' },
+    { label: 'Welcome', href: '/docs' },
+    { label: 'Getting Started', href: '/docs/getting-started' },
   ],
-  // Features: [
-  //   {
-  //     label: 'Authentication',
-  //     items: [
-  //       { label: 'User Registration', href: '/docs/voice/realtime' },
-  //       { label: 'Login / JWT Tokens', href: '/docs/voice/batch' },
-  //     ],
-  //   },
-  // ],
+  Guides: [
+    { label: 'Authentication', href: '/docs/authentication' },
+    { label: 'Architecture', href: '/docs/architecture' },
+    { label: 'Best Practices', href: '/docs/best-practices' },
+  ],
 };
 
 export default function DocsSidebar({ className }: { className?: string }) {
@@ -52,7 +45,7 @@ export default function DocsSidebar({ className }: { className?: string }) {
 
   return (
     <div className={cn('flex h-full w-full flex-col', className)}>
-      <SidebarContent>
+      <SidebarContent className="overflow-visible">
         {Object.entries(nav).map(([group, items]) => (
           <SidebarGroup key={group}>
             <SidebarGroupLabel>{group}</SidebarGroupLabel>
@@ -116,7 +109,6 @@ export default function DocsSidebar({ className }: { className?: string }) {
           </SidebarGroup>
         ))}
       </SidebarContent>
-      <SidebarRail />
     </div>
   );
 }

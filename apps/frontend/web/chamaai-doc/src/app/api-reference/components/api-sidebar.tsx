@@ -15,7 +15,6 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarRail,
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
 
@@ -148,7 +147,6 @@ export default function ApiSidebar({ className }: { className?: string }) {
           </SidebarGroup>
         ))}
       </SidebarContent>
-      <SidebarRail />
     </div>
   );
 }

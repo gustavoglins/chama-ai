@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/input-group';
 import { Kbd } from '@/components/ui/kbd';
 import { Navigation } from '@/components/ui/navigation';
-import { Separator } from '@/components/ui/separator';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { VerticalSeparator } from '@/components/ui/vertical-separator';
 import { sfPro } from '@/lib/fonts';
@@ -18,6 +17,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import './globals.css';
+import { Separator } from '@/components/ui/separator';
+import { TypographySmall } from '@/components/typography/TypographySmall';
+import { TypographyMuted } from '@/components/typography/TypographyMuted';
+import { TypographyP } from '@/components/typography/TypographyP';
 
 export default function RootLayout({
   children,
@@ -60,7 +63,7 @@ export default function RootLayout({
         <meta name="description" content="Documentação oficial do Chama Aí" />
       </head>
       <body className={`${isExpanded ? 'px-8' : ''} flex flex-col gap-5`}>
-        <header className="py-4">
+        <header className="sticky top-0 z-50 border-b border-border/60 bg-background/95 py-4 backdrop-blur supports-[backdrop-filter]:backdrop-blur-md">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4 w-1/3 min-w-0">
               <Image
@@ -123,6 +126,13 @@ export default function RootLayout({
           </div>
         </header>
         <main>{children}</main>
+        <footer className="flex flex-col justify-center items-center p-2">
+          <Separator />
+          <TypographyP className="text-sm">
+            Copyright © {new Date().getFullYear()} Chama Aí. All rights
+            reserved.
+          </TypographyP>
+        </footer>
       </body>
     </html>
   );
