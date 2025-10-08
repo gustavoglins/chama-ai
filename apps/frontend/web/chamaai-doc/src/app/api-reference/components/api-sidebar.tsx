@@ -44,7 +44,7 @@ const apiNav: ApiNavSection[] = [
         items: [
           {
             label: 'User Signup',
-            href: '/api-reference/user-service#user-signup',
+            href: '/api-reference/user-service/signup',
           },
         ],
       },

@@ -69,30 +69,37 @@ export default function RequestCard({ method, endpoint }: RequestCardProps) {
   return (
     <div
       className={cn(
-        'flex w-full items-center gap-5 rounded-lg border px-2 py-1.5 text-sm',
-        'bg-[#f5f7fa] border-border/50 text-foreground',
-        'dark:bg-[#1c1e1f] dark:border-border/40 dark:text-foreground'
+        'flex items-center gap-4 rounded-lg border border-border px-4 py-2.5 text-sm w-full overflow-hidden'
       )}
     >
       <Badge
         variant="outline"
-        className={cn('font-medium', methodStyle.light, methodStyle.dark)}
+        className={cn(
+          'font-medium shrink-0 min-w-[60px] justify-center',
+          methodStyle.light,
+          methodStyle.dark
+        )}
       >
         {displayMethod}
       </Badge>
-      <p className="flex-1 font-mono text-[14px] text-foreground/80 dark:text-white/80">
+      <p className="flex-1 font-mono text-sm text-foreground/80 dark:text-white/80 truncate">
         {endpoint}
       </p>
       <button
         type="button"
         onClick={handleCopy}
         className={cn(
-          'hover:border-border/70 hover:text-foreground hover:bg-black/5',
+          'p-1.5 rounded-md transition-colors shrink-0',
+          'text-foreground/60 hover:text-foreground hover:bg-black/5',
           'dark:text-white/60 dark:hover:text-white dark:hover:bg-white/10'
         )}
         aria-label={copied ? 'Endpoint copiado' : 'Copiar endpoint'}
       >
-        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        {copied ? (
+          <Check className="h-4 w-4 text-green-500" />
+        ) : (
+          <Copy className="h-4 w-4" />
+        )}
       </button>
     </div>
   );

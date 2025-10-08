@@ -109,7 +109,7 @@ export default function OnThisPage({
   return (
     <nav
       aria-label="On this page"
-      className="flex h-full flex-col justify-between py-2 pr-2"
+      className="flex h-full flex-col justify-between py-3.75 pr-2"
     >
       <div>
         <p className="text-xs font-normal tracking-wide text-muted-foreground">

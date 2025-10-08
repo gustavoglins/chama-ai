@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       className={`${sfPro.variable} ${
-        isExpanded ? 'max-w-full' : 'max-w-[85rem]'
+        isExpanded ? 'max-w-full' : 'max-w-[92rem]'
       } mx-auto${isDark ? ' dark' : ''} mx-auto`}
       lang="pt-BR"
     >

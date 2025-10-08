@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import clsx from 'clsx';
-import { Check, ChevronsUpDown, Copy } from 'lucide-react';
-import { useEffect, useState, useRef } from 'react';
+import { Check, Copy } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { customDarkTheme, customLightTheme } from '@/lib/code-themes';
 
@@ -17,7 +16,7 @@ export enum CodeLanguage {
 interface TypographyCodeProps {
   children?: string;
   code?: string;
-  codeByLanguage?: Partial<Record<CodeLanguage, string>>;
+  codeByLanguage?: Partial<Record<CodeLanguage | string, string>>;
   language?: CodeLanguage | string;
   showLineNumbers?: boolean;
   forceTheme?: 'light' | 'dark';
@@ -44,13 +43,9 @@ export function TypographyCode({
   const [isDark, setIsDark] = useState<boolean | null>(null);
   const [selectedLang, setSelectedLang] = useState(language);
   const [copied, setCopied] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const codeContent = codeByLanguage
-    ? codeByLanguage[selectedLang as CodeLanguage] ??
-      Object.values(codeByLanguage)[0] ??
-      ''
+    ? codeByLanguage[selectedLang] ?? Object.values(codeByLanguage)[0] ?? ''
     : code ?? children ?? '';
 
   useEffect(() => {
@@ -72,20 +67,6 @@ export function TypographyCode({
     return () => observer.disconnect();
   }, [forceTheme]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   const handleCopy = async () => {
     await navigator.clipboard.writeText(codeContent.trim());
     setCopied(true);
@@ -94,7 +75,6 @@ export function TypographyCode({
 
   const handleLanguageChange = (lang: string) => {
     setSelectedLang(lang);
-    setIsDropdownOpen(false);
     onLanguageChange?.(lang);
   };
 
@@ -106,15 +86,11 @@ export function TypographyCode({
 
   const resolvedStyle = isDark ? customDarkTheme : customLightTheme;
   const containerClass = clsx(
-    'rounded-lg border overflow-hidden',
-    isDark ? 'bg-[#1c1e1f] border-border/40' : 'bg-[#f5f7fa] border-border/50'
+    'rounded-lg border border-border overflow-hidden w-full flex flex-col'
   );
 
   const headerClass = clsx(
-    'flex items-center justify-between px-4 py-2 border-b text-sm font-medium',
-    isDark
-      ? 'bg-[#16181a] border-border/40 text-foreground'
-      : 'bg-[#ebeef2] border-border/50 text-foreground'
+    'flex items-center justify-between px-4 py-2.5 border-b text-sm font-medium shrink-0 bg-muted/50'
   );
 
   const showHeader = title || showCopyButton || showLanguageSelector;
@@ -131,61 +107,44 @@ export function TypographyCode({
     <div className={containerClass}>
       {showHeader && (
         <div className={headerClass}>
-          <span className="text-sm font-medium">{title || selectedLang}</span>
-          <div className="flex items-center gap-2">
-            {showLanguageSelector && languages.length > 0 && (
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className={clsx(
-                    'flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium transition-colors bg-transparent cursor-pointer',
-                    isDark
-                      ? 'hover:bg-white/5 border-border/40'
-                      : 'hover:bg-black/5 border-border/50'
-                  )}
-                >
-                  {selectedLang}
-                  <ChevronsUpDown className="h-3 w-3 opacity-60" />
-                </button>
-
-                {isDropdownOpen && (
-                  <div
+          <div className="flex items-center gap-3">
+            {title && <span className="text-sm font-medium">{title}</span>}
+            {showLanguageSelector && languages.length > 0 ? (
+              <div className="flex items-center gap-1 rounded-md bg-muted/50 p-0.5">
+                {languages.map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => handleLanguageChange(lang)}
                     className={clsx(
-                      'absolute right-0 top-full mt-1 py-1.5 rounded-lg border shadow-lg z-50 min-w-[120px] animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200',
-                      isDark
-                        ? 'bg-[#1c1e1f] border-border/40'
-                        : 'bg-white border-border/50'
+                      'px-2.5 py-1 rounded text-xs font-medium transition-all cursor-pointer',
+                      selectedLang === lang
+                        ? isDark
+                          ? 'bg-[#2a2d2e] text-emerald-400 shadow-sm'
+                          : 'bg-white text-foreground shadow-sm'
+                        : isDark
+                        ? 'text-foreground/60 hover:text-foreground/80'
+                        : 'text-foreground/60 hover:text-foreground/80'
                     )}
                   >
-                    {languages.map((lang) => (
-                      <button
-                        key={lang}
-                        onClick={() => handleLanguageChange(lang)}
-                        className={clsx(
-                          'w-full px-3 py-2 text-left text-xs transition-colors flex items-center justify-between gap-2 cursor-pointer',
-                          selectedLang === lang
-                            ? 'text-emerald-500 font-medium'
-                            : isDark
-                            ? 'text-foreground/80 hover:bg-white/5'
-                            : 'text-foreground/80 hover:bg-black/5'
-                        )}
-                      >
-                        <span>{lang}</span>
-                        {selectedLang === lang && (
-                          <Check className="h-3 w-3 shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                    {lang}
+                  </button>
+                ))}
               </div>
+            ) : (
+              !title && (
+                <span className="text-sm font-medium">{selectedLang}</span>
+              )
             )}
+          </div>
+          <div className="flex items-center gap-2">
             {showCopyButton && (
               <button
                 onClick={handleCopy}
                 className={clsx(
-                  'p-1.5 rounded-md transition-colors cursor-pointer',
-                  isDark ? 'hover:bg-white/10' : 'hover:bg-black/5'
+                  'p-1.5 rounded-md transition-colors cursor-pointer shrink-0',
+                  isDark
+                    ? 'text-white/60 hover:text-white hover:bg-white/10'
+                    : 'text-foreground/60 hover:text-foreground hover:bg-black/5'
                 )}
                 aria-label="Copy code"
               >

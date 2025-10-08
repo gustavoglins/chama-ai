@@ -8,7 +8,12 @@ interface TypographyPProps {
 
 export function TypographyP({ children, className }: TypographyPProps) {
   return (
-    <p className={cn('leading-7 [&:not(:first-child)]:mt-3.25', className)}>
+    <p
+      className={cn(
+        'leading-7 [&:not(:first-child)]:mt-3.25 text-md text-muted-foreground',
+        className
+      )}
+    >
       {children}
     </p>
   );
