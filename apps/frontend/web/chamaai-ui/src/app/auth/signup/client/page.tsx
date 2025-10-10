@@ -92,9 +92,7 @@ export default function ClientSignupPage() {
   }
 
   return (
-    <Card
-      className={`w-full ${[2, 3].includes(step) ? 'max-w-md' : 'max-w-sm'}`}
-    >
+    <Card className={`${[2, 3].includes(step) ? 'max-w-md' : 'max-w-sm'}`}>
       <CardHeader>
         <CardTitle>
           {step === 0 && 'Criar conta'}

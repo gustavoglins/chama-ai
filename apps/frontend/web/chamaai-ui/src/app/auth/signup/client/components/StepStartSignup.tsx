@@ -56,9 +56,9 @@ export default function StepStartSignup({ onSuccess }: StepStartSignupProps) {
         const userMessage = translateError(backendErrorMessage);
         toast.error(userMessage);
       } else {
-        toast.error('Erro inesperado. Tente novamente.');
+        toast.error('Erro inesperado. Por favor tente novamente.');
       }
-      console.error('Error in client signup:', error);
+      console.error('Error in clientSignup request:', error);
     }
   }
 

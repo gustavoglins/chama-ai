@@ -15,15 +15,9 @@ const confirmPasswordField = z
   .string()
   .min(8, 'A Confirmação de senha é obrigatória');
 
-const firstNameField = z
-  .string()
-  .trim()
-  .min(2, 'O Nome é obrigatório');
+const firstNameField = z.string().trim().min(2, 'O Nome é obrigatório');
 
-const lastNameField = z
-  .string()
-  .trim()
-  .min(2, 'O Sobrenome é obrigatório');
+const lastNameField = z.string().trim().min(2, 'O Sobrenome é obrigatório');
 
 const cpfField = z
   .string()
@@ -34,7 +28,10 @@ const cpfField = z
 
 const dateOfBirthField = z
   .date()
-  .refine((value) => value <= new Date(), 'A Data de nascimento não pode ser no futuro');
+  .refine(
+    (value) => value <= new Date(),
+    'A Data de nascimento não pode ser no futuro'
+  );
 
 const genderField = z.enum(['MALE', 'FEMALE', 'OTHER']);
 
@@ -173,3 +170,10 @@ export const resetPasswordFormSchema = ResetPasswordContactSchema.merge(
   ResetPasswordNewSchema
 );
 export type ResetPasswordFormSchema = z.infer<typeof resetPasswordFormSchema>;
+
+// Testes:
+
+export const LogInSchema = z.object({
+  email: emailField,
+});
+export type LogInType = z.infer<typeof LogInSchema>;

@@ -1,3 +1,10 @@
+import LandingLayout from "@/app/(landing)/layout";
+import LandingPage from "@/app/(landing)/page";
+
 export default function RootPage() {
-  return <h1>Ola</h1>;
+    return (
+        <LandingLayout>
+            <LandingPage/>
+        </LandingLayout>
+    )
 }
