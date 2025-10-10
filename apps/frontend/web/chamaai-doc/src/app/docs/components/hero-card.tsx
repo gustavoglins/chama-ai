@@ -84,8 +84,8 @@ export default function HeroCard({
                   </a>
 
                   <div className="relative group flex flex-col items-center gap-3 p-6 rounded-lg border border-muted-foreground/30 opacity-60 cursor-not-allowed">
-                    <Badge 
-                      variant="secondary" 
+                    <Badge
+                      variant="secondary"
                       className="absolute -top-2 -right-2 text-xs px-2 py-0.5 bg-emerald-500 text-white"
                     >
                       Soon
@@ -106,8 +106,8 @@ export default function HeroCard({
                   </div>
 
                   <div className="relative group flex flex-col items-center gap-3 p-6 rounded-lg border border-muted-foreground/30 opacity-60 cursor-not-allowed">
-                    <Badge 
-                      variant="secondary" 
+                    <Badge
+                      variant="secondary"
                       className="absolute -top-2 -right-2 text-xs px-2 py-0.5 bg-emerald-500 text-white"
                     >
                       Soon

@@ -10,12 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Briefcase, House, ReceiptText } from 'lucide-react';
+import { Briefcase, House, MapPin, ReceiptText } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
-import { SearchCommand } from '@/components/SearchCommand';
+import { AnimatedSearch } from '@/components/AnimatedSearch';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
@@ -67,19 +67,22 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
           <div className="flex gap-1 items-center shrink-0">
             <CurrentTime />
-            {/* <Button variant="ghost" size="sm">
-              Criar Evento
-            </Button> */}
+            <Button variant="ghost" size="sm">
+              <MapPin />
+              Rua Bronze, 57
+            </Button>
 
-            {/* Search / Command Dialog */}
-            <SearchCommand placeholder="Procure por eventos, calendários e mais..." />
+            <AnimatedSearch
+              placeholder="Procure por eventos, calendários e mais..."
+              width={440}
+            />
 
             <NotificationsMenu />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
-                  <Avatar className="h-7 w-7">
+                  <Avatar className="h-7 w-7 mb-0.75">
                     <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>GL</AvatarFallback>
                   </Avatar>
