@@ -13,3 +13,9 @@
 - **Authentication:** JWT
 - **Sending emails:** Resend (External API)
 - **Whatsapp Sendings:** EvolutionAPI (Self Hosted)
+
+## Previews
+
+![Landing Page Preview](/previews/landing-page.png)
+![API Documentation Preview](/previews/api-documentation.png)
+![API Reference Preview](/previews/api-reference.png)
