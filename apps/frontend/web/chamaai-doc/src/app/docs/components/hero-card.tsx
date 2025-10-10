@@ -1,7 +1,8 @@
 ﻿'use client';
 
-import { ExternalLink, Globe, Sparkles } from 'lucide-react';
+import { ExternalLink, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { TypographyH1 } from '@/components/typography/TypographyH1';
 import LiquidShape from '@/app/docs/components/liquid-shape';
 import {
@@ -82,12 +83,13 @@ export default function HeroCard({
                     <ExternalLink className="size-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </a>
 
-                  <a
-                    href="https://apps.apple.com/app/chamaai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex flex-col items-center gap-3 p-6 rounded-lg border hover:border-emerald-500/50 transition-colors"
-                  >
+                  <div className="relative group flex flex-col items-center gap-3 p-6 rounded-lg border border-muted-foreground/30 opacity-60 cursor-not-allowed">
+                    <Badge 
+                      variant="secondary" 
+                      className="absolute -top-2 -right-2 text-xs px-2 py-0.5 bg-emerald-500 text-white"
+                    >
+                      Soon
+                    </Badge>
                     <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-muted">
                       <svg
                         className="size-6"
@@ -101,15 +103,15 @@ export default function HeroCard({
                       <h3 className="font-semibold text-sm mb-1">iOS App</h3>
                       <p className="text-xs text-muted-foreground">App Store</p>
                     </div>
-                    <ExternalLink className="size-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
+                  </div>
 
-                  <a
-                    href="https://play.google.com/store/apps/details?id=cloud.chamaai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex flex-col items-center gap-3 p-6 rounded-lg border hover:border-emerald-500/50 transition-colors"
-                  >
+                  <div className="relative group flex flex-col items-center gap-3 p-6 rounded-lg border border-muted-foreground/30 opacity-60 cursor-not-allowed">
+                    <Badge 
+                      variant="secondary" 
+                      className="absolute -top-2 -right-2 text-xs px-2 py-0.5 bg-emerald-500 text-white"
+                    >
+                      Soon
+                    </Badge>
                     <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-muted">
                       <svg
                         className="size-6"
@@ -127,8 +129,7 @@ export default function HeroCard({
                         Google Play
                       </p>
                     </div>
-                    <ExternalLink className="size-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>

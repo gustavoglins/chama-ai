@@ -99,6 +99,14 @@ export function TypographyCode({
     const languageMap: Record<string, string> = {
       [CodeLanguage.NODEJS]: 'javascript',
       [CodeLanguage.CURL]: 'bash',
+      '200': 'json',
+      '201': 'json',
+      '400': 'json',
+      '401': 'json',
+      '403': 'json',
+      '404': 'json',
+      '409': 'json',
+      '500': 'json',
     };
     return languageMap[lang] || lang;
   };
