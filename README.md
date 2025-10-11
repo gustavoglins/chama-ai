@@ -15,6 +15,10 @@
   </a>
 </p>
 
+## Translation
+
+- [🇧🇷 Português](README.pt.md)
+
 ## Summary
 
 - [Overview](#overview)
