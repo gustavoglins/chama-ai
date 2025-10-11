@@ -24,6 +24,7 @@ export type CardInput =
       badges?: string[];
       actionIcon?: React.ReactNode | string;
       cta?: { label: string; href?: string };
+      href?: string;
     };
 
 const ImageCard: React.FC<{
@@ -52,6 +53,7 @@ const ImageCard: React.FC<{
   let badges: string[] | undefined;
   let actionIcon: React.ReactNode | string | undefined;
   let cta: { label: string; href?: string } | undefined;
+  let href: string | undefined;
 
   if (resolvedInput) {
     if (typeof resolvedInput === 'string') {
@@ -70,6 +72,7 @@ const ImageCard: React.FC<{
       badges = obj.badges;
       actionIcon = obj.actionIcon as React.ReactNode | string | undefined;
       cta = obj.cta;
+      href = obj.href;
     }
   }
 
@@ -99,6 +102,15 @@ const ImageCard: React.FC<{
     <div
       className={`relative rounded-2xl overflow-hidden shadow-md min-h-0 ${className}`}
     >
+      {/* Make the visual area clickable if href is provided. Place a positioned anchor that covers the same area as the image/solid background. Keep CTA outside to avoid nested anchors. */}
+      {href ? (
+        <a
+          href={href}
+          className="absolute inset-0 z-10 block"
+          aria-label={title ?? subtitle ?? 'card-link'}
+        />
+      ) : null}
+
       {isSolid ? (
         <div
           className={`absolute inset-0 ${
@@ -127,14 +139,14 @@ const ImageCard: React.FC<{
         </>
       )}
 
-      <div className="absolute top-4 left-4 flex gap-2 flex-wrap max-w-[70%]">
+      <div className="absolute top-4 left-4 flex gap-2 flex-wrap max-w-[70%] z-20">
         {badges && badges.length > 0
           ? badges.map((b, i) => <Badge key={i}>{b}</Badge>)
           : null}
       </div>
 
       {typeof resolvedInput === 'string' ? (
-        <div className="absolute right-4 top-4">
+        <div className="absolute right-4 top-4 z-20">
           <div className="w-10 h-10 bg-white/95 text-slate-800 rounded-full flex items-center justify-center shadow">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +165,7 @@ const ImageCard: React.FC<{
           </div>
         </div>
       ) : actionIcon ? (
-        <div className="absolute right-4 top-4">
+        <div className="absolute right-4 top-4 z-20">
           {typeof actionIcon === 'string' ? (
             (() => {
               const icons = LucideIcons as unknown as Record<
@@ -183,7 +195,7 @@ const ImageCard: React.FC<{
       ) : null}
 
       {(title || subtitle || cta) && (
-        <div className="absolute left-6 bottom-6 text-white flex flex-col items-start gap-3">
+        <div className="absolute left-6 bottom-6 text-white flex flex-col items-start gap-3 z-20">
           {title && (
             <h3 className="text-xl lg:text-3xl font-bold leading-tight drop-shadow">
               {title}
@@ -250,7 +262,7 @@ export const MosaicCards: React.FC<MosaicCardsProps> = ({ imageSrcs }) => {
           </div>
 
           <div className="min-h-0 h-full">
-            <ImageCard source={imgs[2]} className="h-full min-h-136" />
+            <ImageCard source={imgs[2]} className="h-full min-h-131" />
           </div>
         </div>
       </div>

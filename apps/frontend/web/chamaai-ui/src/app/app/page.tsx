@@ -15,8 +15,7 @@ export default function AppPage() {
             Tarefas, consertos ou alguém pra dar uma mão… tá tudo aqui.
           </TypographyP>
         </div>
-        {/* <div className="h-[500px]"> */}
-        <div className="h-[520px]">
+        <div className="h-[500px]">
           <MosaicCards
             imageSrcs={[
               {
@@ -24,7 +23,7 @@ export default function AppPage() {
                 title: 'CHAMAAI25',
                 subtitle: 'Cupom especial pra o seu 1º pedido!',
                 badges: ['Cupom ativo'],
-                actionIcon: 'Gift',
+                href: '/app/services',
               },
               {
                 image: '/images/app-hero/plumber.png',
@@ -32,6 +31,7 @@ export default function AppPage() {
                 subtitle: 'Chaveiros, Encanadores, eletricistas e mais',
                 badges: ['Casa & Reparos'],
                 actionIcon: 'House',
+                href: '/app/services/houses-repairs',
               },
               {
                 image: '/images/app-hero/ti.png',
@@ -45,6 +45,7 @@ export default function AppPage() {
                 ],
                 actionIcon: 'Monitor',
                 cta: { label: 'Contratar', href: '/services/ti' },
+                href: '/app/services/technology-digital',
               },
               {
                 solid: 'emerald',
@@ -52,12 +53,14 @@ export default function AppPage() {
                 subtitle: 'Chama Aí e ta resolvido',
                 badges: ['Serviços sob demanda'],
                 actionIcon: 'ArrowUpRight',
+                href: '/app/services',
               },
               {
                 image: '/images/app-hero/personal-trainer.png',
                 title: 'Personal Trainer',
                 actionIcon: 'Dumbbell',
                 badges: ['Treinos'],
+                href: '/app/services/classes-training',
               },
               {
                 image: '/images/app-hero/logistic.png',
@@ -65,6 +68,7 @@ export default function AppPage() {
                 title: 'De mudança?',
                 subtitle: 'Ajuda rápida pra carregar ou transportar',
                 badges: ['Transporte & Entregas'],
+                href: '/app/services/transportation-delivery',
               },
             ]}
           />
