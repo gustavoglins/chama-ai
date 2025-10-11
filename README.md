@@ -16,6 +16,18 @@
 
 ## Previews
 
+##### Landing Page
+
 ![Landing Page Preview](/previews/landing-page.png)
+
+##### App home Page
+
+![App Home Preview](/previews/app-home.png)
+
+##### API Documentation Page
+
 ![API Documentation Preview](/previews/api-documentation.png)
+
+##### API Reference Page
+
 ![API Reference Preview](/previews/api-reference.png)
