@@ -97,7 +97,8 @@ Chama Aí is an innovative on-demand services platform designed to simplify the 
 
 #### External APIs
 
-- Resend.com (email)
+- Resend
+- Stripe
 
 ## Screenshots
 
