@@ -1,4 +1,6 @@
-![In Development GIF](https://github.com/user-attachments/assets/345696ab-4e75-4398-843f-ce0290abb9d0)
+<p align="center">
+  ![In Development GIF](https://github.com/user-attachments/assets/345696ab-4e75-4398-843f-ce0290abb9d0)
+</p>
 
 <p align="center">
   <img src="/assets/chamaai-banner.png" alt="Landing Page Preview" width="800"/>
