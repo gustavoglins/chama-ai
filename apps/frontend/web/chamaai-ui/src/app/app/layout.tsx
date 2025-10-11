@@ -10,12 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Briefcase, House, MapPin, ReceiptText } from 'lucide-react';
+import { Briefcase, House, ReceiptText } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
 import { AnimatedSearch } from '@/components/AnimatedSearch';
+
+import { AddressSwitcher } from '@/components/AddressSwitcher';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
@@ -67,10 +69,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
           <div className="flex gap-1 items-center shrink-0">
             <CurrentTime />
-            <Button variant="ghost" size="sm">
-              <MapPin />
-              Rua Bronze, 57
-            </Button>
+
+            <AddressSwitcher />
 
             <AnimatedSearch
               placeholder="Procure por eventos, calendários e mais..."
@@ -101,7 +101,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className="max-w-[75rem] w-full mx-auto px-6 py-8 flex-1">
+      <main className="max-w-[90rem] w-full mx-auto px-6 py-8 flex-1">
         {children}
       </main>
 
