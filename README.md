@@ -1,4 +1,6 @@
-![In Developtment GIF](/assets/in-dev.gif)
+<p align="center">
+  <img src="assets/in-dev.gif" alt="In Development GIF" width="1000"/>
+</p>
 
 <p align="center">
   <img src="/assets/chamaai-banner.png" alt="Landing Page Preview" width="800"/>
