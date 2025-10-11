@@ -31,7 +31,7 @@ export function AddressSwitcher({
 }: AddressSwitcherProps) {
   const defaultAddresses: Address[] = useMemo(
     () => [
-      { id: 'home', label: 'Casa', line: 'Rua Bronze, 57' },
+      { id: 'home', label: 'Casa', line: 'Rua das Flores, 57' },
       { id: 'work', label: 'Trabalho', line: 'Av. Central, 1020' },
       { id: 'studio', label: 'Estúdio', line: 'Rua das Flores, 88' },
     ],

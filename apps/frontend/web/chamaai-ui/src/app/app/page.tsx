@@ -15,7 +15,8 @@ export default function AppPage() {
             Tarefas, consertos ou alguém pra dar uma mão… tá tudo aqui.
           </TypographyP>
         </div>
-        <div className="h-[500px]">
+        {/* <div className="h-[500px]"> */}
+        <div className="h-[520px]">
           <MosaicCards
             imageSrcs={[
               {
@@ -27,13 +28,23 @@ export default function AppPage() {
               },
               {
                 image: '/images/app-hero/plumber.png',
-                title: 'ASD',
-                subtitle: 'das',
+                title: 'Reparos rápidos',
+                subtitle: 'Chaveiros, Encanadores, eletricistas e mais',
+                badges: ['Casa & Reparos'],
+                actionIcon: 'House',
               },
               {
                 image: '/images/app-hero/ti.png',
                 title: 'Serviços de TI',
-                badges: ['Tech', 'Urgent'],
+                badges: [
+                  'Designers',
+                  'Programadores',
+                  'UX/UI',
+                  'Marketing',
+                  'Técnicos',
+                ],
+                actionIcon: 'Monitor',
+                cta: { label: 'Contratar', href: '/services/ti' },
               },
               {
                 solid: 'emerald',
@@ -46,6 +57,7 @@ export default function AppPage() {
                 image: '/images/app-hero/personal-trainer.png',
                 title: 'Personal Trainer',
                 actionIcon: 'Dumbbell',
+                badges: ['Treinos'],
               },
               {
                 image: '/images/app-hero/logistic.png',
