@@ -16,7 +16,8 @@
 </p>
 
 ## Tradução
-[🇺🇸 English](README.md)
+
+- [🇺🇸 English](README.md)
 
 ## Sumário
 
