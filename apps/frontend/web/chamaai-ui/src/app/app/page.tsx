@@ -7,15 +7,15 @@ import MosaicCards from '@/components/ui/MosaicCards';
 
 export default function AppPage() {
   return (
-    <div className="w-full h-full flex flex-col gap-12">
-      <div className="flex flex-col gap-8">
+    <main className="w-full h-full flex flex-col gap-20">
+      <section className="flex flex-col gap-8 mb-10">
         <div>
           <TypographyH2>Início</TypographyH2>
           <TypographyP>
             Tarefas, consertos ou alguém pra dar uma mão… tá tudo aqui.
           </TypographyP>
         </div>
-        <div className="h-[500px]">
+        <div className="h-[520px]">
           <MosaicCards
             imageSrcs={[
               {
@@ -73,66 +73,74 @@ export default function AppPage() {
             ]}
           />
         </div>
-      </div>
+      </section>
 
-      <TypographyH4>Categorias</TypographyH4>
+      <section className="flex flex-col gap-8">
+        <div>
+          <TypographyH4>Categorias</TypographyH4>
+          <TypographyP>
+            Encontre o serviço que você precisa nas categorias abaixo, de forma
+            rápida e fácil.
+          </TypographyP>
+        </div>
 
-      <CategoriesGrid className="mt-4">
-        <CategoryCard
-          title="Casa & Reparos"
-          subtitle="2 mil Eventos"
-          iconImages={['/3d-icons/3d-house.png']}
-          href="#"
-        />
-        <CategoryCard
-          title="Tecnologia & Digital"
-          subtitle="67 Eventos"
-          iconImages={['/3d-icons/3d-computer.png']}
-          href="#"
-        />
-        <CategoryCard
-          title="Transporte & Entregas"
-          subtitle="2 mil Eventos"
-          iconImages={['/3d-icons/3d-truck.png']}
-          href="#"
-        />
-        <CategoryCard
-          title="Saúde & Bem-estar"
-          subtitle="1 mil Eventos"
-          iconImages={['/3d-icons/heartbeat.png']}
-          href="#"
-        />
-        <CategoryCard
-          title="Eventos & Festas"
-          subtitle="555 Eventos"
-          iconImages={['/3d-icons/036-speakers.png']}
-          href="#"
-        />
-        <CategoryCard
-          title="Aulas & Treinamento"
-          subtitle="980 Eventos"
-          iconImages={['/3d-icons/gym.png']}
-          href="#"
-        />
-        <CategoryCard
-          title="Automóveis & Transportes"
-          subtitle="1 mil Eventos"
-          iconImages={['/3d-icons/014-silhouette.png']}
-          href="#"
-        />
-        <CategoryCard
-          title="Administrativos"
-          subtitle="991 Eventos"
-          iconImages={['/3d-icons/approved.png']}
-          href="#"
-        />
-        {/* <CategoryCard
+        <CategoriesGrid className="mt-0">
+          <CategoryCard
+            title="Casa & Reparos"
+            subtitle="2 mil Serviços"
+            iconImages={['/3d-icons/3d-house.png']}
+            href="#"
+          />
+          <CategoryCard
+            title="Tecnologia & Digital"
+            subtitle="67 Serviços"
+            iconImages={['/3d-icons/3d-computer.png']}
+            href="#"
+          />
+          <CategoryCard
+            title="Transporte & Entregas"
+            subtitle="2 mil Serviços"
+            iconImages={['/3d-icons/3d-truck.png']}
+            href="#"
+          />
+          <CategoryCard
+            title="Saúde & Bem-estar"
+            subtitle="1 mil Serviços"
+            iconImages={['/3d-icons/heartbeat.png']}
+            href="#"
+          />
+          <CategoryCard
+            title="Eventos & Festas"
+            subtitle="555 Serviços"
+            iconImages={['/3d-icons/036-speakers.png']}
+            href="#"
+          />
+          <CategoryCard
+            title="Aulas & Treinamento"
+            subtitle="980 Serviços"
+            iconImages={['/3d-icons/gym.png']}
+            href="#"
+          />
+          <CategoryCard
+            title="Automóveis & Transportes"
+            subtitle="1 mil Serviços"
+            iconImages={['/3d-icons/014-silhouette.png']}
+            href="#"
+          />
+          <CategoryCard
+            title="Administrativos"
+            subtitle="991 Serviços"
+            iconImages={['/3d-icons/approved.png']}
+            href="#"
+          />
+          {/* <CategoryCard
           title="Outros / Diversos"
           subtitle="991 Eventos"
           iconImages={['/3d-icons/dice.png']}
           href="#"
         /> */}
-      </CategoriesGrid>
-    </div>
+        </CategoriesGrid>
+      </section>
+    </main>
   );
 }
