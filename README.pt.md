@@ -15,6 +15,9 @@
   </a>
 </p>
 
+## Tradução
+[🇺🇸 English](README.md)
+
 ## Sumário
 
 - [Visão Geral](#visão-geral)
