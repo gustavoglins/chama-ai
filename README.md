@@ -11,22 +11,66 @@
   </a>
 </p>
 
-#
-
 ## Summary
 
-- <a href="#usage">Usage</a>
-- <a href="#usage">Usage</a>
+- <a href="#overview">Overview</a>
+- <a href="#technologies">Technologies</a>
+
+## Overview
+
+Chama Aí is an innovative on-demand services platform designed to simplify the way customers find and connect reliable service providers. Built for scalability and performance, it allows for registration, service scheduling, online payments, and real-time communication, all within the Chama Aí app. With a modern UI and a focus on UX, the app offers a practical, fast, and reliable experience for all users.
 
 ## Technologies
 
-- **Frontend:** React, Next.js, Tailwind CSS, Zustand
-- **Backend:** Java, Spring Framework (Boot, JPA, Security, Cloud, Kafka, Actuator)
-- **Database:** PostgreSQL
-- **Messaging / Cache:** Kafka, Redis
-- **Authentication:** JWT
-- **Sending emails:** Resend (External API)
-- **Whatsapp Sendings:** EvolutionAPI (Self Hosted)
+#### Frontend:
+
+- React + NextJS
+- Tailwind CSS
+- Framer Motion
+- Zustand
+
+#### Backend:
+
+- Java
+- Spring Framework
+  - Boot
+  - Web
+  - JPA
+  - Security
+  - Cloud (Netflix Eureka)
+  - WebFlux
+  - Actuator
+- Kafka
+- OpenFeign
+- OAuth2
+- MapStruct
+
+#### Data:
+
+- PostgreSQL
+- Redis
+
+#### External APIs
+
+- Resend.com (email)
+
+## 📁 Repository Structure
+
+<details>
+<summary>📁 chama-ai (click to expand)</summary>
+├─ 📂 apps/ <br>
+│  ├─ ⚛️ frontend/      # Web UI (App & Doc) + Mobile App (iOS & Android)<br>
+│  └─ ☕ backend/       # API Gateway + Service Discovery + Microsservices<br>
+├─ 📂 assets/<br>
+│  └─ 🖼️...             # README Images<br>
+├─ 📂 infra/<br>
+│  └─ 📂 kafka/         # Kafka files<br>
+│  └─ 🐳 docker-compose/         # Application docker compose<br>
+├─ 📄 LICENSE.md         # Chama Aí License<br>
+├─ 📄 README.md         # You are here!<br>
+└─ ⚙️ .github/<br>
+│   └─ 🔄 workflows/    # CI/CD<br>
+</details>
 
 ## Screenshots
 
