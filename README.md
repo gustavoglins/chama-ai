@@ -44,7 +44,7 @@ Chama Aí is an innovative on-demand services platform designed to simplify the 
 <summary>📁 chama-ai (click to expand)</summary>
 ├─ 📂 apps/ <br>
 │  ├─ ⚛️ frontend/      # Web UI (App & Doc) + Mobile App (iOS & Android)<br>
-│  └─ ☕ backend/       # API Gateway + Service Discovery + Microsservices<br>
+│  └─ ☕ backend/       # API Gateway + Service Discovery + Microservices<br>
 ├─ 📂 assets/<br>
 │  └─ 🖼️...             # README Images<br>
 ├─ 📂 infra/<br>
