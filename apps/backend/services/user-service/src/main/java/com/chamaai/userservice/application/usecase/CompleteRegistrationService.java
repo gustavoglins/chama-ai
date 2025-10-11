@@ -1,10 +1,10 @@
 package com.chamaai.userservice.application.usecase;
 
 import com.chamaai.common.dto.responses.UserCreatedEvent;
-import com.chamaai.userservice.application.commands.CreateUserCommand;
+import com.chamaai.userservice.application.commands.CompleteRegistrationCommand;
 import com.chamaai.userservice.application.exception.DataAlreadyRegisteredException;
 import com.chamaai.userservice.application.mapper.UserMapper;
-import com.chamaai.userservice.application.ports.in.CreateUserUseCase;
+import com.chamaai.userservice.application.ports.in.CompleteRegistrationUseCase;
 import com.chamaai.userservice.application.ports.out.DomainEventPublisherPort;
 import com.chamaai.userservice.application.ports.out.PasswordEncoderPort;
 import com.chamaai.userservice.application.ports.out.UserRepositoryPort;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CreateUserService implements CreateUserUseCase {
+public class CompleteRegistrationService implements CompleteRegistrationUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
     private final UserDomainService userDomainService;
@@ -26,26 +26,18 @@ public class CreateUserService implements CreateUserUseCase {
     private final DomainEventPublisherPort domainEventPublisherPort;
     private final UserMapper userMapper;
 
-    public CreateUserService(
-            UserRepositoryPort userRepositoryPort,
-            UserDomainService userDomainService,
-            PasswordEncoderPort passwordEncoderPort,
-            UserValidationPort userValidationPort,
-            UserMapper userMapper,
-            DomainEventPublisherPort domainEventPublisherPort
-    ) {
+    public CompleteRegistrationService(UserRepositoryPort userRepositoryPort, UserDomainService userDomainService, PasswordEncoderPort passwordEncoderPort, UserValidationPort userValidationPort, DomainEventPublisherPort domainEventPublisherPort, UserMapper userMapper) {
         this.userRepositoryPort = userRepositoryPort;
         this.userDomainService = userDomainService;
         this.passwordEncoderPort = passwordEncoderPort;
         this.userValidationPort = userValidationPort;
-        this.userMapper = userMapper;
         this.domainEventPublisherPort = domainEventPublisherPort;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public UserResponseDTO createUser(CreateUserCommand command) {
-        userRepositoryPort.deleteAll(); //!TODO: remove this after all tests
-        List<String> conflicts = userValidationPort.validateUniqueFields(command.taxId(), command.email(), command.phoneNumber());
+    public UserResponseDTO completeRegistration(CompleteRegistrationCommand command) {
+        List<String> conflicts = userValidationPort.validateUniqueFields(command.taxId(), command.email());
         if (!conflicts.isEmpty()) {
             throw new DataAlreadyRegisteredException(conflicts);
         }

@@ -24,20 +24,12 @@ public class StartRegistrationService implements StartRegistrationUseCase {
 
     @Override
     public void startRegistration(StartRegistrationCommand command) {
-        if (command.login().contains("@")) {
-            if (userRepositoryPort.existsByEmail(command.login())) {
-                throw new DataAlreadyRegisteredException(List.of("Email already in use"));
-            }
-            ApiResponseDTO<?> result = this.authRestPort.generateOtp(command.login());
-            if (result.status() == ApiResponseStatus.ERROR)
-                throw new RuntimeException("Failed to generate OTP");
-        } else {
-            if (userRepositoryPort.existsByPhoneNumber(command.login())) {
-                throw new DataAlreadyRegisteredException(List.of("Phone number already registered"));
-            }
-            ApiResponseDTO<?> result = this.authRestPort.generateOtp(command.login());
-            if (result.status() == ApiResponseStatus.ERROR)
-                throw new RuntimeException("Failed to generate OTP");
+        if (userRepositoryPort.existsByEmail(command.email())) {
+            throw new DataAlreadyRegisteredException(List.of("Email already in use"));
         }
+        ApiResponseDTO<?> result = this.authRestPort.generateOtp(command.email());
+        if (result.status() == ApiResponseStatus.ERROR)
+            throw new RuntimeException("Failed to generate OTP");
+
     }
 }

@@ -19,7 +19,6 @@ public class UserDomainService {
     public void validateUser(User user) {
         if (!EmailSpec.isValid(user.getEmail())) throw new InvalidUserException("Invalid email");
         if (!CpfSpec.isValid(user.getTaxId())) throw new InvalidUserException("Invalid CPF");
-        if (!PhoneSpec.isValid(user.getPhoneNumber())) throw new InvalidUserException("Invalid phone number");
         if (!eligibilitySpec.isAdult(user)) throw new InvalidUserException("User must be of legal age");
         if (user.getAuthProvider() == null) throw new InvalidUserException("AuthProvider cannot be null");
         if (user.getFirstName() == null || user.getFirstName().isEmpty()) throw new InvalidUserException("FirstName cannot be null");

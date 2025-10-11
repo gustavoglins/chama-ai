@@ -1,11 +1,11 @@
 package com.chamaai.userservice.application.mapper;
 
-import com.chamaai.userservice.application.commands.CreateUserCommand;
-import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
+import com.chamaai.userservice.application.commands.CompleteRegistrationCommand;
 import com.chamaai.userservice.domain.enums.AuthProvider;
 import com.chamaai.userservice.domain.enums.AuthRole;
 import com.chamaai.userservice.domain.enums.CommunicationChannel;
 import com.chamaai.userservice.domain.model.User;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -17,7 +17,7 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    default User toDomain(CreateUserCommand dto) {
+    default User toDomain(CompleteRegistrationCommand dto) {
         if (dto == null) return null;
 
         return new User.UserBuilder()
@@ -28,9 +28,6 @@ public interface UserMapper {
                 .withLastName(dto.lastName())
                 .withDateOfBirth(dto.dateOfBirth())
                 .withGender(dto.gender())
-                .withPhoneNumber(dto.phoneNumber())
-                .withProfilePicture(dto.profilePicture())
-                .withBio(dto.bio())
                 .withAccountType(dto.accountType() == null ? Set.of() : Set.of(dto.accountType()))
                 .withAuthProvider(AuthProvider.LOCAL)
                 .withRole(AuthRole.COMMON_USER)

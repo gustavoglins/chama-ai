@@ -1,41 +1,69 @@
 package com.chamaai.userservice.infrastructure.adapters.http.controllers;
 
-import com.chamaai.userservice.application.commands.CreateUserCommand;
+import com.chamaai.userservice.application.commands.CompleteRegistrationCommand;
 import com.chamaai.userservice.application.commands.StartRegistrationCommand;
 import com.chamaai.userservice.application.commands.UpdateUserCommand;
-import com.chamaai.userservice.application.ports.in.CreateUserUseCase;
+import com.chamaai.userservice.application.ports.in.CheckEmailUseCase;
+import com.chamaai.userservice.application.ports.in.CompleteRegistrationUseCase;
 import com.chamaai.userservice.application.ports.in.StartRegistrationUseCase;
 import com.chamaai.userservice.application.ports.in.UpdateUserUseCase;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.requests.CheckEmailRequestDTO;
+import com.chamaai.userservice.infrastructure.adapters.http.dto.requests.CompleteRegistrationRequestDTO;
 import com.chamaai.userservice.infrastructure.adapters.http.dto.requests.StartRegistrationRequestDTO;
 import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.ApiResponse;
 import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.ApiResponseStatus;
 import com.chamaai.userservice.infrastructure.adapters.http.dto.responses.UserResponseDTO;
+import com.chamaai.userservice.infrastructure.adapters.persistence.entity.UserEntity;
+import com.chamaai.userservice.infrastructure.adapters.persistence.repository.SpringDataUserRepository;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final Logger log = LoggerFactory.getLogger(UserController.class);
     private final StartRegistrationUseCase startRegistrationUseCase;
-    private final CreateUserUseCase createUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
+    private final CompleteRegistrationUseCase completeRegistrationUseCase;
+    private final CheckEmailUseCase checkEmailUseCase;
 
-    public UserController(StartRegistrationUseCase startRegistrationUseCase, CreateUserUseCase createUserUseCase, UpdateUserUseCase updateUserUseCase) {
-        this.startRegistrationUseCase = startRegistrationUseCase;
-        this.createUserUseCase = createUserUseCase;
+    //TODO: remove this
+    @Autowired
+    private SpringDataUserRepository userRepository;
+
+
+    public UserController(CheckEmailUseCase checkEmailUseCase, CompleteRegistrationUseCase completeRegistrationUseCase, UpdateUserUseCase updateUserUseCase, StartRegistrationUseCase startRegistrationUseCase) {
+        this.checkEmailUseCase = checkEmailUseCase;
+        this.completeRegistrationUseCase = completeRegistrationUseCase;
         this.updateUserUseCase = updateUserUseCase;
+        this.startRegistrationUseCase = startRegistrationUseCase;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/checkEmail")
+    public ResponseEntity<ApiResponse<Map<String, String>>> checkEmail(@RequestBody @Valid CheckEmailRequestDTO request) {
+        boolean exists = this.checkEmailUseCase.checkEmail(request.email());
+        Map<String, String> data = new HashMap<>();
+        data.put("exists", String.valueOf(exists));
+        ApiResponse<Map<String, String>> response = new ApiResponse<>(
+                ApiResponseStatus.SUCCESS,
+                HttpStatus.OK.value(),
+                "Check email completed successfully",
+                data,
+                null
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/startSignup")
     public ResponseEntity<ApiResponse<Void>> startRegistration(@RequestBody @Valid StartRegistrationRequestDTO request) {
-        log.info("Receive request to start registration");
-        this.startRegistrationUseCase.startRegistration(new StartRegistrationCommand(request.login()));
+        this.startRegistrationUseCase.startRegistration(new StartRegistrationCommand(request.email()));
         ApiResponse<Void> response = new ApiResponse<>(
                 ApiResponseStatus.SUCCESS,
                 HttpStatus.OK.value(),
@@ -46,18 +74,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Valid CreateUserCommand request) {
-        log.info("Receive request to create a new user");
-        UserResponseDTO result = this.createUserUseCase.createUser(request);
+    @PostMapping("/completeSignup")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> completeRegistration(@RequestBody @Valid CompleteRegistrationRequestDTO request) {
+        UserResponseDTO user = this.completeRegistrationUseCase.completeRegistration(new CompleteRegistrationCommand(request));
         ApiResponse<UserResponseDTO> response = new ApiResponse<>(
                 ApiResponseStatus.SUCCESS,
-                HttpStatus.CREATED.value(),
-                "User created successfully",
-                result,
+                HttpStatus.OK.value(),
+                "Registration completed successfully",
+                user,
                 null
         );
-        log.info("Successfully created a new user");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -72,5 +98,10 @@ public class UserController {
                 null
         );
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/all")
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
     }
 }

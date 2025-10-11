@@ -17,7 +17,7 @@ public class UserValidatorService implements UserValidationPort {
     }
 
     @Override
-    public List<String> validateUniqueFields(String taxId, String email, String phone) {
+    public List<String> validateUniqueFields(String taxId, String email) {
         List<String> conflicts = new ArrayList<>();
 
         if (taxId != null && userRepositoryPort.findByTaxId(taxId).isPresent()) {
@@ -25,9 +25,6 @@ public class UserValidatorService implements UserValidationPort {
         }
         if (email != null && userRepositoryPort.findByEmail(email).isPresent()) {
             conflicts.add("Email already registered");
-        }
-        if (phone != null && userRepositoryPort.findByPhoneNumber(phone).isPresent()) {
-            conflicts.add("Phone number already registered");
         }
         return conflicts;
     }
