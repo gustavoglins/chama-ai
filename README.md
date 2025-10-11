@@ -17,8 +17,12 @@
 
 ## Summary
 
-- <a href="#overview">Overview</a>
-- <a href="#technologies">Technologies</a>
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Repository Structure](#repository-structure)
+- [Technologies](#technologies)
+- [Screenshots](#screenshots)
+- [License](#license)
 
 ## Overview
 
