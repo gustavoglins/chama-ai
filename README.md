@@ -1,15 +1,13 @@
-<!-- Banner centralizado -->
 <p align="center">
-  <img src="/assets/chamaai-banner.png" alt="Landing Page Preview" width="800"/>
+  <img src="/assets/chamaai-banner.png" alt="Landing Page Preview" width="100%"/>
 </p>
 
-<!-- Botões lado a lado centralizados -->
 <p align="center">
-  <a href="https://app.chamaai.com" target="_blank">
-    <img src="/assets/open-demo-btn.png" alt="Open Live Demo" width="180"/>
+  <a href="https://chamaai.cloud" target="_blank">
+    <img src="/assets/open-demo-btn.png" alt="Open Live Demo" style="max-width: 300px; width: 100%; height: auto; margin-right: 10px;" />
   </a>
-  <a href="https://docs.chamaai.com" target="_blank">
-    <img src="/assets/open-doc-btn.png" alt="Open Documentation" width="180"/>
+  <a href="https://docs.chamaai.cloud" target="_blank">
+    <img src="/assets/open-doc-btn.png" alt="Open Documentation" style="max-width: 300px; width: 100%; height: auto; margin-left: 10px;" />
   </a>
 </p>
 
