@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="assets/in-dev.gif" alt="In Development GIF" width="1000"/>
-</p>
+![in-dev](https://github.com/user-attachments/assets/bcdb59c9-38d6-4dce-906d-ecfa4f9197aa)
 
 <p align="center">
   <img src="/assets/chamaai-banner.png" alt="Landing Page Preview" width="800"/>
