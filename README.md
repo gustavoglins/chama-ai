@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-  <a href="https://app.chamaai.com" target="_blank">
+  <a href="https://chamaai.cloud" target="_blank">
     <img src="/assets/open-demo-btn.png" alt="Open Live Demo" width="400"/>
   </a>
-  <a href="https://docs.chamaai.com" target="_blank">
+  <a href="https://docs.chamaai.cloud" target="_blank">
     <img src="/assets/open-doc-btn.png" alt="Open Documentation" width="400"/>
   </a>
 </p>
