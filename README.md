@@ -93,18 +93,16 @@ Chama Aí is an innovative on-demand services platform designed to simplify the 
 
 ## Screenshots
 
-##### Landing Page
+<p align="center">
+  <img src="/assets/landing-page.png" alt="Landing Page Preview" width="45%" style="margin-right: 5%"/>
+  <img src="/assets/app-home.png" alt="App Home Preview" width="45%"/>
+</p>
 
-![Landing Page Preview](/assets/landing-page.png)
+<p align="center">
+  <img src="/assets/api-documentation.png" alt="API Documentation Preview" width="45%" style="margin-right: 5%"/>
+  <img src="/assets/api-reference.png" alt="API Reference Preview" width="45%"/>
+</p>
 
-##### App home Page
+## License
 
-![App Home Preview](/assets/app-home.png)
-
-##### API Documentation Page
-
-![API Documentation Preview](/assets/api-documentation.png)
-
-##### API Reference Page
-
-![API Reference Preview](/assets/api-reference.png)
+This project is licensed under the terms described in the [LICENSE](./LICENSE.md) file.
