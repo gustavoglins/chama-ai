@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="/assets/chamaai-banner.png" alt="Landing Page Preview" width="100%"/>
+  <img src="/assets/chamaai-banner.png" alt="Landing Page Preview" width="800"/>
 </p>
 
-<p align="center" style="display: flex; justify-content: center; gap: 10px;">
+<p align="center">
   <a href="https://app.chamaai.com" target="_blank">
-    <img src="/assets/open-demo-btn.png" alt="Open Live Demo" style="height: auto; max-width: 300px;" />
+    <img src="/assets/open-demo-btn.png" alt="Open Live Demo" width="300"/>
   </a>
   <a href="https://docs.chamaai.com" target="_blank">
-    <img src="/assets/open-doc-btn.png" alt="Open Documentation" style="height: auto; max-width: 300px;" />
+    <img src="/assets/open-doc-btn.png" alt="Open Documentation" width="300"/>
   </a>
 </p>
 
