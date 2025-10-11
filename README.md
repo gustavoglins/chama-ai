@@ -1,8 +1,4 @@
-# Chama Ai - On-demand services platform.
-
-#### An app to connect customers with service providers quickly and reliably
-
-![Landing Page Preview](/previews/landing-page.png)
+![Landing Page Preview](/assets/chamaai-banner.png)
 
 ## Technologies
 
@@ -18,16 +14,16 @@
 
 ##### Landing Page
 
-![Landing Page Preview](/previews/landing-page.png)
+![Landing Page Preview](/assets/landing-page.png)
 
 ##### App home Page
 
-![App Home Preview](/previews/app-home.png)
+![App Home Preview](/assets/app-home.png)
 
 ##### API Documentation Page
 
-![API Documentation Preview](/previews/api-documentation.png)
+![API Documentation Preview](/assets/api-documentation.png)
 
 ##### API Reference Page
 
-![API Reference Preview](/previews/api-reference.png)
+![API Reference Preview](/assets/api-reference.png)
