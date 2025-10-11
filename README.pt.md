@@ -99,6 +99,28 @@ Chama Aí é uma plataforma inovadora de serviços sob demanda, projetada para s
 
 - Resend.com (email)
 
+## Arquitetura
+
+O backend do Chama Aí é construído em uma **Arquitetura de Microsserviços** combinada com o padrão de **Arquitetura Hexagonal (Portas e Adaptadores)**, garantindo escalabilidade e separação de responsabilidade entre os serviços.
+
+Cada serviço é **implantável de forma independente** e se comunica via **Kafka** para eventos assíncronos ou via **REST** através do **API Gateway**.
+
+#### Visão Geral
+
+- **API Gateway** — Central entry point for all requests, responsible for routing, authentication, and rate limiting.
+- **Service Discovery (Eureka)** — Dynamically registers and locates services, ensuring fault tolerance and easy scalability.
+- **Microservices** — Decoupled services that handle distinct business domains independently.
+- **Kafka** — Enables event-driven communication and decoupling between services
+- **PostgreSQL & Redis** — Persistent and in-memory storage for different needs
+
+#### Arquitetura Hexagonal (Portas & Adaptadores)
+
+Cada microsserviço segue uma **Arquitetura Hexagonal**, estruturada em três camadas principais:
+
+- **Domínio** — Lógica de negócio, entidades e casos de uso
+- **Aplicação** — Camada de coordenação, gerenciando portas de entrada/saída
+- **Infraestrutura** — Adaptadores para frameworks, bancos de dados e APIs
+
 ## Screenshots
 
 <p align="center">

@@ -100,6 +100,28 @@ Chama Aí is an innovative on-demand services platform designed to simplify the 
 - Resend
 - Stripe
 
+## Architecture
+
+The Chama Aí backend is built on a **Microservices Architecture** combined with the **Hexagonal Architecture (Ports and Adapters)** pattern, ensuring scalability, and clear separation of concerns across all components.
+
+Each service is **independently deployable** and communicates through **Kafka** for asynchronous events or via **REST** through the **API Gateway**.
+
+#### Overview
+
+- **API Gateway** — Central entry point for all requests, responsible for routing, authentication, and rate limiting.
+- **Service Discovery (Eureka)** — Dynamically registers and locates services, ensuring fault tolerance and easy scalability.
+- **Microservices** — Decoupled services that handle distinct business domains independently.
+- **Kafka** — Enables event-driven communication and decoupling between services
+- **PostgreSQL & Redis** — Persistent and in-memory storage for different needs
+
+#### Hexagonal Architecture (Ports & Adapters)
+
+Each microservice follows a **Hexagonal Architecture**, structured in three core layers:
+
+- **Domain** — Business logic, entities, and use cases
+- **Application** — Coordination layer, managing input/output ports
+- **Infrastructure** — Adapters for frameworks, databases, and APIs
+
 ## Screenshots
 
 <p align="center">
