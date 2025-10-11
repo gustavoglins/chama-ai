@@ -4,10 +4,10 @@
 
 <p align="center">
   <a href="https://app.chamaai.com" target="_blank">
-    <img src="/assets/open-demo-btn.png" alt="Open Live Demo" width="300"/>
+    <img src="/assets/open-demo-btn.png" alt="Open Live Demo" width="400"/>
   </a>
   <a href="https://docs.chamaai.com" target="_blank">
-    <img src="/assets/open-doc-btn.png" alt="Open Documentation" width="300"/>
+    <img src="/assets/open-doc-btn.png" alt="Open Documentation" width="400"/>
   </a>
 </p>
 
