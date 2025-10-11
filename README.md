@@ -1,4 +1,24 @@
-![Landing Page Preview](/assets/chamaai-banner.png)
+<!-- Banner centralizado -->
+<p align="center">
+  <img src="/assets/chamaai-banner.png" alt="Landing Page Preview" width="800"/>
+</p>
+
+<!-- Botões lado a lado centralizados -->
+<p align="center">
+  <a href="https://app.chamaai.com" target="_blank">
+    <img src="/assets/open-demo-btn.png" alt="Open Live Demo" width="180"/>
+  </a>
+  <a href="https://docs.chamaai.com" target="_blank">
+    <img src="/assets/open-doc-btn.png" alt="Open Documentation" width="180"/>
+  </a>
+</p>
+
+#
+
+## Summary
+
+- <a href="#usage">Usage</a>
+- <a href="#usage">Usage</a>
 
 ## Technologies
 
@@ -10,7 +30,7 @@
 - **Sending emails:** Resend (External API)
 - **Whatsapp Sendings:** EvolutionAPI (Self Hosted)
 
-## Previews
+## Screenshots
 
 ##### Landing Page
 
